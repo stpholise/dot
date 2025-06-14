@@ -8,7 +8,7 @@ import {
   flexRender,
   type SortingState,
 } from "@tanstack/react-table";
-import { dummyUsers } from "@/app/_data/data";
+import { dummyUsers } from "@/app/_data/TableData";
 import { columns } from "../ui/units/column";
 import { getPaginationRange } from "../ui/units/PaginationRange";
 import { useState } from "react";

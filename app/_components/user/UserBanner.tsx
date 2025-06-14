@@ -3,13 +3,13 @@ import Image from "next/image";
 const UserBanner = () => {
   return (
     <div className="flex gap-6 h-16 items-center">
-      <div className="w-16 h-16 rounded-full border overflow-hidden bg-blue-100 ">
+      <div className="w-14 h-14 rounded-full border overflow-hidden bg-blue-100 ">
         <Image
           alt="user image"
-          src="/image/user.png"
+          src="/image/test_user.png"
           width={74}
           height={74}
-          className=" rounded-full object-cover"
+          className="rounded-full  w-14 h-14 object-cover"
         />
       </div>
       <div className="">
