@@ -9,7 +9,7 @@ const Searchbar = () => {
         console.log(values.search); // Replace with your search logic
       }}
     >
-      <Form className=" flex items-center border-[#D2D5E1] w-[459px] h-10 border rounded-lg px-4 gap-4 ">
+      <Form className=" hidden xs:flex items-center border-[#D2D5E1] xs:w-48 md:w-[459px] h-10 border rounded-lg px-4 gap-4  ">
         <Image
           alt="search"
           src={"/icons/search.svg"}

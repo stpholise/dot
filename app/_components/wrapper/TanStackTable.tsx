@@ -49,6 +49,7 @@ const TanStackTable = () => {
               className="outline-none w-8/10"
             >
               <option value="">Sort by</option>
+              <option value="sn">S/N</option>
               <option value="accountName">Account Name</option>
               <option value="createdAt">Created At</option>
             </select>
@@ -72,16 +73,16 @@ const TanStackTable = () => {
                 <th
                   key={header.id}
                   className={"px-4 py-2 text-left font-medium text-gray-600"}
-                  onClick={header.column.getToggleSortingHandler()}
+                  // onClick={header.column.getToggleSortingHandler()}
                 >
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext()
                   )}
                   {{
-                    asc: " 🔼",
-                    desc: " 🔽",
-                  }[header.column.getIsSorted() as string] ?? null}
+                    // asc: " 🔼",
+                    // desc: " 🔽",
+                   }[header.column.getIsSorted() as string] ?? null} 
                 </th>
               ))}
             </tr>

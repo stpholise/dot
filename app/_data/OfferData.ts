@@ -53,7 +53,7 @@ export const offerInfo: OfferInfo[] = [
       url: "/image/creat_remittance.png",
       alt: "create remittance",
       width: 257,
-      height: 112,
+      height: 157,
     },
     link: {
       url: "/",
