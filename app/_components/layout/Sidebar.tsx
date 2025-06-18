@@ -4,9 +4,9 @@ import SecondaryNav from "../menu/SecondaryNav";
 
 const Sidebar = () => {
   return (
-    <div className="bg-white h-vh w-60 py-6 fixed top-0 bottom-0 left-0 lg:flex lg:flex-col hidden">
+    <div className="bg-white   lg:h-screen sm:w-60 py-6 fixed lg:top-0 bottom-0 left-0 top-20 lg:flex lg:flex-col ">
       <div className="h-full">
-        <div className="w-60 h-28 flex items-center justify-center">
+        <div className="w-60 h-28 lg: hidden lg:flex items-center justify-center">
           <Image
             src="/icons/dot_logo.svg"
             alt="logo"

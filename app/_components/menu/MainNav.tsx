@@ -35,7 +35,7 @@ const MainNav = () => {
         <Link
           href={item.link}
           className={clsx(
-            "flex transition duration-300 ease lg:px-6  lg:text-base font-medium py-2 justify-start items-center gap-4   whitespace-nowrap rounded-r-md group",
+            "flex transition duration-300 ease lg:px-6 xs:px-6 px-4  lg:text-base font-medium py-2 justify-start items-center gap-4   whitespace-nowrap rounded-r-md group",
             {
               "text-[#363739]": pathname !== item.link,
               " bg-black text-white":

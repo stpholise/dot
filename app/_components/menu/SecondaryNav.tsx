@@ -25,7 +25,7 @@ const SecondaryNav = () => {
       {navItems.map((item) => (
         <Link
           href={item.link}
-          className="flex transition duration-300 ease lg:px-6 lg:text-black lg:text-base font-medium py-2 justify-start items-center gap-4 text-[#363739]  whitespace-nowrap  group"
+          className="flex transition duration-300 ease lg:px-6 xs:px-6 px-4 lg:text-black lg:text-base font-medium py-2 justify-start items-center gap-4 text-[#363739]  whitespace-nowrap  group"
           key={item.title}
         >
           {" "}
