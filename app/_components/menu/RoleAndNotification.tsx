@@ -1,7 +1,7 @@
 import Image from "next/image";
 const RoleAndNotification = () => {
   return (
-    <div className="flex items-center w-48  gap-8">
+    <div className="flex justify-end  items-center w-48  gap-8">
       <Image
         alt="notification"
         src="/icons/notification.svg"
@@ -19,7 +19,7 @@ const RoleAndNotification = () => {
             className=""
           />
         </div>
-         <p>Admin</p>
+         <p className="hidden lg:block">Admin</p>
           <Image
             alt="more"
             src={"icons/chevron_down.svg"}

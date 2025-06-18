@@ -10,7 +10,7 @@ const page = () => {
         <div className="offers grid grid-col-1 lg:grid-cols-2 xl:grid-cols-3 w-full   lg:gap-4 md:gap-8 justify-evenly  lg:p-0">
          {
           offerInfo.map((item, index) => (
-            <OffersCard key={index}  image={item.image} link={item.link} description={item.description} />
+            <OffersCard key={index}  image={item.image} link={item.link} description={item.description} icon={item.icon} />
           ))
          }
         </div>

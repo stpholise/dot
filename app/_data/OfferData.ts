@@ -12,6 +12,11 @@ export interface OfferInfo {
     border?: boolean;
     role: string;
   };
+  icon: {
+    url: string;
+    alt: string;
+    bg: string;
+  };
   description: string;
 }
 
@@ -30,6 +35,11 @@ export const offerInfo: OfferInfo[] = [
       border: true,
       role: "link",
     },
+    icon: {
+      url: "/icons/heart_pulse.svg",
+      alt: "heart pulse",
+      bg: "#E7FAE3",
+    },
     description: "Provide access to affordable and cheap health insurance.",
   },
   {
@@ -46,6 +56,11 @@ export const offerInfo: OfferInfo[] = [
       border: true,
       role: "link",
     },
+    icon: {
+      url: "/icons/hand_money.svg",
+      bg: "#E6EDFD",
+      alt: "hand money",
+    },
     description: "Create wealth for the unbanked and banked alike.",
   },
   {
@@ -61,6 +76,11 @@ export const offerInfo: OfferInfo[] = [
       icon: "/icons/chevron_right.svg",
       border: true,
       role: "link",
+    },
+    icon: {
+      url: "/icons/document_medicine.svg",
+      bg: "#FBDFC6",
+      alt: "document-medicine",
     },
     description: "Create wealth for the unbanked and banked alike.",
   },
