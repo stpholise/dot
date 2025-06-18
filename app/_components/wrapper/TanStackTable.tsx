@@ -39,7 +39,7 @@ const TanStackTable = () => {
   return (
     <div className="p-4 lg:p-0">
       <div className=" p-4 flex items-center outline-none justify-between ">
-        <div className="flex lg:gap-9">
+        <div className="flex sm:flex-row flex-col gap-4 lg:gap-9">
           <div className="flex gap-2 w-40 text-gray-500 border border-[#d2d5e1] rounded-lg py-2 px-3">
             <p className="text-black">All</p>
             <select
@@ -65,47 +65,48 @@ const TanStackTable = () => {
           </div>
         </div>
       </div>
-      <table className="min-w-full  text-sm">
-        <thead className="bg-[#FAFAFA] border-y border-[#EAEAEA]">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={"px-4 py-2 text-left font-medium text-gray-600"}
-                  // onClick={header.column.getToggleSortingHandler()}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                  {{
-                    // asc: " 🔼",
-                    // desc: " 🔽",
-                   }[header.column.getIsSorted() as string] ?? null} 
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="border-b border-[#eaeaea]  ">
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-4 py-4 ">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
+      <div className="w-full overflow-x-scroll">
+        <table className="min-w-full  text-sm ">
+          <thead className="bg-[#FAFAFA] border-y border-[#EAEAEA]">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className={"px-4 py-2 text-left font-medium text-gray-600"}
+                    // onClick={header.column.getToggleSortingHandler()}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                    {{
+                      // asc: " 🔼",
+                      // desc: " 🔽",
+                    }[header.column.getIsSorted() as string] ?? null}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id} className="border-b border-[#eaeaea]  ">
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="px-4 py-4 ">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div className="flex items-center justify-between p-4 text-sm">
         <button
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className="px-3 py-1 border rounded disabled:opacity-50"
+          className="sm:px-3 px-2 py-1 border rounded disabled:opacity-50"
         >
           Previous
         </button>

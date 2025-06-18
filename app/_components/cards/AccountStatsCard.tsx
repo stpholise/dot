@@ -15,14 +15,13 @@ const AccountStatsCard = ({
   color,
 }: AccountStatsSummary) => {
   return (
-    <div className={cn("flex gap-4 h-32 rounded-2xl p-4 border border-[#ECF4FE]", color)}>
-      <div className="">
+    <div className={cn("flex gap-4 h-32 w-full sm:w-[327px] md:w-auto rounded-2xl p-4 border border-[#ECF4FE]", color)}>
+      <div  >
         <Image
           alt={title}
           src={icon}
           height={40}
-          width={40}
-          className={clsx("", {})}
+          width={40} 
         />
       </div>
       <div className=" flex flex-col gap-2">

@@ -33,12 +33,12 @@ const accountStatsSummary: AccountStatsSummary[] = [
 const AccountOpening = () => {
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex  w-full justify-between gap-12">
+      <div className="flex flex-col sm:flex-row w-full justify-between items-center gap-4 md:gap-12">
         <PageTitle MainTitle={"Dot MFB Account Opening"} />
         <LongButton icon={"/icons/add.svg"} text={"Open Dot MFB Account"} />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-4 items-center justify-center md:justify-between">
         {accountStatsSummary.map((item) => (
           <AccountStatsCard
             key={item.title}
