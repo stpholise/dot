@@ -1,14 +1,18 @@
 "use client";
 import Image from "next/image";
-import clsx from "clsx";
-import { useState } from "react";
+import clsx from "clsx"; 
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from '../../store'
+import { toggleMenu } from '../../store/slices/AppSlice'
 
-const MenuButton = () => {
-  const [menuIsOpen, setMenuIsOpen] = useState(false);
+const MenuButton = () => { 
+ 
+  const dispatch = useDispatch() 
+  const menuIsOpen = useSelector((state: RootState)  => state.app.isMenuOpen )
 
   return (
     <button
-      onClick={() => setMenuIsOpen(!menuIsOpen)}
+      onClick={() => dispatch(toggleMenu())}
       className={clsx(
         "lg:hidden flex gap-2 border border-[#D0D5DD] rounded-3xl p-1 ease-in-out transition-all duration-700"
       )}

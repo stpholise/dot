@@ -1,3 +1,4 @@
+"use client"
 import Searchbar from "../menu/Searchbar";
 import RoleAndNotification from '../menu/RoleAndNotification'
 import MenuButton  from "../menu/MenuButton";
