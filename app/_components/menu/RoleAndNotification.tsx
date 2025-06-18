@@ -25,7 +25,7 @@ const RoleAndNotification = () => {
             src={"icons/chevron_down.svg"}
             height={20}
             width={20}
-            className=""
+            className="hidden xs:block"
           />
       </div>
     </div>
