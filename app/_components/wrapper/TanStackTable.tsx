@@ -106,7 +106,7 @@ const TanStackTable = () => {
         <button
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className="sm:px-3 px-2 py-1 border rounded disabled:opacity-50"
+          className="sm:px-3 px-2 py-1 cursor-pointer border rounded disabled:opacity-50"
         >
           Previous
         </button>
@@ -123,8 +123,8 @@ const TanStackTable = () => {
                 onClick={() => table.setPageIndex(page)}
                 className={`px-3 py-1 rounded border ${
                   table.getState().pagination.pageIndex === page
-                    ? "bg-black text-white"
-                    : "bg-white text-black border-gray-300"
+                    ? "bg-black text-white cursor-pointer"
+                    : "bg-white text-black border-gray-300 cursor-pointer"
                 }`}
               >
                 {page + 1}
@@ -135,7 +135,7 @@ const TanStackTable = () => {
         <button
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className="px-3 py-1 border border-gray-600 rounded disabled:opacity-50 outline-none"
+          className="px-3 cursor-pointer py-1 border border-gray-600 rounded disabled:opacity-50 outline-none"
         >
           Next
         </button>

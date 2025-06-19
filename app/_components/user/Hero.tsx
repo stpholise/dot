@@ -10,7 +10,7 @@ const Hero = () => {
           userFirstName="Olamileken"
         />
         <div className="flex flex-col md:flex-row gap-4 items-center ">
-          <button className="bg-black text-base font-medium text-white rounded-2xl lg:w-54 py-3 px-8 whitespace-nowrap">
+          <button className="bg-black cursor-pointer text-base font-medium text-white rounded-2xl lg:w-54 py-3 px-8 whitespace-nowrap">
             Open a Dot Account
           </button>
           <PrimaryButtons
