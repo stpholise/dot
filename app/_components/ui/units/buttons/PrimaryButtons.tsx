@@ -29,7 +29,7 @@ const PrimaryButtons = ({
         <Link
           href={url}
           className={clsx(
-            ` flex gap-[6px] px-6 py-2 rounded-xl  whitespace-nowrap w-fit ${bg} `,
+            ` flex cursor-pointer gap-[6px] px-6 py-2 rounded-xl  whitespace-nowrap w-fit ${bg} `,
             {
               "border border-[#E1E4EA]": border,
               bg,
@@ -41,7 +41,7 @@ const PrimaryButtons = ({
       ) : (
         <button
           className={clsx(
-            `flex gap-[6px] px-6 py-2 rounded-xl ${bg} whitespace-nowrap w-fit`,
+            `flex gap-[6px] cursor-pointer px-6 py-2 rounded-xl ${bg} whitespace-nowrap w-fit`,
             {
               "border border-gray-400": border,
             }
