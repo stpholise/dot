@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
+
 interface NavItems {
   icon: string;
   title: string;
@@ -27,10 +28,11 @@ const navItems: NavItems[] = [
   },
 ];
 
+
 const MainNav = () => {
   const pathname = usePathname();
   return (
-    <div role="list" className="flex flex-col gap-2 w-11/12">
+    <div role="list" className="flex flex-col gap-2 w-full sm:w-11/12">
       {navItems.map((item) => (
         <Link
           href={item.link}
@@ -56,6 +58,8 @@ const MainNav = () => {
           {item.title}{" "}
         </Link>
       ))}
+
+    
     </div>
   );
 };
