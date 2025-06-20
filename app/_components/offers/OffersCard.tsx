@@ -9,7 +9,7 @@ const OffersCard = ({ image, link, description, icon }: OfferInfo) => {
   return (
     <div
       className={clsx(
-        "lg:h-80   lg:w-80 md:w-[754px]  xs:border-[#E1E4EA] xs:border md:max-w-[754px]  md:h-52 sm:h-[348px] xs:w-[327px] 2xs:w-[327px] lg:py-6 py-3 max-w-[327px] sm:py-6 xs:bg-white rounded-2xl overflow-hidden flex lg:flex-col md:flex-row-reverse sm:flex-col flex-row lg:items-start md:items-center sm:items-start 2xs:justify-evenly items-center  md:justify-between  px-4 sm:px-0 gap-4 2xs:gap-4 2xs:mt-4 ",
+        "lg:h-80   lg:w-80 md:w-[754px]  xs:border-[#E1E4EA] xs:border md:max-w-[754px]  md:h-52 sm:h-[348px] xs:w-[327px] 2xs:w-[327px] lg:py-6 py-3 max-w-[327px] sm:py-6 xs:bg-white rounded-2xl overflow-hidden flex lg:flex-col md:flex-row-reverse sm:flex-col flex-row lg:items-start md:items-center sm:items-start 2xs:justify-evenly items-center  md:justify-between lg:justify-between  px-4 sm:px-0 gap-4 2xs:gap-4  2xs:mt-4 ",
         icon.bg
       )}
     >
@@ -19,7 +19,7 @@ const OffersCard = ({ image, link, description, icon }: OfferInfo) => {
           src={image.url}
           height={image.height}
           width={image.width}
-          className={clsx("max-w-[359.42px]  object-contain  ", {
+          className={clsx("max-w-[359.42px] max-h-[124px] object-contain  ", {
             [`w-[${image.width}px]`]: image.width,
             [`h-[${image.height}px]`]: image.height,
           })}
@@ -39,7 +39,7 @@ const OffersCard = ({ image, link, description, icon }: OfferInfo) => {
           className=""
         />
       </div>
-      <div className="lg:px-8 lg:py-2 max-w-[359.42px]  w-full xs:w-10/12 lg:h-[131px] md:w-8/12 lg:w-full  md:px-12 md:py-12  2xs:px-4 2xs:py-4  p-2 flex flex-col gap-6 ">
+      <div className="lg:px-8 lg:py-2 max-w-[359.42px]  w-full xs:w-10/12 lg:h-[131px] md:w-8/12 lg:w-full  md:px-12 md:py-12  2xs:px-4 2xs:py-4  p-2 flex flex-col gap-6 lg:mt-auto">
         <Link
           href={link.url}
           className="sm:hidden cursor-pointer leading-snug flex items-center justify-between gap-2"
