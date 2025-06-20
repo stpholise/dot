@@ -15,7 +15,9 @@ const Sidebar = () => {
   const isMenuOpen = useSelector((state: RootState) => state.app.isMenuOpen);
 
   useEffect(() => {
-    dispatch(menuState(false));
+ 
+      dispatch(menuState(false));
+ 
   }, [pathname]);
 
   return (
