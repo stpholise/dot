@@ -65,7 +65,6 @@ const OffersCard = ({ image, link, description, icon }: OfferInfo) => {
         <p className="text-[#4F555F] hidden sm:block ">{description}</p>
         <div className="hidden sm:block">
           <PrimaryButtons
-            url={link.url}
             text={link.text}
             icon={link.icon}
             className={"md:text-black text-white  md:bg-white bg-black mt-auto border border-gray-400"}
