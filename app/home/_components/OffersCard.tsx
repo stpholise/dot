@@ -1,9 +1,9 @@
 import { OfferInfo } from "@/app/_data/OfferData";
 import Image from "next/image";
 import Link from "next/link";
-
 import clsx from "clsx";
 import PrimaryButtons from "../../_components/ui/units/buttons/PrimaryButtons";
+
 const OffersCard = ({ image, link, description, icon }: OfferInfo) => {
   console.log(icon);
   return (
@@ -67,9 +67,8 @@ const OffersCard = ({ image, link, description, icon }: OfferInfo) => {
           <PrimaryButtons
             url={link.url}
             text={link.text}
-            border={true}
             icon={link.icon}
-            bg={"md:text-black text-white  md:bg-white bg-black mt-auto"}
+            className={"md:text-black text-white  md:bg-white bg-black mt-auto border border-gray-400"}
           />
         </div>
       </div>
