@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
-import clsx from "clsx";
-import { useRouter } from "next/navigation";
+import clsx from "clsx"; 
 import { ButtonHTMLAttributes } from "react";
 
 interface PrimaryButtonsProp extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -12,11 +11,10 @@ interface PrimaryButtonsProp extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const PrimaryButtons = ({
   text,
-  icon,
-  url,
+  icon, 
   ...rest
 }: PrimaryButtonsProp) => {
-  const router = useRouter();
+
   const content = (
     <>
       {text}
@@ -26,7 +24,7 @@ const PrimaryButtons = ({
   return (
     <>
       <button
-        onClick={url ? () => router.push(url) : rest.onClick}
+     
         {...rest}
         className={clsx(
           `flex gap-[6px] cursor-pointer px-6 py-2 rounded-xl  whitespace-nowrap w-fit`,
