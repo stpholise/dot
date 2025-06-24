@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import clsx from "clsx";
-import PrimaryButtons from "../ui/units/buttons/PrimaryButtons";
+import PrimaryButtons from "../../_components/ui/units/buttons/PrimaryButtons";
 const OffersCard = ({ image, link, description, icon }: OfferInfo) => {
   console.log(icon);
   return (

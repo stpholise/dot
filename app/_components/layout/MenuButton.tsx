@@ -14,7 +14,7 @@ const MenuButton = () => {
       <button
         onClick={() => dispatch(toggleMenu())}
         className={clsx(
-          "lg:hidden flex gap-2 border  border-[#D0D5DD] z-20 rounded-3xl p-1 ease-in-out transition-all duration-700"
+          "lg:hidden flex gap-2 border w-20  border-[#D0D5DD] z-20 rounded-3xl p-1 ease-in-out transition-all duration-700"
         )}
       >
         <div

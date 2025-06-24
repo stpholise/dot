@@ -1,8 +1,10 @@
+"use client";
 import Image from "next/image";
 import clsx from "clsx";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ButtonHTMLAttributes } from "react";
 
-interface PrimaryButtonsProp {
+interface PrimaryButtonsProp extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
   icon?: string;
   border?: boolean;
@@ -16,7 +18,9 @@ const PrimaryButtons = ({
   border,
   url,
   bg,
+  ...rest
 }: PrimaryButtonsProp) => {
+  const router = useRouter();
   const content = (
     <>
       {text}
@@ -25,32 +29,19 @@ const PrimaryButtons = ({
   );
   return (
     <>
-      {url ? (
-        <Link
-          href={url}
-          className={clsx(
-            ` flex cursor-pointer gap-[6px] px-6 py-2 rounded-xl  whitespace-nowrap w-fit ${bg} `,
-            {
-              "border border-[#E1E4EA]": border,
-              bg,
-            }
-          )}
-        >
-          {content}
-        </Link>
-      ) : (
-        <button
-          className={clsx(
-            `flex gap-[6px] cursor-pointer px-6 py-2 rounded-xl ${bg} whitespace-nowrap w-fit`,
-            {
-              "border border-gray-400": border,
-            }
-          )}
-        >
-          {" "}
-          {content}
-        </button>
-      )}
+      <button
+        onClick={url ? () => router.push(url) : rest.onClick}
+        {...rest}
+        className={clsx(
+          `flex gap-[6px] cursor-pointer px-6 py-2 rounded-xl ${bg} whitespace-nowrap w-fit`,
+          {
+            "border border-gray-400": border,
+          },
+          rest.className
+        )}
+      >
+        {content}
+      </button>
     </>
   );
 };

@@ -10,14 +10,14 @@ export const getPaginationRange = (
     return range;
   }
 
-  const siblings = 1; 
+  const siblings = 1;
   const left = Math.max(currentPage - siblings, 1);
   const right = Math.min(currentPage + siblings, totalPages - 2);
 
   const shouldShowLeftDots = left > 1;
   const shouldShowRightDots = right < totalPages - 2;
 
-  range.push(0); 
+  range.push(0);
 
   if (shouldShowLeftDots && !shouldShowRightDots) {
     range.push("...");
@@ -37,7 +37,7 @@ export const getPaginationRange = (
     range.push("...");
   }
 
-  range.push(totalPages - 1); 
+  range.push(totalPages - 1);
 
   return range;
 };
