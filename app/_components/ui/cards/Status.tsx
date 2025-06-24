@@ -1,6 +1,6 @@
 
 import Image from "next/image";
-import { cn } from "../ui/units/utility/merger";
+import { cn } from "@/app/_utils/merger";
 interface AccountStatsSummary {
   icon: string;
   title: string;

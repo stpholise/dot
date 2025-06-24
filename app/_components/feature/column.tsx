@@ -1,4 +1,4 @@
-import { DummyUser } from "../../../_data/TableData";
+import { DummyUser } from "@/app/_data/TableData";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<DummyUser>[] = [

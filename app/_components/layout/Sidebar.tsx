@@ -1,24 +1,22 @@
 "use client";
-import Image from "next/image";
-import MainNav from "../menu/MainNav";
-import SecondaryNav from "../menu/SecondaryNav";
+import Image from "next/image"; 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";  
 import { menuState } from "@/app/store/slices/AppSlice";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const pathname = usePathname();
+  const router = useRouter();
   const isMenuOpen = useSelector((state: RootState) => state.app.isMenuOpen);
 
-  useEffect(() => {
- 
-      dispatch(menuState(false));
- 
-  }, [pathname]);
+  const handleNavigation = (item: NavItems) => {
+    router.push(item.link);
+    dispatch(menuState(false));
+  };
 
   return (
     <div
@@ -46,15 +44,93 @@ const Sidebar = () => {
             <p className="text-[#667085] font-mdeium text-sm uppercase ml-6 my-2">
               MAIN
             </p>
-            <MainNav />
+            <div role="list" className="flex flex-col gap-2 w-full sm:w-11/12">
+              {navItems.map((item) => (
+                <button
+                  onClick={() => handleNavigation(item)}
+                  className={clsx(
+                    "flex transition duration-300 ease lg:px-6 xs:px-6 px-4  lg:text-base font-medium py-2 justify-start items-center gap-4   whitespace-nowrap rounded-r-md group",
+                    {
+                      "text-[#363739]": pathname !== item.link,
+                      " bg-black text-white":
+                        pathname == item.link ||
+                        (item.link !== "/" && pathname.startsWith(item.link)),
+                    }
+                  )}
+                  key={item.title}
+                >
+                  <Image
+                    className="group-hover:stroke-white"
+                    alt={item.title}
+                    src={item.icon}
+                    height="17"
+                    width="16"
+                  />
+                  {item.title}{" "}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="">
-            <SecondaryNav />
-          </div>
+            <div role="list" className="flex flex-col gap-2 w-11/12 sticky bottom-10 ">
+      {secondaryNavItems.map((item) => (
+        <button
+          onClick={() => handleNavigation(item)}
+          className="flex transition duration-300 ease lg:px-6 xs:px-6 px-4 lg:text-black lg:text-base font-medium py-2 justify-start items-center gap-4 text-[#363739]  whitespace-nowrap  group"
+          key={item.title}
+        >
+         
+          <Image
+            className="group-hover:stroke-white"
+            alt={item.title}
+            src={item.icon}
+            height="17"
+            width="16"
+          />{" "}
+          {item.title}{" "}
+        </button>
+      ))}
+    </div>
         </div>
       </div>
     </div>
   );
 };
+
+interface NavItems {
+  icon: string;
+  title: string;
+  link: string;
+}
+
+const navItems: NavItems[] = [
+  {
+    icon: "/icons/home.svg",
+    title: "Home",
+    link: "/",
+  },
+  {
+    icon: "/icons/user_account.svg",
+    title: "Dot MFB Accounts",
+    link: "/account",
+  },
+  {
+    icon: "/icons/remitance.svg",
+    title: "Remittance",
+    link: "/remottance",
+  },
+];
+
+const secondaryNavItems: NavItems[] = [
+  {
+    icon: "/icons/setting.svg",
+    title: "Settings",
+    link: "/setting",
+  },
+  {
+    icon: "/icons/logout.svg",
+    title: "Logout",
+    link: "/login",
+  },
+];
 
 export default Sidebar;

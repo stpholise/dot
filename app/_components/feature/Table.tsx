@@ -7,19 +7,33 @@ import {
   getFilteredRowModel,
   flexRender,
   type SortingState,
-} from "@tanstack/react-table";
-import { dummyUsers } from "@/app/_data/TableData";
-import { columns } from "../ui/units/column";
-import { getPaginationRange } from "../ui/units/PaginationRange";
-import { useState } from "react";
+  type  ColumnDef,
+} from "@tanstack/react-table"; 
+import { getPaginationRange } from "./PaginationRange";
+import { useMemo, useState } from "react";
 
-const TanStackTable = () => {
+type TanStackTableProps<T> ={
+  data: T[];
+  columns: ColumnDef<T, unknown>[]
+}
+
+const TanStackTable = <T,>({
+data,
+columns
+}:TanStackTableProps<T>
+
+) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  const columnsMemo = useMemo(
+    ()=>columns, [columns]
+  );
+  const dataMemo = useMemo(
+    ()=>data, [data]
+  )
   const table = useReactTable({
-    data: dummyUsers,
-    columns,
+    data: dataMemo,
+    columns: columnsMemo,
     state: {
       globalFilter,
       sorting,
