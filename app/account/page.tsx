@@ -1,6 +1,6 @@
 "use client";
 import AccountStatsCard from "../_components/ui/cards/Status";
-import TanStackTable from "../_components/feature/Table";
+import TanStackTable from "../_components/table/Table";
 import PageTitle from "../_components/ui/units/PageTitle";
 import LongButton from "../_components/ui/units/buttons/SecondaryButton";
 import { columns } from "./_components/column";

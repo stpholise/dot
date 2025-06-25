@@ -30,7 +30,7 @@ const Header = () => {
                <p className="hidden lg:block">Admin</p>
                 <Image
                   alt="more"
-                  src={"icons/chevron_down.svg"}
+                  src={"/icons/chevron_down.svg"}
                   height={20}
                   width={20}
                   className="hidden xs:block"
