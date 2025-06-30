@@ -21,7 +21,7 @@ const Sidebar = () => {
   return (
     <div
       className={clsx(
-        "bg-white transition-transform ease-in-out duration-500 fixed top-20 lg:top-0 z-30 left-0 bottom-0 lg:h-screen sm:w-60 py-6 w-9/12 lg:flex lg:flex-col transform",
+        "bg-white transition-transform ease-in-out duration-500 fixed top-20 lg:top-0 z-30 left-0 bottom-0 lg:h-screen sm:w-56 py-6 w-9/12 lg:flex lg:flex-col transform",
         {
           "-translate-x-full lg:translate-x-0": !isMenuOpen,
           "translate-x-0": isMenuOpen,
@@ -29,7 +29,7 @@ const Sidebar = () => {
       )}
     >
       <div className="h-full">
-        <div className="w-60 h-28 lg: hidden lg:flex items-center justify-center">
+        <div className="w-56 h-28 lg: hidden lg:flex items-center justify-center">
           <Image
             src="/icons/dot_logo.svg"
             alt="logo"
@@ -39,7 +39,7 @@ const Sidebar = () => {
           />
         </div>
 
-        <div className="flex flex-col justify-between h-[calc(100%-20%)] w-11/12 ">
+        <div className="flex flex-col justify-between h-[calc(100%-20%)] w-full">
           <div className="">
             <p className="text-[#667085] font-mdeium text-sm uppercase ml-6 my-2">
               MAIN
