@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"; 
+import { createSlice } from "@reduxjs/toolkit";
 
 interface CustomerDetails {
   withBvn: boolean;
@@ -11,28 +11,29 @@ interface CustomerDetails {
 }
 
 interface CusstomerImage {
-    selfie: string;
-    idCard: string;
-    signature: string;
+  url: string;
+  selfie?: string;
+  idCard?: string;
+  signature?: string;
 }
 
 interface CustomerIdentification {
   idType: "NIN" | "Voter ID" | "Driver's License";
-    idNumber: string;
-    issuedBy?: string;
-    issueDate: Date;
-    expiryDate: Date;
-    idImagefront: string;
-    idImageback: string;
+  idNumber: string;
+  issuedBy?: string;
+  issueDate: Date;
+  expiryDate: Date;
+  idImagefront: File | null;
+  idImageback: File | null;
 }
 
 interface CustomerAddress {
-    state: string;
-    city: string;
-    address: string;
-    country?: string;
-    postalCode?: string;
-    utilityBillImage?: string;
+  state: string;
+  city: string;
+  address: string;
+  country?: string;
+  postalCode?: string;
+  utilityBillImage?: File | null;
 }
 
 interface UserAccountState {
@@ -52,21 +53,21 @@ const initialState: UserAccountState = {
     lname: "",
     phone: "",
     dob: new Date(),
-    gender: "male"
+    gender: "male",
   },
   customerImage: {
+    url: "",
     selfie: "",
     idCard: "",
-    signature: ""
+    signature: "",
   },
   customerIdentification: {
     idType: "NIN",
     idNumber: "",
-    issuedBy: "",
     issueDate: new Date(),
     expiryDate: new Date(),
-    idImagefront: "",
-    idImageback: ""
+    idImagefront: null,
+    idImageback: null,
   },
   customerAddress: {
     state: "",
@@ -74,58 +75,57 @@ const initialState: UserAccountState = {
     address: "",
     country: "",
     postalCode: "",
-    utilityBillImage: ""
-  }
+    utilityBillImage: null,
+  },
 };
 const initialStepState: currentStepState = {
-  currentStep: 0
+  currentStep: 0,
 };
 
 export const userAccountSlice = createSlice({
-    name: 'userAccount',
-    initialState: {
-        userAccountInitialState: initialState,
-        initialStepState: initialStepState,
+  name: "userAccount",
+  initialState: {
+    userAccountInitialState: initialState,
+    initialStepState: initialStepState,
+  },
+  reducers: {
+    setCustomerDetails: (state, action) => {
+      state.userAccountInitialState.customerDetails = {
+        ...state.userAccountInitialState.customerDetails,
+        ...action.payload,
+      };
     },
-    reducers: {
-        setCustomerDetails: (state, action) => {
-            state.userAccountInitialState.customerDetails = {
-                ...state.userAccountInitialState.customerDetails,
-                ...action.payload
-            }
-        },
-        setCustomerImage: (state, action) =>{
-            state.userAccountInitialState.customerImage = {
-                ...state.userAccountInitialState.customerImage,
-                ...action.payload
-            }
-        },
-        setCustomerIdentification: (state, action) => {
-            state.userAccountInitialState.customerIdentification = {
-                ...state.userAccountInitialState.customerIdentification,
-                ...action.payload
-            }
-        },
-        setCustomerAddress: (state, action) => {
-            state.userAccountInitialState.customerAddress = {
-                ...state.userAccountInitialState.customerAddress,
-                ...action.payload
-            }
-        },
-        setCurrentStep: (state, action) => {
-            state.initialStepState.currentStep = action.payload;
-        }
-
-    }
-})
-
+    setCustomerImage: (state, action) => {
+      state.userAccountInitialState.customerImage = {
+        ...state.userAccountInitialState.customerImage,
+        ...action.payload,
+      };
+    },
+    setCustomerIdentification: (state, action) => {
+      state.userAccountInitialState.customerIdentification = {
+        ...state.userAccountInitialState.customerIdentification,
+        ...action.payload,
+      };
+      console.log(action.payload);
+    },
+    setCustomerAddress: (state, action) => {
+      state.userAccountInitialState.customerAddress = {
+        ...state.userAccountInitialState.customerAddress,
+        ...action.payload,
+      };
+    },
+    setCurrentStep: (state, action) => {
+      state.initialStepState.currentStep = action.payload;
+    },
+  },
+});
 
 export const {
   setCustomerDetails,
   setCustomerImage,
   setCustomerIdentification,
   setCustomerAddress,
-  setCurrentStep
+  setCurrentStep,
 } = userAccountSlice.actions;
 
 export default userAccountSlice.reducer;

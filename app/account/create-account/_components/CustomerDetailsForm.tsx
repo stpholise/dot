@@ -4,7 +4,9 @@ import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
 import Image from "next/image";
 import clsx from "clsx";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
+import { RootState } from "@/app/store";
 interface CustomerDetails {
   withBvn: boolean;
   bvn?: string;
@@ -14,13 +16,12 @@ interface CustomerDetails {
   dob: Date;
   gender: "male" | "female" | "other";
 }
-type SetStep = React.Dispatch<React.SetStateAction<number>>;
 
-interface CustomerDetailsFormProps {
-  setCurrentStep: SetStep;
-}
-
-const CustomerDetailsForm = ({ setCurrentStep }: CustomerDetailsFormProps) => {
+const CustomerDetailsForm = () => {
+  const dispatch = useDispatch();
+  const currentStep = useSelector(
+    (state: RootState) => state.userAccount.initialStepState.currentStep
+  );
   const initialValues: CustomerDetails = {
     withBvn: false,
     bvn: "",
@@ -58,11 +59,12 @@ const CustomerDetailsForm = ({ setCurrentStep }: CustomerDetailsFormProps) => {
   ) => {
     console.log("Form submitted with values:", values);
     actions.setSubmitting(false);
-    setCurrentStep(1);
+    dispatch(setCurrentStep(1));
   };
 
   const incrementStep = () => {
-    setCurrentStep((prevStep) => prevStep++);
+    const newStep = currentStep + 1;
+    dispatch(setCurrentStep(newStep));
   };
   return (
     <div>

@@ -1,9 +1,12 @@
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
-import { useDispatch } from "react-redux";
-import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
-import { useState, useEffect, useRef } from "react";
+import { useDispatch,   } from "react-redux";
+import {
+  setCurrentStep,
+  setCustomerImage,
+} from "@/app/store/slices/UserAccountSlice";
+import { useState, useEffect, useRef } from "react"; 
 
 const CaptureCustomer = () => {
   const dispatch = useDispatch();
@@ -15,9 +18,12 @@ const CaptureCustomer = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const incrementStep = () => {
+    handleStopCamera();
     setIsSubmitting(true);
     setTimeout(() => {
       dispatch(setCurrentStep(2));
+      dispatch(setCustomerImage({ url: customerPhoto }));
+
       setIsSubmitting(false);
     }, 1000);
   };
@@ -54,6 +60,7 @@ const CaptureCustomer = () => {
       if (video && video.srcObject) {
         streamRef.current.getTracks().forEach((track) => {
           track.stop();
+          console.log('stopping track:', track.kind)
         });
         streamRef.current = null;
         video.srcObject = null;
@@ -87,10 +94,9 @@ const CaptureCustomer = () => {
     setIsValid(false);
     handleVideo();
   };
-
+ 
   useEffect(() => {
     handleVideo();
-
     return () => {
       handleStopCamera();
     };
@@ -112,10 +118,10 @@ const CaptureCustomer = () => {
         </p>
       </div>
 
-      <div className=" border-2 border-red-200">
-        <div className=" border border-green-400 flex flex-col">
+      <div className="flex flex-col gap-8 ">
+        <div className=" flex flex-col gap-8">
           <div className="flex flex-col items-center justify-center gap-8 mt-8">
-            <div className="w-[336px] h-[408px] p-0 rounded-full ] flex items-center justify-center">
+            <div className="w-[336px] h-[408px] p-0 rounded-[50%] overflow-hidden border-2 border-red-200 flex items-center justify-center">
               {customerPhoto ? (
                 <Image
                   alt="user Snapshot"
@@ -123,7 +129,7 @@ const CaptureCustomer = () => {
                   height={1000}
                   src={customerPhoto || "/icons/user_placeholder.png"}
                   className={clsx(
-                    "w-[400px] h-[500px] rounded-full  object-cover"
+                    "w-[400px] h-[500px] rounded-[50%]  object-cover"
                   )}
                 />
               ) : (
@@ -132,7 +138,7 @@ const CaptureCustomer = () => {
                   autoPlay
                   playsInline
                   muted
-                  className={clsx("w-full h-full rounded-full  object-cover")}
+                  className={clsx("w-full h-full rounded-[50%]  object-cover")}
                 />
               )}
               <canvas
@@ -142,16 +148,16 @@ const CaptureCustomer = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-           
-
               <div className="w-80">
                 {customerPhoto ? (
                   <div className="flex flex-col gap-8 justify-center items-center">
                     <div className="text-center flex flex-col gap-4">
-                      <h4 className="text-3xl font-medium text-black">Selfie capture frame</h4>
+                      <h4 className="text-3xl font-medium text-black">
+                        Selfie taken!{" "}
+                      </h4>
                       <p className="text-center">
-                        Ensure the customer’s face and neck region fit into the
-                        frame above.
+                        If everything looks good, please proceed to complete the
+                        registration.
                       </p>
                     </div>
                     <PrimaryButtons
@@ -163,10 +169,13 @@ const CaptureCustomer = () => {
                 ) : (
                   <div className="flex flex-col gap-8 justify-center items-center">
                     <div className=" text-center flex flex-col gap-4">
-                      <h4 className="text-3xl font-medium text-black">Selfie taken!</h4>
+                      <h4 className="text-3xl font-medium text-black">
+                        Selfie capture frame
+                      </h4>
                       <p>
-                        If everything looks good, please proceed to complete the
-                        registration.
+                        {" "}
+                        Ensure the customer’s face and neck region fit into the
+                        frame above.
                       </p>
                     </div>
                     <div className=" border-2 border-black rounded-full h-[72px] w-[72px] flex items-center justify-center px-1 py-1">
@@ -187,6 +196,7 @@ const CaptureCustomer = () => {
             text={"Go Back"}
             className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
             icon="/icons/arrow_back.png"
+            onClick={() => dispatch(setCurrentStep(0))}
           />
           <PrimaryButtons
             text={"Proceed - Passport Capture"}

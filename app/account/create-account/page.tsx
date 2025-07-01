@@ -1,14 +1,16 @@
 "use client";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
-import Image from "next/image";
-import { useState, useEffect } from "react";
+import Image from "next/image"; 
 import CustomerDetailsForm from "./_components/CustomerDetailsForm";
 import CaptureCustomer from "./_components/CaptureCustomer";
 import Identification from "./_components/Identification";
 import Address from "./_components/Address";
 import ReviewCredentials from "./_components/ReviewCredentials";
 import Successful from "./_components/Successful";
+import { useSelector, } from 'react-redux'
+import { setCurrentStep } from "@/app/store/slices/UserAccountSlice"
+import { RootState } from "@/app/store";
 interface Step {
   id: number;
   title: string;
@@ -17,59 +19,9 @@ interface Step {
 }
 
 const Page = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  
 
-  // const testingGeolocation = () => {
-  // testing navigator for picture taking
-
-  // navigator.mediaDevices.getUserMedia({video: {
-  //   facingMode: "user",
-  //   width: { ideal: 1280 },
-  //   height: { ideal: 720 }
-  // }, audio: false })
-  //   .then((stream) => {
-  //     const video = document.createElement("video");
-  //     video.srcObject = stream;
-  //     video.play();
-  //     console.log("Video stream started successfully");
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error accessing camera:", error);
-  //   });
-
-  // testing navigator
-  //   console.log("pdf viewer", navigator.pdfViewerEnabled);
-  //   console.log("testing online", navigator.onLine);
-  //   console.log("user agent", navigator.userAgent);
-  //   console.log("language", navigator.language);
-  //   console.log("credentitals", navigator.credentials);
-  //   console.log("connection", navigator.connection?.effectiveType);
-  //   navigator.permissions
-  //     .query({ name: "geolocation" })
-  //     .then((permissionStatus) => {
-  //       console.log("Geolocation permission status:", permissionStatus.state);
-  //     });
-  //   navigator.getBattery().then((battery) => {
-  //     console.log("Battery level:", battery.level);
-  //     console.log("is charging:", battery.charging);
-  //   });
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         console.log("Latitude:", position.coords.latitude);
-  //         console.log("Longitude:", position.coords.longitude);
-  //       },
-  //       (error) => {
-  //         console.error("Error getting location:", error);
-  //       }
-  //     );
-  //   } else {
-  //     console.log("Geolocation is not supported by this browser.");
-  //   }
-  // };
-  useEffect(() => {
-    console.log(currentStep);
-  }, [currentStep]);
+  const currentStep = useSelector((state: RootState) => state.userAccount.initialStepState.currentStep)
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
@@ -153,7 +105,7 @@ const Page = () => {
         <div className="w-[600px] min-h-[580px] text-[#667085] bg-white rounded-3xl  ">
         
           {currentStep === 0 ? (
-            <CustomerDetailsForm setCurrentStep={setCurrentStep} />
+            <CustomerDetailsForm  />
           ) : currentStep === 1 ? (
             <CaptureCustomer />
           ) : currentStep === 2 ? (
@@ -165,7 +117,7 @@ const Page = () => {
           ) : currentStep === 5 ? (
             <Successful />
           ) : (
-            <CustomerDetailsForm setCurrentStep={setCurrentStep} />
+            <CustomerDetailsForm   />
           )}
         </div>
       </div>
