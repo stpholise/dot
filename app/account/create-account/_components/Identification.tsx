@@ -54,7 +54,7 @@ const Identification = () => {
     const newStep = currentStep + 1;
     dispatch(setCurrentStep(newStep));
   };
-  
+
   const onSubmit = (
   value: IdentificationProps,
   action: FormikHelpers<IdentificationProps>
@@ -177,10 +177,12 @@ const Identification = () => {
               <ImageDropzone
                 setFieldValue={setFieldValue}
                 fieldName="idFront"
+                text = {" Upload ID Image (Front)"}
               />
               <ImageDropzone
                 setFieldValue={setFieldValue}
                 fieldName="idBack"
+                text={" Upload ID Image (back)"}
               />
             </div>
             <footer className="flex gap-8 px-8 py-4 mt-auto">

@@ -9,9 +9,10 @@ import { CustomerAddress } from '../account/create-account/_components/Address'
 interface ImageDropzoneProps { 
      setFieldValue: FormikHelpers<IdentificationProps | CustomerAddress >["setFieldValue"];
      fieldName: string;
+     text: string;
 }
 
-const ImageDropzone = ({ setFieldValue, fieldName}: ImageDropzoneProps) => {
+const ImageDropzone = ({ setFieldValue, fieldName, text}: ImageDropzoneProps) => {
   const [itemFiles, setItemFiles] = useState<File[]>([]); 
   const [isFile, setIsFile] = useState<boolean>(false);
 
@@ -76,7 +77,7 @@ const ImageDropzone = ({ setFieldValue, fieldName}: ImageDropzoneProps) => {
             </div>
             <div className="">
               <p className="text-black font-medium flex gap-2">
-                Upload ID Image (Front){" "}
+               {text}{" "}
                 {isFile && (
                   <Image
                     src={"/icons/good.png"}

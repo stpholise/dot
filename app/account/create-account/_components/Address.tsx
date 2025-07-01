@@ -45,7 +45,7 @@ const Address = () => {
       .min(3, "at least 3 characters required")
       .required("city is required"),
     address: Yup.string().min(3).required("your address is requried"),
-    utilityBillImage: Yup.mixed(),
+    utilityBillImage: Yup.mixed().notRequired(),
   });
 
   const onSubmit = (
@@ -78,7 +78,7 @@ const Address = () => {
       >
         {({ isValid, dirty, isSubmitting, setFieldValue }) => (
           <Form>
-            <div className="">
+            <div className="px-8 py-8 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <label htmlFor="fname" className="text-sm text-[#454547]">
                   State *
@@ -129,11 +129,13 @@ const Address = () => {
                   className="text-xs text-red-500"
                 />
               </div>
-
-              <ImageDropzone
-                setFieldValue={setFieldValue}
-                fieldName="idFront"
-              />
+              <div className="">
+                <ImageDropzone
+                  setFieldValue={setFieldValue}
+                  fieldName="utilityBillImage"
+                  text={"Upload Utility Bill (Optional)"}
+                />
+              </div>
             </div>
             <footer className="flex gap-4 px-8 py-4 mt-auto">
               <PrimaryButtons
