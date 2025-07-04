@@ -25,7 +25,10 @@ const Page = () => {
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
-      <div className=" flex items-center justify-between mb-4">
+      <div className={clsx("  items-center justify-between mb-4",{
+        "hidden": currentStep == 5,
+        "flex" : currentStep !==5
+      })}>
         <div className="">
           <h4 className="text-sm text-[#454547]">
             Dot MFB Account Opening \ Create Account
