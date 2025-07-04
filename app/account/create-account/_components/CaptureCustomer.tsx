@@ -1,12 +1,13 @@
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
-import { useDispatch,   } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentStep,
   setCustomerImage,
 } from "@/app/store/slices/UserAccountSlice";
-import { useState, useEffect, useRef } from "react"; 
+import { useState, useEffect, useRef } from "react";
+import { RootState } from "@/app/store";
 
 const CaptureCustomer = () => {
   const dispatch = useDispatch();
@@ -17,15 +18,28 @@ const CaptureCustomer = () => {
   const [isValid, setIsValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const currentStep = useSelector(
+    (state: RootState) => state.userAccount.initialStepState.currentStep
+  );
+
   const incrementStep = () => {
     handleStopCamera();
     setIsSubmitting(true);
     setTimeout(() => {
-      dispatch(setCurrentStep(2));
       dispatch(setCustomerImage({ url: customerPhoto }));
-
+      const newStep = currentStep + 1;
+      dispatch(setCurrentStep(newStep));
       setIsSubmitting(false);
     }, 1000);
+  };
+
+  const decrementStep = () => {
+    handleStopCamera();
+    setTimeout(() => {
+      setIsSubmitting(false);
+      const newStep = currentStep + 1;
+      dispatch(setCurrentStep(newStep));
+    }, 500);
   };
 
   const handleVideo = () => {
@@ -60,7 +74,7 @@ const CaptureCustomer = () => {
       if (video && video.srcObject) {
         streamRef.current.getTracks().forEach((track) => {
           track.stop();
-          console.log('stopping track:', track.kind)
+          console.log("stopping track:", track.kind);
         });
         streamRef.current = null;
         video.srcObject = null;
@@ -82,8 +96,15 @@ const CaptureCustomer = () => {
         return;
       }
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL("image/png");
-      setCustomerPhoto(dataUrl);
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const photoUrl = URL.createObjectURL(blob);
+          setCustomerPhoto(photoUrl);
+        }
+      }, "image.png");
+      // const dataUrl = canvas.toDataURL("image/png");
+      // setCustomerPhoto(dataUrl);
+
       setIsValid(true);
       handleStopCamera();
     }
@@ -94,7 +115,7 @@ const CaptureCustomer = () => {
     setIsValid(false);
     handleVideo();
   };
- 
+
   useEffect(() => {
     handleVideo();
     return () => {
@@ -121,17 +142,19 @@ const CaptureCustomer = () => {
       <div className="flex flex-col gap-8 ">
         <div className=" flex flex-col gap-8">
           <div className="flex flex-col items-center justify-center gap-8 mt-8">
-            <div className="w-[336px] h-[408px] p-0 rounded-[50%] overflow-hidden border-2 border-red-200 flex items-center justify-center">
+            <div className="w-[336px] h-[408px] p-0 rounded-[50%] overflow-hidden flex items-center justify-center">
               {customerPhoto ? (
-                <Image
-                  alt="user Snapshot"
-                  width={1000}
-                  height={1000}
-                  src={customerPhoto || "/icons/user_placeholder.png"}
-                  className={clsx(
-                    "w-[400px] h-[500px] rounded-[50%]  object-cover"
-                  )}
-                />
+                <div className="flex items-center justify-center w-[336px] h-[408px]">
+                  <Image
+                    alt="user Snapshot"
+                    width={1000}
+                    height={1000}
+                    src={customerPhoto}
+                    className={clsx(
+                      "w-[336px] h-[408px] rounded-[50%]  object-fit shadow-lg "
+                    )}
+                  />
+                </div>
               ) : (
                 <video
                   ref={videoRef}
@@ -196,10 +219,11 @@ const CaptureCustomer = () => {
             text={"Go Back"}
             className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
             icon="/icons/arrow_back.png"
-            onClick={() => dispatch(setCurrentStep(0))}
+            onClick={decrementStep}
           />
           <PrimaryButtons
             text={"Proceed - Passport Capture"}
+            disabled={!isValid || isSubmitting}
             className={clsx(
               " h-[52px] font-medium rounded-lg w-96 justify-center items-center",
               {

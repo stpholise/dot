@@ -2,7 +2,10 @@
 import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
+import {
+  setCurrentStep,
+  setCustomerAddress,
+} from "@/app/store/slices/UserAccountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import clsx from "clsx";
@@ -52,8 +55,22 @@ const Address = () => {
     value: CustomerAddress,
     actions: FormikHelpers<CustomerAddress>
   ) => {
-    console.log(value);
-    console.log(actions);
+    console.log({
+      state: value.state,
+      city: value.city,
+      address: value.address,
+      utilityBillImage: value.utilityBillImage,
+    });
+    dispatch(
+      setCustomerAddress({
+        state: value.state,
+        city: value.city,
+        address: value.address,
+        utilityBillImage: value.utilityBillImage,
+      })
+    );
+    actions.resetForm();
+    incrementStep();
   };
 
   return (
@@ -146,6 +163,7 @@ const Address = () => {
               />
               <PrimaryButtons
                 text={"Proceed - Passport Capture"}
+                type={"submit"}
                 className={clsx(
                   " h-[52px] font-medium rounded-lg w-96 justify-center items-center",
                   {
@@ -154,7 +172,6 @@ const Address = () => {
                       !isValid || !dirty || isSubmitting,
                   }
                 )}
-                onClick={incrementStep}
               />
             </footer>
           </Form>

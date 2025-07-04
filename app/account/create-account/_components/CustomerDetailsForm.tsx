@@ -5,7 +5,10 @@ import * as Yup from "yup";
 import Image from "next/image";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
+import {
+  setCurrentStep,
+  setCustomerDetails,
+} from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
 interface CustomerDetails {
   withBvn: boolean;
@@ -13,7 +16,7 @@ interface CustomerDetails {
   fname: string;
   lname: string;
   phone: string;
-  dob: Date;
+  dob:  string ;
   gender: "male" | "female" | "other";
 }
 
@@ -28,7 +31,7 @@ const CustomerDetailsForm = () => {
     fname: "",
     lname: "",
     phone: "",
-    dob: new Date(),
+    dob: "",
     gender: "male",
   };
 
@@ -45,9 +48,7 @@ const CustomerDetailsForm = () => {
     phone: Yup.string()
       .required("Phone number is required")
       .matches(/^\d{11}$/, "Phone number must be 11 digits"),
-    dob: Yup.date()
-      .required("Date of Birth is required")
-      .max(new Date(), "Date of Birth cannot be in the future"),
+    dob: Yup.date().required("Date of Birth is required"),
     gender: Yup.string()
       .oneOf(["male", "female", "other"], "Gender is required")
       .required("Gender is required"),
@@ -55,11 +56,23 @@ const CustomerDetailsForm = () => {
 
   const submitForm = (
     values: CustomerDetails,
-    actions: FormikHelpers<CustomerDetails>
-  ) => {
-    console.log("Form submitted with values:", values);
-    actions.setSubmitting(false);
-    dispatch(setCurrentStep(1));
+    actions: FormikHelpers<CustomerDetails> 
+  ) => { 
+    
+   
+    dispatch(
+      setCustomerDetails({
+        withBvn: values.withBvn,
+        bvn: values.bvn,
+        fname: values.fname,
+        lname: values.lname,
+        phone: values.phone,
+        dob: values.dob,
+        gender: values.gender,
+      })
+    );
+    incrementStep()
+    actions.setSubmitting(false); 
   };
 
   const incrementStep = () => {
@@ -126,7 +139,7 @@ const CustomerDetailsForm = () => {
                 {values.withBvn && (
                   <div className=" flex flex-col gap-2">
                     <label htmlFor="" className="text-[#454547] text-sm">
-                      Customer BVN <sup>*</sup>
+                      Customer BVN *
                     </label>
                     <Field
                       type="text"
@@ -197,6 +210,10 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="date"
                     name="dob"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
+                      setFieldValue("dob", e.target.value.toString()) 
+                    }
+                    }
                     className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
                   />
                   <ErrorMessage
@@ -265,6 +282,7 @@ const CustomerDetailsForm = () => {
               />
               <PrimaryButtons
                 text={"Proceed - Passport Capture"}
+                type="submit"
                 className={clsx(
                   " h-[52px] font-medium rounded-lg w-96 justify-center items-center",
                   {
@@ -272,8 +290,7 @@ const CustomerDetailsForm = () => {
                     "bg-[#9A9A9A] text-white":
                       !isValid || !dirty || isSubmitting,
                   }
-                )}
-                onClick={incrementStep}
+                )} 
               />
             </footer>
           </Form>

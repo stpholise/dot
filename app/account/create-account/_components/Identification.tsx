@@ -3,7 +3,10 @@ import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
-import { setCurrentStep, setCustomerIdentification } from "@/app/store/slices/UserAccountSlice";
+import {
+  setCurrentStep,
+  setCustomerIdentification,
+} from "@/app/store/slices/UserAccountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import ImageDropzone from "@/app/_components/ImageDropzone";
@@ -39,38 +42,38 @@ const validationSchema = Yup.object().shape({
   idBack: Yup.mixed(),
 });
 
-
-
 const Identification = () => {
   const dispatch = useDispatch();
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
   const decrementStep = () => {
-    const newStep = currentStep - 1
-    dispatch(setCurrentStep(newStep))
-  }
+    const newStep = currentStep - 1;
+    dispatch(setCurrentStep(newStep));
+  };
   const incrementStep = () => {
     const newStep = currentStep + 1;
     dispatch(setCurrentStep(newStep));
   };
 
   const onSubmit = (
-  value: IdentificationProps,
-  action: FormikHelpers<IdentificationProps>
-) => {
-
-  dispatch(setCustomerIdentification({
-    idType:value.idType,
-    idNumber: value.idNumber, 
-    issueDate: value.issueDate,
-    expiryDate: value.expiryDate,
-    idImagefront: value.idFront ,
-    idImageback: value.idBack
-  }))
-  console.log(value);
-  action.resetForm();
-};
+    value: IdentificationProps,
+    action: FormikHelpers<IdentificationProps>
+  ) => {
+    dispatch(
+      setCustomerIdentification({
+        idType: value.idType,
+        idNumber: value.idNumber,
+        issueDate: value.issueDate,
+        expiryDate: value.expiryDate,
+        idFront: value.idFront,
+        idBack: value.idBack,
+      })
+    );
+     
+      incrementStep()
+    action.resetForm();
+  };
   return (
     <div>
       <div className=" flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
@@ -103,7 +106,9 @@ const Identification = () => {
                 <Field
                   as="select"
                   name="idType"
-                  className={clsx("w-full px-4 py-3 outline-none border border-gray-300 rounded-lg focus:ring-1 focus:ring-black",)}
+                  className={clsx(
+                    "w-full px-4 py-3 outline-none border border-gray-300 rounded-lg focus:ring-1 focus:ring-black"
+                  )}
                   placeholder="select identity type"
                 >
                   <option className="text-gray-400" disabled value="">
@@ -144,12 +149,13 @@ const Identification = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="issuedDate" className="text-sm text-[#454547]">
+                <label htmlFor="issueDate" className="text-sm text-[#454547]">
                   Issue Date *
                 </label>
                 <Field
                   type="date"
                   name="issueDate"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue('issueDate', e.target.value.toString())}
                   className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
                 />
                 <ErrorMessage
@@ -166,6 +172,7 @@ const Identification = () => {
                 <Field
                   type="date"
                   name="expiryDate"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>)=> setFieldValue('expiryDate', e.target.value.toString())}
                   className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
                 />
                 <ErrorMessage
@@ -177,7 +184,7 @@ const Identification = () => {
               <ImageDropzone
                 setFieldValue={setFieldValue}
                 fieldName="idFront"
-                text = {" Upload ID Image (Front)"}
+                text={" Upload ID Image (Front)"}
               />
               <ImageDropzone
                 setFieldValue={setFieldValue}
@@ -201,6 +208,7 @@ const Identification = () => {
 
                 <PrimaryButtons
                   text={"Proceed - Passport Capture"}
+                  type="submit"
                   className={clsx(
                     " h-[52px] font-medium rounded-lg w-44 justify-center items-center",
                     {
@@ -210,7 +218,7 @@ const Identification = () => {
                     }
                   )}
                   disabled={!isValid || !dirty || isSubmitting}
-                  onClick={incrementStep}
+             
                 />
               </div>
             </footer>

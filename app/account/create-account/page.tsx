@@ -1,15 +1,15 @@
 "use client";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
-import Image from "next/image"; 
+import Image from "next/image";
 import CustomerDetailsForm from "./_components/CustomerDetailsForm";
 import CaptureCustomer from "./_components/CaptureCustomer";
 import Identification from "./_components/Identification";
 import Address from "./_components/Address";
 import ReviewCredentials from "./_components/ReviewCredentials";
 import Successful from "./_components/Successful";
-import { useSelector, } from 'react-redux'
-import { setCurrentStep } from "@/app/store/slices/UserAccountSlice"
+import { useSelector } from "react-redux";
+import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
 interface Step {
   id: number;
@@ -19,9 +19,9 @@ interface Step {
 }
 
 const Page = () => {
-  
-
-  const currentStep = useSelector((state: RootState) => state.userAccount.initialStepState.currentStep)
+  const currentStep = useSelector(
+    (state: RootState) => state.userAccount.initialStepState.currentStep
+  );
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
@@ -40,10 +40,12 @@ const Page = () => {
           icon="/icons/close.svg"
         />
       </div>
-      <div className=" flex lg:gap-8  gap-5 justify-between">
+      <div className={" flex lg:gap-8  gap-5 justify-between"}>
         <div
-          className="  xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8
-        flex flex-col items-center gap-4 "
+          className={clsx(
+            "sticky md:top-28 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 flex flex-col items-center gap-4 ",
+            currentStep >= 4 && "hidden"
+          )}
         >
           <div className="grid gap-2 grid-cols-5 lg:gap-4 justify-stretch  ">
             {steps.map((step, index) => (
@@ -88,6 +90,7 @@ const Page = () => {
               </div>
             </div>
           ))}
+          .
           <div className="text-xs text-[#667085] flex gap-4 items-start mt-auto">
             <Image
               alt="lock icon"
@@ -102,10 +105,16 @@ const Page = () => {
             </p>
           </div>
         </div>
-        <div className="w-[600px] min-h-[580px] text-[#667085] bg-white rounded-3xl  ">
-        
+        <div
+          className={clsx(
+            "w-[600px] min-h-[580px] text-[#667085] bg-white rounded-3xl  ",
+            {
+              "lg:mx-auto ": currentStep >= 4,
+            }
+          )}
+        >
           {currentStep === 0 ? (
-            <CustomerDetailsForm  />
+            <CustomerDetailsForm />
           ) : currentStep === 1 ? (
             <CaptureCustomer />
           ) : currentStep === 2 ? (
@@ -117,7 +126,7 @@ const Page = () => {
           ) : currentStep === 5 ? (
             <Successful />
           ) : (
-            <CustomerDetailsForm   />
+            <CustomerDetailsForm />
           )}
         </div>
       </div>

@@ -6,8 +6,15 @@ interface CustomerDetails {
   fname: string;
   lname: string;
   phone: string;
-  dob: Date;
+  dob: string;
   gender: "male" | "female" | "other";
+}
+
+interface CustomerAccountDetail {
+  AccountName: string;
+  AccountNumber: string;
+  AccountTier: string
+
 }
 
 interface CusstomerImage {
@@ -21,10 +28,10 @@ interface CustomerIdentification {
   idType: "NIN" | "Voter ID" | "Driver's License";
   idNumber: string;
   issuedBy?: string;
-  issueDate: Date;
-  expiryDate: Date;
-  idImagefront: File | null;
-  idImageback: File | null;
+  issueDate: string;
+  expiryDate: string;
+  idFront: string | null;
+  idBack: string | null;
 }
 
 interface CustomerAddress {
@@ -41,6 +48,7 @@ interface UserAccountState {
   customerImage: CusstomerImage;
   customerIdentification: CustomerIdentification;
   customerAddress: CustomerAddress;
+  customerAccountDetail: CustomerAccountDetail;
 }
 interface currentStepState {
   currentStep: number;
@@ -52,7 +60,7 @@ const initialState: UserAccountState = {
     fname: "",
     lname: "",
     phone: "",
-    dob: new Date(),
+    dob: "",
     gender: "male",
   },
   customerImage: {
@@ -64,10 +72,10 @@ const initialState: UserAccountState = {
   customerIdentification: {
     idType: "NIN",
     idNumber: "",
-    issueDate: new Date(),
-    expiryDate: new Date(),
-    idImagefront: null,
-    idImageback: null,
+    issueDate: "",
+    expiryDate: "",
+    idFront: null,
+    idBack: null,
   },
   customerAddress: {
     state: "",
@@ -77,6 +85,11 @@ const initialState: UserAccountState = {
     postalCode: "",
     utilityBillImage: null,
   },
+  customerAccountDetail: {
+    AccountName: '',
+    AccountNumber: '',
+    AccountTier: '',
+  }
 };
 const initialStepState: currentStepState = {
   currentStep: 0,
@@ -106,13 +119,19 @@ export const userAccountSlice = createSlice({
         ...state.userAccountInitialState.customerIdentification,
         ...action.payload,
       };
-      console.log(action.payload);
+      console.log('customer identification :',action.payload);
     },
     setCustomerAddress: (state, action) => {
       state.userAccountInitialState.customerAddress = {
         ...state.userAccountInitialState.customerAddress,
         ...action.payload,
       };
+    },
+    setCustomerAccountDetail: (state, action) => {
+      state.userAccountInitialState.customerAccountDetail = {
+        ...state.userAccountInitialState.customerAccountDetail,
+        ...action.payload,
+      }
     },
     setCurrentStep: (state, action) => {
       state.initialStepState.currentStep = action.payload;
@@ -126,6 +145,7 @@ export const {
   setCustomerIdentification,
   setCustomerAddress,
   setCurrentStep,
+  setCustomerAccountDetail,
 } = userAccountSlice.actions;
 
 export default userAccountSlice.reducer;
