@@ -138,7 +138,7 @@ const CaptureCustomer = () => {
 
   return (
     <div>
-      <div className=" flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
+      <div className=" hidden lg:flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
         <Image
           alt="user"
           src="/icons/security.png"

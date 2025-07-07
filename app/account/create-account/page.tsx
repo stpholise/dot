@@ -56,10 +56,10 @@ const Page = () => {
           onClick={cancelRegistration}
         />
       </div>
-      <div className={" flex lg:gap-8  gap-5 justify-between"}>
+      <div className={" flex lg:gap-8  gap-5 lg:justify-between justify-center"}>
         <div
           className={clsx(
-            "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 flex flex-col items-center gap-4 ",
+            "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden lg:flex flex-col items-center gap-4 ",
             currentStep >= 4 && "hidden"
           )}
         >
@@ -106,7 +106,7 @@ const Page = () => {
               </div>
             </div>
           ))}
-          .
+          
           <div className="text-xs text-[#667085] flex gap-4 items-start mt-auto">
             <Image
               alt="lock icon"
@@ -123,12 +123,27 @@ const Page = () => {
         </div>
         <div
           className={clsx(
-            "w-[600px] min-h-[580px] text-[#667085] bg-white rounded-3xl  ",
+            "lg:w-[600px] max-w-[600px]   min-h-[580px] text-[#667085] bg-white rounded-3xl  ",
             {
               "lg:mx-auto ": currentStep >= 4,
             }
           )}
         >
+              <div className="grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-8 py-4 mt-4 ">
+            {steps.map((step, index) => (
+              <div
+                onClick={() => setCurrentStep(index)}
+                key={index}
+                className={clsx(
+                  "md:w-24 sm:w-20  h-1 rounded-sm hover:cursor-pointer ",
+                  {
+                    "bg-gray-300": currentStep !== index,
+                    "bg-gray-400": currentStep >= index,
+                  }
+                )}
+              ></div>
+            ))}
+          </div>
           {currentStep === 0 ? (
             <CustomerDetailsForm />
           ) : currentStep === 1 ? (

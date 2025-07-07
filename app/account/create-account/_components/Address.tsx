@@ -22,8 +22,12 @@ export interface CustomerAddress {
 
 const Address = () => {
   const dispatch = useDispatch();
-  const { states, isLoading, error } = useFetchState() as { states: string[], isLoading: boolean, error: string} 
-  console.log({'states': states, 'isLoading': isLoading, "error": error}) 
+  const { states, isLoading, error } = useFetchState() as {
+    states: string[];
+    isLoading: boolean;
+    error: string;
+  };
+  console.log({ states: states, isLoading: isLoading, error: error });
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
@@ -78,7 +82,22 @@ const Address = () => {
 
   return (
     <div>
-      <div className=" flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
+      <div className=" lg:hidden sm:flex gap-4 px-8 mt-4">
+        <Image
+          src={"/image/Frame 48.png"}
+          alt="doc"
+          height={80}
+          width={80}
+          className="rounded-xl max-h-20 max-w-20"
+        />
+        <div className=" ">
+          <p className="text-sm text-[#667085] text-medium">Customer Address</p>
+          <h3 className="text-black text-3xl font-medium">
+            How can we locate the customer?
+          </h3>
+        </div>
+      </div>
+      <div className=" hidden lg:flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
         <Image
           alt="user"
           src="/icons/security.png"
@@ -112,14 +131,20 @@ const Address = () => {
                     as="select"
                     name="state"
                     className="w-full px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
-                  
                   >
-                    <option value="" className='text-gray-300' disabled>select a state</option>
-                    {states && states.map((state) => (
-                      <option className="text-black" value={state} key={state}>
-                        {state}
-                      </option>
-                    ))}
+                    <option value="" className="text-gray-300" disabled>
+                      select a state
+                    </option>
+                    {states &&
+                      states.map((state) => (
+                        <option
+                          className="text-black"
+                          value={state}
+                          key={state}
+                        >
+                          {state}
+                        </option>
+                      ))}
                   </Field>
                 )}
                 <ErrorMessage

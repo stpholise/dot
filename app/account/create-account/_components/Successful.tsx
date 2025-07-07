@@ -28,13 +28,13 @@ const Successful = () => {
     dispatch(setCurrentStep(0));
   };
   return (
-    <div className="px-10 py-8">
+    <div className="sm:px-10 sm:py-8 px-8 py-4">
       <Image
         src={"/icons/success.png"}
         alt={"account created"}
         width={85}
         height={85}
-        className="lg:mx-auto my-10"
+        className="mx-auto my-4 lg:my-10"
       />
 
       <h2 className="text-center font-medium text-black text-lg">

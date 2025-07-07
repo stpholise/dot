@@ -54,13 +54,12 @@ const ReviewCredentials = () => {
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
-  // const setCustomerIdentification = useSelector((state: RootState))
-  const dateFn = () => {
-    return new Intl.DateTimeFormat("en-gb", {
+  const dateFn = (date: string | Date) => {
+    return new Intl.DateTimeFormat("en-GB", {
       day: "2-digit",
       month: "long",
       year: "numeric",
-    });
+    }).format(new Date(date));
   };
 
   const decrementStep = () => {
@@ -133,7 +132,7 @@ const ReviewCredentials = () => {
             <p className="text-xs text-[#667085]">Date of Birth</p>
             <div className="">
               <p className="text-black">
-                {dateFn().format(new Date(customerDetails.dob))}{" "}
+                {customerDetails.dob && dateFn(customerDetails.dob)}
               </p>
             </div>
           </div>
@@ -159,19 +158,21 @@ const ReviewCredentials = () => {
             <p className="text-xs text-[#667085]">Issue Date</p>
             <div className="">
               <p className="text-black">
-                {dateFn().format(new Date(customerIdentification.issueDate))}{" "}
+                {customerIdentification.issueDate &&
+                  dateFn(customerIdentification.issueDate)}{" "}
               </p>
             </div>
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-xs text-[#667085]">Expiry Date</p>
             <div className="">
-              <p className="text-black">
-                {dateFn().format(new Date(customerIdentification.expiryDate))}{" "}
-              </p>
+              {customerIdentification.expiryDate && (
+                <p className="text-black">
+                  {dateFn(customerIdentification.expiryDate)}{" "}
+                </p>
+              )}
             </div>
           </div>
-         
         </div>
         <div className="flex flex-col gap-4 py-4">
           <div className="flex gap-4 whitespace-nowrap items-center text-xs uppercase font-medium">

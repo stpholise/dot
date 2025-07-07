@@ -76,7 +76,23 @@ const Identification = () => {
   };
   return (
     <div>
-      <div className=" flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
+      <div className=" lg:hidden sm:flex gap-4 px-8 mt-4">
+              <Image
+                src={"/image/Frame 48.png"}
+                alt="doc"
+                height={80}
+                width={80}
+                className="rounded-xl max-h-20 max-w-20"
+              />
+              <div className=" ">
+                <p className="text-sm text-[#667085] text-medium">Customer Identification</p>
+                <h3 className="text-black text-3xl font-medium">
+                 Provide your current valid means of identification
+                </h3>
+              </div>
+            </div>
+       
+      <div className=" hidden lg:flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
         <Image
           alt="user"
           src="/icons/security.png"
