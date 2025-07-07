@@ -6,6 +6,7 @@ import {
   setCurrentStep,
   setCustomerAddress,
 } from "@/app/store/slices/UserAccountSlice";
+import { useFetchState } from "./useFetchState";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import clsx from "clsx";
@@ -21,6 +22,8 @@ export interface CustomerAddress {
 
 const Address = () => {
   const dispatch = useDispatch();
+  const { states, isLoading, error } = useFetchState() as { states: string[], isLoading: boolean, error: string} 
+  console.log({'states': states, 'isLoading': isLoading, "error": error}) 
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
@@ -100,12 +103,25 @@ const Address = () => {
                 <label htmlFor="fname" className="text-sm text-[#454547]">
                   State *
                 </label>
-                <Field
-                  type="text"
-                  name="state"
-                  className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                  placeholder="Enter your id number"
-                />
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : error ? (
+                  <p>Error: {error}</p>
+                ) : (
+                  <Field
+                    as="select"
+                    name="state"
+                    className="w-full px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
+                  
+                  >
+                    <option value="" className='text-gray-300' disabled>select a state</option>
+                    {states && states.map((state) => (
+                      <option className="text-black" value={state} key={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </Field>
+                )}
                 <ErrorMessage
                   name="state"
                   component="div"

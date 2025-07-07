@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export const useFetchState = () => {
-  const [states, setStates] = useState();
+  const [states, setStates] = useState<string[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,8 +26,8 @@ export const useFetchState = () => {
         }
         setIsLoading(false);
       }
-      return { states, isLoading, error}
     };
-    fetchState()
+    fetchState();
   });
+  return { states, isLoading, error };
 };

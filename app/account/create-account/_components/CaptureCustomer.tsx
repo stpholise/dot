@@ -17,6 +17,7 @@ const CaptureCustomer = () => {
   const [customerPhoto, setCustomerPhoto] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isValid, setIsValid] = useState(false);
+  const [canTakePhoto, setCanTakePhoto] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentStep = useSelector(
@@ -36,6 +37,7 @@ const CaptureCustomer = () => {
 
   const decrementStep = () => {
     handleStopCamera();
+    setIsValid(true);
     setTimeout(() => {
       setIsSubmitting(false);
       const newStep = currentStep - 1;
@@ -125,7 +127,9 @@ const CaptureCustomer = () => {
   };
 
   useEffect(() => {
-    console.log(navigator.mediaDevices.enumerateDevices);
+    setTimeout(() => {
+      setCanTakePhoto(false);
+    }, 500);
     handleVideo();
     return () => {
       handleStopCamera();
@@ -156,11 +160,11 @@ const CaptureCustomer = () => {
                 <div className="flex items-center justify-center w-[336px] h-[408px]">
                   <Image
                     alt="user Snapshot"
-                    width={1000}
-                    height={1000}
+                    width={336}
+                    height={300}
                     src={customerPhoto}
                     className={clsx(
-                      "w-[336px] h-[408px] rounded-[50%]  object-fit shadow-lg "
+                      "w-[336px] h-[408px] rounded-[50%]  object-cover shadow-lg object-center-top "
                     )}
                   />
                 </div>
@@ -212,6 +216,7 @@ const CaptureCustomer = () => {
                     </div>
                     <div className=" border-2 border-black rounded-full h-[72px] w-[72px] flex items-center justify-center px-1 py-1">
                       <button
+                        disabled={canTakePhoto}
                         className="bg-black h-[60px] rounded-full w-[60px] "
                         onClick={handleTakePicture}
                       ></button>
