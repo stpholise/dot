@@ -3,6 +3,7 @@ import { RootState } from "@/app/store";
 import { useSelector, useDispatch } from "react-redux";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
+import { useEffect } from 'react'
 
 interface DotAccountBenefit {
   icon: string;
@@ -27,6 +28,13 @@ const Successful = () => {
   const incrementStep = () => { 
     dispatch(setCurrentStep(0));
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(setCurrentStep(0))
+    }
+  }, [])
+
   return (
     <div className="sm:px-10 sm:py-8 px-8 py-4">
       <Image
@@ -60,7 +68,7 @@ const Successful = () => {
           {" "}
           Here are some benefits of owning a DOT account
         </h4>
-        <div className="grid grid-cols-2 my-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 my-4 gap-4">
           {dotAccountBenefit.map((item, index) => (
             <div className="flex gap-3 items-start" key={item.title + index}>
               <div className="w-10 h-10 rounded-full bg-gray-100 p-2 flex items-center justify-center">
@@ -84,7 +92,7 @@ const Successful = () => {
           ))}
         </div>
       </div>
-      <footer className="flex gap-4  py-4 mt-auto">
+      <footer className="flex gap-4  py-4 mt-auto sm:flex-row flex-col-reverse">
         <PrimaryButtons
           text={"Create another Account"}
           className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
@@ -95,7 +103,7 @@ const Successful = () => {
           text={"View Created Accounts"}
           onClick={incrementStep}
           className={
-            " h-[48px] bg-black text-white font-medium rounded-lg w-96 justify-center items-center"
+            " h-[48px] bg-black text-white font-medium rounded-lg sm:w-96 justify-center items-center"
           }
         />
       </footer>

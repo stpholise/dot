@@ -76,17 +76,17 @@ const Identification = () => {
   };
   return (
     <div>
-      <div className=" lg:hidden sm:flex gap-4 px-8 mt-4">
+      <div className=" lg:hidden flex gap-4 px-8 mt-4">
               <Image
                 src={"/image/Frame 48.png"}
                 alt="doc"
                 height={80}
                 width={80}
-                className="rounded-xl max-h-20 max-w-20"
+                className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 h-14 w-14"
               />
               <div className=" ">
-                <p className="text-sm text-[#667085] text-medium">Customer Identification</p>
-                <h3 className="text-black text-3xl font-medium">
+                <p className="text-xs sm:text-sm text-[#667085] text-medium">Customer Identification</p>
+                <h3 className="text-black text-base sm:text-3xl font-medium">
                  Provide your current valid means of identification
                 </h3>
               </div>
@@ -208,7 +208,7 @@ const Identification = () => {
                 text={" Upload ID Image (back)"}
               />
             </div>
-            <footer className="flex gap-8 px-8 py-4 mt-auto">
+            <footer className="flex gap-8 px-8 py-4 mt-auto flex-col-reverse">
               <PrimaryButtons
                 text={"Go Back"}
                 className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"

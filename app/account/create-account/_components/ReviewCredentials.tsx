@@ -174,44 +174,46 @@ const ReviewCredentials = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-4 py-4">
-          <div className="flex gap-4 whitespace-nowrap items-center text-xs uppercase font-medium">
-            Uploaded Documents
-            <div className="h-0 border border-gray-200 w-full"></div>
-          </div>
+        {customerIdentification.idFront && customerIdentification.idBack && (
+          <div className="flex flex-col gap-4 py-4">
+            <div className="flex gap-4 whitespace-nowrap items-center text-xs uppercase font-medium">
+              Uploaded Documents
+              <div className="h-0 border border-gray-200 w-full"></div>
+            </div>
 
-          <div className="flex gap-4 rounded-2xl h-16 px-4 py-2 bg-[#F7F7F7]  ">
-            <Image
-              src={"/icons/document.png"}
-              alt={"document"}
-              width={40}
-              height={40}
-              className=""
-            />
-            <div className="">
-              <h4 className="text-black text-sm">ID Image (Front)</h4>
-              <p className="text-[#868C98] text-xs overflow-hidden">
-                {customerIdentification.idFront}
-              </p>
+            <div className="flex gap-4 rounded-2xl h-16 px-4 py-2 bg-[#F7F7F7]  ">
+              <Image
+                src={"/icons/document.png"}
+                alt={"document"}
+                width={40}
+                height={40}
+                className=""
+              />
+              <div className="">
+                <h4 className="text-black text-sm">ID Image (Front)</h4>
+                <p className="text-[#868C98] text-xs overflow-hidden">
+                  {customerIdentification.idFront}
+                </p>
+              </div>
+            </div>
+
+            <div className=" flex gap-4 rounded-2xl h-16 py-2 px-4 bg-[#F7F7F7]">
+              <Image
+                src={"/icons/document.png"}
+                alt={"document"}
+                width={40}
+                height={40}
+                className=""
+              />
+              <div className="">
+                <h4 className="text-black text-sm">ID Image (Back)</h4>
+                <p className="text-[#868C98] text-xs overflow-hidden">
+                  {customerIdentification.idBack}
+                </p>
+              </div>
             </div>
           </div>
-
-          <div className=" flex gap-4 rounded-2xl h-16 py-2 px-4 bg-[#F7F7F7]">
-            <Image
-              src={"/icons/document.png"}
-              alt={"document"}
-              width={40}
-              height={40}
-              className=""
-            />
-            <div className="">
-              <h4 className="text-black text-sm">ID Image (Back)</h4>
-              <p className="text-[#868C98] text-xs overflow-hidden">
-                {customerIdentification.idBack}
-              </p>
-            </div>
-          </div>
-        </div>
+        )}
         <div className="flex gap-4 py-4">
           <input
             type="checkbox"
@@ -231,7 +233,7 @@ const ReviewCredentials = () => {
           </div>
         </div>
       </div>
-      <footer className="flex gap-4  py-4 mt-auto">
+      <footer className="flex gap-4  py-4 mt-auto sm:flex-row flex-col-reverse">
         <PrimaryButtons
           text={"Edit Credentials"}
           className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
@@ -242,7 +244,7 @@ const ReviewCredentials = () => {
           text={"Proceed - Passport Capture"}
           onClick={CreateUserAccount}
           className={
-            " h-[48px] bg-black text-white font-medium rounded-lg w-96 justify-center items-center"
+            " h-[48px] bg-black text-white font-medium rounded-lg sm:w-96 justify-center items-center"
           }
         />
       </footer>

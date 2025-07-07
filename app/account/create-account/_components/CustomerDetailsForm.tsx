@@ -79,17 +79,17 @@ const CustomerDetailsForm = () => {
   };
   return (
     <div>
-      <div className=" lg:hidden md:flex gap-4 px-8 mt-4">
+      <div className=" lg:hidden flex gap-4 px-8 mt-4">
         <Image
           src={"/image/Frame 48.png"}
           alt="doc"
           height={80}
           width={80}
-          className="rounded-xl max-h-20 max-w-20"
+          className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 w-14 h-14"
         />
         <div className=" ">
-          <p className="text-sm text-[#667085] text-medium">Customer Details</p>
-          <h3 className="text-black text-3xl font-medium">
+          <p className=" text-xs sm:text-sm text-[#667085] text-medium">Customer Details</p>
+          <h3 className="text-black text-base sm:text-3xl font-medium">
             {" "}
             Who is this account being created for?
           </h3>
@@ -118,8 +118,8 @@ const CustomerDetailsForm = () => {
             <div className="  font-medium px-9 py-4">
               <div className=" flex flex-col gap-2 border-b border-gray-100 py-6">
                 <p className="text-sm">Does the customer have a BVN? *</p>
-                <div className="flex gap-4">
-                  <label className="w-1/2 flex justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
+                <div className="flex sm:flex-row flex-col gap-4">
+                  <label className="sm:w-1/2 flex  justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
                     Yes, the BVN is present
                     <Field
                       type="radio"
@@ -129,7 +129,7 @@ const CustomerDetailsForm = () => {
                       className="cursor-pointer w-5 h-5"
                     />
                   </label>
-                  <label className="flex w-1/2 justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
+                  <label className="flex sm:w-1/2 justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
                     No, Bvn is not available
                     <Field
                       type="radio"
@@ -287,17 +287,17 @@ const CustomerDetailsForm = () => {
                 </div>
               </div>
             </div>
-            <footer className="flex gap-4 px-8 py-4 mt-auto">
+            <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
-                text={"Go Back"}
-                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
-                icon="/icons/arrow_back.png"
+                text={"Cancel"}
+                className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
+               
               />
               <PrimaryButtons
                 text={"Proceed - Passport Capture"}
                 type="submit"
                 className={clsx(
-                  " h-[48px] font-medium rounded-lg w-96 justify-center items-center",
+                  " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
                     "bg-black text-white": isValid && dirty && !isSubmitting,
                     "bg-[#9A9A9A] text-white":
