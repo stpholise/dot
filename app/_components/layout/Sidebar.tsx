@@ -1,9 +1,9 @@
 "use client";
-import Image from "next/image"; 
+import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
-import { usePathname } from "next/navigation";  
-import { menuState } from "@/app/store/slices/AppSlice";
+import { usePathname } from "next/navigation";
+import { menuState, toggleMenu } from "@/app/store/slices/AppSlice";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
@@ -21,14 +21,14 @@ const Sidebar = () => {
   return (
     <div
       className={clsx(
-        "bg-white transition-transform ease-in-out duration-500 fixed top-20 lg:top-0 z-30 left-0 bottom-0 lg:h-screen sm:w-56 py-6 w-9/12 lg:flex lg:flex-col transform",
+        "bg-white transition-transform ease-in-out duration-500 fixed top-16 lg:top-0 z-40 left-0 bottom-0 lg:h-screen sm:w-56 pb-6 pt-10 w-9/12 lg:flex lg:flex-col transform",
         {
           "-translate-x-full lg:translate-x-0": !isMenuOpen,
           "translate-x-0": isMenuOpen,
         }
       )}
     >
-      <div className="h-full">
+      <div className="h-full bg-white">
         <div className="w-56 h-28 lg: hidden lg:flex items-center justify-center">
           <Image
             src="/icons/dot_logo.svg"
@@ -44,7 +44,7 @@ const Sidebar = () => {
             <p className="text-[#667085] font-mdeium text-sm uppercase ml-6 my-2">
               MAIN
             </p>
-            <div role="list" className="flex flex-col gap-2 w-full sm:w-11/12">
+            <div role="list" className="flex flex-col gap-2 w-full 2xs:w-11/12 sm:w-11/12">
               {navItems.map((item) => (
                 <button
                   onClick={() => handleNavigation(item)}
@@ -71,27 +71,32 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
-            <div role="list" className="flex flex-col gap-2 w-11/12 sticky bottom-10 ">
-      {secondaryNavItems.map((item) => (
-        <button
-          onClick={() => handleNavigation(item)}
-          className="flex transition duration-300 ease lg:px-6 xs:px-6 px-4 lg:text-black lg:text-base font-medium py-2 justify-start items-center gap-4 text-[#363739]  whitespace-nowrap  group"
-          key={item.title}
-        >
-         
-          <Image
-            className="group-hover:stroke-white"
-            alt={item.title}
-            src={item.icon}
-            height="17"
-            width="16"
-          />{" "}
-          {item.title}{" "}
-        </button>
-      ))}
-    </div>
+          <div
+            role="list"
+            className="flex flex-col gap-2 w-11/12 sticky bottom-10 "
+          >
+            {secondaryNavItems.map((item) => (
+              <button
+                onClick={() => handleNavigation(item)}
+                className="flex  transition duration-300 ease lg:px-6 xs:px-6 px-4 lg:text-black lg:text-base font-medium py-2 justify-start items-center gap-4 text-[#363739]  whitespace-nowrap  group"
+                key={item.title}
+              >
+                <Image
+                  className="group-hover:stroke-white"
+                  alt={item.title}
+                  src={item.icon}
+                  height="17"
+                  width="16"
+                />{" "}
+                {item.title}{" "}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
+        {isMenuOpen && (
+          <div onClick={() =>dispatch(toggleMenu())} className="overlay  w-screen h-screen -z-60 bg-transparent fixed top-0 right-0 bottom-0 left-0"></div>
+        )}
     </div>
   );
 };

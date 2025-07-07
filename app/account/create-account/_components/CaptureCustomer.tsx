@@ -228,7 +228,7 @@ const CaptureCustomer = () => {
           </div>
         </div>
 
-        <footer className="flex gap-4 px-8 py-4 mt-auto">
+        <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
           <PrimaryButtons
             text={"Go Back"}
             className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
@@ -239,7 +239,7 @@ const CaptureCustomer = () => {
             text={"Proceed - Passport Capture"}
             disabled={!isValid || isSubmitting}
             className={clsx(
-              " h-[48px] font-medium rounded-lg w-96 justify-center items-center",
+              " h-[48px] font-medium rounded-lg sm:w-96 justify-center items-center",
               {
                 "bg-black text-white": isValid && !isSubmitting,
                 "bg-[#9A9A9A] text-white": !isValid || isSubmitting,

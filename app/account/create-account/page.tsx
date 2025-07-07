@@ -35,28 +35,47 @@ const Page = () => {
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
       <div
-        className={clsx("  items-center justify-between mb-4", {
-          hidden: currentStep == 5,
-          flex: currentStep !== 5,
-        })}
+        className={clsx(
+          " items-center justify-between mb-4",
+          {
+            hidden: currentStep == 5,
+            flex: currentStep !== 5,
+          }
+        )}
       >
         <div className="">
-          <h4 className="text-sm text-[#454547]">
+          <h4 className="text-sm text-[#454547] sm:block hidden">
             Dot MFB Account Opening \ Create Account
           </h4>
-          <h1 className="h1 text-2xl font-medium text-black">
+          <h1 className="h1 text-base sm:text-2xl font-medium text-black">
             Create a Dot MFB Account
           </h1>
         </div>
         <PrimaryButtons
-          className="mt-4 text-black bg-white border border-gray-300 hover:bg-gray-100 h-[52px] items-center justify-center"
+          className="mt-4 text-black hidden lg:flex bg-white border border-gray-300 hover:bg-gray-100 h-[48px] items-center justify-center"
           text="Cancel Registration"
           icon="/icons/close.svg"
           disabled={currentStep === 1}
           onClick={cancelRegistration}
         />
+        <button
+          className=" text-black flex lg:hidden bg-white border border-gray-300 hover:bg-gray-100 h-[40px] w-[40px] items-center justify-center rounded-lg"
+          disabled={currentStep === 1}
+          onClick={cancelRegistration}
+        >
+          {" "}
+          <Image
+            src="/icons/close.svg"
+            alt="cancel registration"
+            width={24}
+            height={24}
+            className=""
+          />
+        </button>
       </div>
-      <div className={" flex lg:gap-8  gap-5 lg:justify-between justify-center"}>
+      <div
+        className={" flex lg:gap-8  gap-5 lg:justify-between justify-center"}
+      >
         <div
           className={clsx(
             "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden lg:flex flex-col items-center gap-4 ",
@@ -106,7 +125,7 @@ const Page = () => {
               </div>
             </div>
           ))}
-          
+
           <div className="text-xs text-[#667085] flex gap-4 items-start mt-auto">
             <Image
               alt="lock icon"
@@ -123,13 +142,15 @@ const Page = () => {
         </div>
         <div
           className={clsx(
-            "lg:w-[600px] max-w-[600px]   min-h-[580px] text-[#667085] bg-white rounded-3xl  ",
+            "lg:w-[600px] max-w-[600px] w-full   min-h-[580px] text-[#667085] bg-white rounded-3xl  ",
             {
               "lg:mx-auto ": currentStep >= 4,
             }
           )}
         >
-              <div className="grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-8 py-4 mt-4 ">
+          <div className={clsx("grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-8 py-4 mt-4 ",{
+            "hidden" : currentStep >= 4
+          })}>
             {steps.map((step, index) => (
               <div
                 onClick={() => setCurrentStep(index)}

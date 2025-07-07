@@ -82,17 +82,17 @@ const Address = () => {
 
   return (
     <div>
-      <div className=" lg:hidden sm:flex gap-4 px-8 mt-4">
+      <div className=" lg:hidden flex gap-4 px-8 mt-4">
         <Image
           src={"/image/Frame 48.png"}
           alt="doc"
           height={80}
           width={80}
-          className="rounded-xl max-h-20 max-w-20"
+          className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 w-14 h-14"
         />
         <div className=" ">
-          <p className="text-sm text-[#667085] text-medium">Customer Address</p>
-          <h3 className="text-black text-3xl font-medium">
+          <p className=" text-xs sm:text-sm text-[#667085] text-medium">Customer Address</p>
+          <h3 className="text-black text-base sm:text-3xl font-medium">
             How can we locate the customer?
           </h3>
         </div>
@@ -195,7 +195,7 @@ const Address = () => {
                 />
               </div>
             </div>
-            <footer className="flex gap-4 px-8 py-4 mt-auto">
+            <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
                 text={"Go Back"}
                 className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
@@ -206,7 +206,7 @@ const Address = () => {
                 text={"Proceed - Passport Capture"}
                 type={"submit"}
                 className={clsx(
-                  " h-[48px] font-medium rounded-lg w-96 justify-center items-center",
+                  " h-[48px] font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
                     "bg-black text-white": isValid && dirty && !isSubmitting,
                     "bg-[#9A9A9A] text-white":

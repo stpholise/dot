@@ -53,7 +53,7 @@ const ImageDropzone = ({
   return (
     <div
       className={clsx(" bg-[#F7F7F7] flex rounded-3xl ", {
-        "w-[520px] h-[130px] px-6 py-6 justify-center ": !isFile,
+        "sm:w-[520px] sm:h-[130px] px-6 py-6 justify-center ": !isFile,
         "px-4 py-4  justify-start": isFile,
       })}
     >
