@@ -16,7 +16,7 @@ interface CustomerDetails {
   fname: string;
   lname: string;
   phone: string;
-  dob:  string ;
+  dob: string;
   gender: "male" | "female" | "other";
 }
 
@@ -56,10 +56,8 @@ const CustomerDetailsForm = () => {
 
   const submitForm = (
     values: CustomerDetails,
-    actions: FormikHelpers<CustomerDetails> 
-  ) => { 
-    
-   
+    actions: FormikHelpers<CustomerDetails>
+  ) => {
     dispatch(
       setCustomerDetails({
         withBvn: values.withBvn,
@@ -71,8 +69,8 @@ const CustomerDetailsForm = () => {
         gender: values.gender,
       })
     );
-    incrementStep()
-    actions.setSubmitting(false); 
+    incrementStep();
+    actions.setSubmitting(false);
   };
 
   const incrementStep = () => {
@@ -210,10 +208,9 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="date"
                     name="dob"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
-                      setFieldValue("dob", e.target.value.toString()) 
-                    }
-                    }
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setFieldValue("dob", e.target.value.toString());
+                    }}
                     className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
                   />
                   <ErrorMessage
@@ -277,20 +274,20 @@ const CustomerDetailsForm = () => {
             <footer className="flex gap-4 px-8 py-4 mt-auto">
               <PrimaryButtons
                 text={"Go Back"}
-                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
+                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
                 icon="/icons/arrow_back.png"
               />
               <PrimaryButtons
                 text={"Proceed - Passport Capture"}
                 type="submit"
                 className={clsx(
-                  " h-[52px] font-medium rounded-lg w-96 justify-center items-center",
+                  " h-[48px] font-medium rounded-lg w-96 justify-center items-center",
                   {
                     "bg-black text-white": isValid && dirty && !isSubmitting,
                     "bg-[#9A9A9A] text-white":
                       !isValid || !dirty || isSubmitting,
                   }
-                )} 
+                )}
               />
             </footer>
           </Form>

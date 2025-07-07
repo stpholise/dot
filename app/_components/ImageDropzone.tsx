@@ -52,17 +52,15 @@ const ImageDropzone = ({
 
   return (
     <div
-      className={clsx(" bg-[#F7F7F7] rounded-3xl ", {
-        "w-[520px] h-[130px] px-6 py-6 ": !isFile,
-        "px-4 py-4": isFile,
+      className={clsx(" bg-[#F7F7F7] flex rounded-3xl ", {
+        "w-[520px] h-[130px] px-6 py-6 justify-center ": !isFile,
+        "px-4 py-4  justify-start": isFile,
       })}
     >
       {
         <div
-          className={clsx("flex items-center ", {
-            "justify-center": !isFile,
-
-            "justify-items-start ": isFile,
+          className={clsx("flex items-center justify-between w-full", {
+            
           })}
         >
           <div
@@ -72,7 +70,7 @@ const ImageDropzone = ({
               {
                 "justify-center": !isFile,
 
-                "justify-items-start ": isFile,
+                "justify-start ": isFile,
               }
             )}
           >
@@ -93,7 +91,7 @@ const ImageDropzone = ({
                   alt={"gallery icon"}
                   width={40}
                   height={40}
-                  className="w-full h-full"
+                  className="w-full h-full "
                 />
               ) : (
                 <Image
@@ -105,9 +103,9 @@ const ImageDropzone = ({
                 />
               )}
             </div>
-            <div className="">
-              <p className="text-black font-medium flex gap-2">
-                {text}{" "}
+            <div className=" ">
+              <p className="text-black font-medium flex gap-2 ">
+                {text} 
                 {isFile && (
                   <Image
                     src={"/icons/good.png"}

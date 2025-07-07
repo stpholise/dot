@@ -5,6 +5,7 @@ import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import {
   setCurrentStep,
   setCustomerAccountDetail,
+  resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
 import { useState } from "react";
 
@@ -18,7 +19,8 @@ const ReviewCredentials = () => {
   };
 
   const CreateUserAccount = () => {
-    const customerFullName =  customerDetails.lname + ' ' + customerDetails.fname ;
+    const customerFullName =
+      customerDetails.lname + " " + customerDetails.fname;
     dispatch(
       setCustomerAccountDetail({
         AccountName: customerFullName,
@@ -27,6 +29,7 @@ const ReviewCredentials = () => {
       })
     );
     incrementStep();
+    dispatch(resetUserDetails());
   };
   const dispatch = useDispatch();
   const [wantATM, setWantATM] = useState<boolean>(false);
@@ -168,13 +171,7 @@ const ReviewCredentials = () => {
               </p>
             </div>
           </div>
-          {/* <div className="">
-            {Object.entries(CustomerAddress).map(([key, value]) => (
-              <div key={key} className="">
-                <strong>{key}: </strong> {value}
-              </div>
-            ))}
-          </div> */}
+         
         </div>
         <div className="flex flex-col gap-4 py-4">
           <div className="flex gap-4 whitespace-nowrap items-center text-xs uppercase font-medium">
@@ -236,7 +233,7 @@ const ReviewCredentials = () => {
       <footer className="flex gap-4  py-4 mt-auto">
         <PrimaryButtons
           text={"Edit Credentials"}
-          className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
+          className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
           icon="/icons/arrow_back.png"
           onClick={decrementStep}
         />
@@ -244,7 +241,7 @@ const ReviewCredentials = () => {
           text={"Proceed - Passport Capture"}
           onClick={CreateUserAccount}
           className={
-            " h-[52px] bg-black text-white font-medium rounded-lg w-96 justify-center items-center"
+            " h-[48px] bg-black text-white font-medium rounded-lg w-96 justify-center items-center"
           }
         />
       </footer>

@@ -13,8 +13,7 @@ interface CustomerDetails {
 interface CustomerAccountDetail {
   AccountName: string;
   AccountNumber: string;
-  AccountTier: string
-
+  AccountTier: string;
 }
 
 interface CusstomerImage {
@@ -86,10 +85,10 @@ const initialState: UserAccountState = {
     utilityBillImage: null,
   },
   customerAccountDetail: {
-    AccountName: '',
-    AccountNumber: '',
-    AccountTier: '',
-  }
+    AccountName: "",
+    AccountNumber: "",
+    AccountTier: "",
+  },
 };
 const initialStepState: currentStepState = {
   currentStep: 0,
@@ -119,7 +118,7 @@ export const userAccountSlice = createSlice({
         ...state.userAccountInitialState.customerIdentification,
         ...action.payload,
       };
-      console.log('customer identification :',action.payload);
+      console.log("customer identification :", action.payload);
     },
     setCustomerAddress: (state, action) => {
       state.userAccountInitialState.customerAddress = {
@@ -131,10 +130,18 @@ export const userAccountSlice = createSlice({
       state.userAccountInitialState.customerAccountDetail = {
         ...state.userAccountInitialState.customerAccountDetail,
         ...action.payload,
-      }
+      };
     },
     setCurrentStep: (state, action) => {
       state.initialStepState.currentStep = action.payload;
+    },
+    resetUserDetails: (state) => {
+      state.userAccountInitialState.customerDetails =
+        initialState.customerDetails;
+      state.userAccountInitialState.customerAddress =
+        initialState.customerAddress;
+      state.userAccountInitialState.customerIdentification =
+        initialState.customerIdentification;
     },
   },
 });
@@ -146,6 +153,7 @@ export const {
   setCustomerAddress,
   setCurrentStep,
   setCustomerAccountDetail,
+  resetUserDetails,
 } = userAccountSlice.actions;
 
 export default userAccountSlice.reducer;

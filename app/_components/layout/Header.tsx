@@ -4,7 +4,7 @@ import Image from 'next/image'
 import MenuButton  from "./MenuButton";
 const Header = () => {
   return (
-    <div className=" sticky top-0 right-0 h-20 lg:h-24 md:gap-12 bg-white w-full lg:w-[calc(100%-222px)] lg:ml-56 flex justify-between items-center text-[#343434] font-medium p-4 xs:px-10">
+    <div className=" sticky top-0 right-0 z-50 h-20 lg:h-20 md:gap-12 bg-white w-full lg:w-[calc(100%-222px)] lg:ml-56 flex justify-between items-center text-[#343434] font-medium p-4 xs:px-10">
       <div className="flex items-center gap-4">
       <MenuButton />
       <Searchbar />

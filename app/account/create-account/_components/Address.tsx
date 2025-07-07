@@ -157,7 +157,7 @@ const Address = () => {
             <footer className="flex gap-4 px-8 py-4 mt-auto">
               <PrimaryButtons
                 text={"Go Back"}
-                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
+                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
                 icon="/icons/arrow_back.png"
                 onClick={decrementStep}
               />
@@ -165,7 +165,7 @@ const Address = () => {
                 text={"Proceed - Passport Capture"}
                 type={"submit"}
                 className={clsx(
-                  " h-[52px] font-medium rounded-lg w-96 justify-center items-center",
+                  " h-[48px] font-medium rounded-lg w-96 justify-center items-center",
                   {
                     "bg-black text-white": isValid && dirty && !isSubmitting,
                     "bg-[#9A9A9A] text-white":

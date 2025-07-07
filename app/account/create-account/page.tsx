@@ -8,8 +8,11 @@ import Identification from "./_components/Identification";
 import Address from "./_components/Address";
 import ReviewCredentials from "./_components/ReviewCredentials";
 import Successful from "./_components/Successful";
-import { useSelector } from "react-redux";
-import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setCurrentStep,
+  resetUserDetails,
+} from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
 interface Step {
   id: number;
@@ -19,16 +22,24 @@ interface Step {
 }
 
 const Page = () => {
+  const dispatch = useDispatch();
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
 
+  const cancelRegistration = () => {
+    dispatch(resetUserDetails());
+    dispatch(setCurrentStep(0));
+  };
+
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
-      <div className={clsx("  items-center justify-between mb-4",{
-        "hidden": currentStep == 5,
-        "flex" : currentStep !==5
-      })}>
+      <div
+        className={clsx("  items-center justify-between mb-4", {
+          hidden: currentStep == 5,
+          flex: currentStep !== 5,
+        })}
+      >
         <div className="">
           <h4 className="text-sm text-[#454547]">
             Dot MFB Account Opening \ Create Account
@@ -41,12 +52,14 @@ const Page = () => {
           className="mt-4 text-black bg-white border border-gray-300 hover:bg-gray-100 h-[52px] items-center justify-center"
           text="Cancel Registration"
           icon="/icons/close.svg"
+          disabled={currentStep === 1}
+          onClick={cancelRegistration}
         />
       </div>
       <div className={" flex lg:gap-8  gap-5 justify-between"}>
         <div
           className={clsx(
-            "sticky md:top-28 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 flex flex-col items-center gap-4 ",
+            "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 flex flex-col items-center gap-4 ",
             currentStep >= 4 && "hidden"
           )}
         >

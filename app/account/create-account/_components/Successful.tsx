@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
+import { useSelector, useDispatch } from "react-redux";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
 
@@ -24,9 +24,8 @@ const Successful = () => {
     const newStep = currentStep - 1;
     dispatch(setCurrentStep(newStep));
   };
-  const incrementStep = () => {
-    const newStep = currentStep + 1;
-    dispatch(setCurrentStep(newStep));
+  const incrementStep = () => { 
+    dispatch(setCurrentStep(0));
   };
   return (
     <div className="px-10 py-8">
@@ -88,7 +87,7 @@ const Successful = () => {
       <footer className="flex gap-4  py-4 mt-auto">
         <PrimaryButtons
           text={"Create another Account"}
-          className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
+          className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
           icon=""
           onClick={decrementStep}
         />
@@ -96,7 +95,7 @@ const Successful = () => {
           text={"View Created Accounts"}
           onClick={incrementStep}
           className={
-            " h-[52px] bg-black text-white font-medium rounded-lg w-96 justify-center items-center"
+            " h-[48px] bg-black text-white font-medium rounded-lg w-96 justify-center items-center"
           }
         />
       </footer>

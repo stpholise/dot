@@ -13,6 +13,7 @@ const CaptureCustomer = () => {
   const dispatch = useDispatch();
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
   const [customerPhoto, setCustomerPhoto] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isValid, setIsValid] = useState(false);
@@ -37,23 +38,34 @@ const CaptureCustomer = () => {
     handleStopCamera();
     setTimeout(() => {
       setIsSubmitting(false);
-      const newStep = currentStep + 1;
+      const newStep = currentStep - 1;
       dispatch(setCurrentStep(newStep));
     }, 500);
   };
 
-  const handleVideo = () => {
-    navigator.mediaDevices
+  const handleVideo = async () => {
+    await navigator.mediaDevices
+      .enumerateDevices()
+      .then((devices) => {
+        devices.forEach((device) => {
+          console.log(`${device.kind}: ${device.label} id=${device.deviceId}`);
+        });
+      })
+      .catch((err) => {
+        console.error(`${err.name}: ${err.message}`);
+      });
+    await navigator.mediaDevices
       .getUserMedia({
         video: {
           facingMode: "user",
-          height: 1000,
-          width: 1000,
+          height: 500,
+          width: 500,
         },
         audio: false,
       })
       .then((stream) => {
         const video = videoRef.current;
+
         if (!video) {
           console.error("Video element not found");
           return;
@@ -61,7 +73,6 @@ const CaptureCustomer = () => {
         streamRef.current = stream;
         video.srcObject = stream;
         video.play();
-        console.log("Video stream started successfully");
       })
       .catch((error) => {
         console.error("Error accessing camera:", error);
@@ -69,30 +80,30 @@ const CaptureCustomer = () => {
   };
 
   const handleStopCamera = () => {
+    const video = videoRef.current;
     if (streamRef.current) {
-      const video = videoRef.current;
+      streamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
       if (video && video.srcObject) {
-        streamRef.current.getTracks().forEach((track) => {
-          track.stop();
-          console.log("stopping track:", track.kind);
-        });
         streamRef.current = null;
         video.srcObject = null;
       }
+    }
+    if (video) {
+      video.pause();
+      video.srcObject = null;
     }
   };
 
   const handleTakePicture = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    if (!video || !canvas) {
-      console.error("Video or canvas element not found");
-      return;
-    }
+    if (!video || !canvas) return;
+
     if (video && canvas) {
       const context = canvas.getContext("2d");
       if (!context) {
-        console.error("Failed to get canvas context");
         return;
       }
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -102,9 +113,6 @@ const CaptureCustomer = () => {
           setCustomerPhoto(photoUrl);
         }
       }, "image.png");
-      // const dataUrl = canvas.toDataURL("image/png");
-      // setCustomerPhoto(dataUrl);
-
       setIsValid(true);
       handleStopCamera();
     }
@@ -117,6 +125,7 @@ const CaptureCustomer = () => {
   };
 
   useEffect(() => {
+    console.log(navigator.mediaDevices.enumerateDevices);
     handleVideo();
     return () => {
       handleStopCamera();
@@ -217,7 +226,7 @@ const CaptureCustomer = () => {
         <footer className="flex gap-4 px-8 py-4 mt-auto">
           <PrimaryButtons
             text={"Go Back"}
-            className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
+            className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
             icon="/icons/arrow_back.png"
             onClick={decrementStep}
           />
@@ -225,7 +234,7 @@ const CaptureCustomer = () => {
             text={"Proceed - Passport Capture"}
             disabled={!isValid || isSubmitting}
             className={clsx(
-              " h-[52px] font-medium rounded-lg w-96 justify-center items-center",
+              " h-[48px] font-medium rounded-lg w-96 justify-center items-center",
               {
                 "bg-black text-white": isValid && !isSubmitting,
                 "bg-[#9A9A9A] text-white": !isValid || isSubmitting,

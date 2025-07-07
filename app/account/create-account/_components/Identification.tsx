@@ -202,7 +202,7 @@ const Identification = () => {
               <div className=" flex gap-4">
                 <PrimaryButtons
                   text={"skip"}
-                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
+                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
                   onClick={incrementStep}
                 />
 
@@ -210,7 +210,7 @@ const Identification = () => {
                   text={"Proceed - Passport Capture"}
                   type="submit"
                   className={clsx(
-                    " h-[52px] font-medium rounded-lg w-44 justify-center items-center",
+                    " h-[48px] font-medium rounded-lg w-44 justify-center items-center",
                     {
                       "bg-black text-white": isValid && dirty && !isSubmitting,
                       "bg-[#9A9A9A] text-white":
