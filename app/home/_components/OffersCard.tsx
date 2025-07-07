@@ -5,7 +5,7 @@ import clsx from "clsx";
 import PrimaryButtons from "../../_components/ui/units/buttons/PrimaryButtons";
 
 const OffersCard = ({ image, link, description, icon }: OfferInfo) => {
-  console.log(icon);
+
   return (
     <div
       className={clsx(

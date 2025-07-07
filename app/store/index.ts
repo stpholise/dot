@@ -1,9 +1,11 @@
 "use client"
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import appReducer from "./slices/AppSlice"
+import userAccountReducer from "./slices/UserAccountSlice"
 
 const rootReducer = combineReducers({
     app: appReducer,
+    userAccount: userAccountReducer
 })
 
 export const store = configureStore({

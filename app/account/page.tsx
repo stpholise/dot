@@ -1,10 +1,11 @@
 "use client";
 import AccountStatsCard from "../_components/ui/cards/Status";
-import TanStackTable from "../_components/feature/Table";
+import TanStackTable from "../_components/table/Table";
 import PageTitle from "../_components/ui/units/PageTitle";
 import LongButton from "../_components/ui/units/buttons/SecondaryButton";
 import { columns } from "./_components/column";
 import { dummyUsers } from "../_data/TableData";
+import { useRouter } from "next/navigation";
 
 interface AccountStatsSummary {
   icon: string;
@@ -12,33 +13,41 @@ interface AccountStatsSummary {
   value: string;
   color: string;
 }
-const page = () => {
+const Page = () => {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/account/create-account");
+  };
   return (
     <div className="bg-[#FAF9F9] text-black min-h-screen w-screen">
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)] py-4 px-4 lg:px-1">
         <div className="flex flex-col gap-8">
-      <div className="flex flex-col sm:flex-row w-full justify-between items-center gap-4 md:gap-12">
-        <PageTitle MainTitle={"Dot MFB Account Opening"} />
-        <LongButton icon={"/icons/add.svg"} text={"Open Dot MFB Account"} />
-      </div>
+          <div className="flex flex-col sm:flex-row w-full justify-between items-center gap-4 md:gap-12">
+            <PageTitle MainTitle={"Dot MFB Account Opening"} />
+            <LongButton
+              icon={"/icons/add.svg"}
+              text={"Open Dot MFB Account"}
+              onClick={handleClick}
+            />
+          </div>
 
-      <div className="grid md:grid-cols-3 gap-4 items-center justify-center md:justify-between">
-        {accountStatsSummary.map((item) => (
-          <AccountStatsCard
-            key={item.title}
-            icon={item.icon}
-            title={item.title}
-            color={item.color}
-            value={item.value}
-          />
-        ))}
-      </div>
-      <div className="">
-        <div className="bg-white rounded-3xl py-4 ">
-          <TanStackTable columns={columns} data={dummyUsers}/>
+          <div className="grid md:grid-cols-3 gap-4 items-center justify-center md:justify-between">
+            {accountStatsSummary.map((item) => (
+              <AccountStatsCard
+                key={item.title}
+                icon={item.icon}
+                title={item.title}
+                color={item.color}
+                value={item.value}
+              />
+            ))}
+          </div>
+          <div className="">
+            <div className="bg-white rounded-3xl py-4 ">
+              <TanStackTable columns={columns} data={dummyUsers} />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
       </div>
     </div>
   );
@@ -65,4 +74,4 @@ const accountStatsSummary: AccountStatsSummary[] = [
   },
 ];
 
-export default page;
+export default Page;
