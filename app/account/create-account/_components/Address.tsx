@@ -91,7 +91,9 @@ const Address = () => {
           className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 w-14 h-14"
         />
         <div className=" ">
-          <p className=" text-xs sm:text-sm text-[#667085] text-medium">Customer Address</p>
+          <p className=" text-xs sm:text-sm text-[#667085] text-medium">
+            Customer Address
+          </p>
           <h3 className="text-black text-base sm:text-3xl font-medium">
             How can we locate the customer?
           </h3>
@@ -162,7 +164,7 @@ const Address = () => {
                   type="text"
                   name="city"
                   className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                  placeholder="Enter your id number"
+                  placeholder="Enter your city"
                 />
                 <ErrorMessage
                   name="city"
@@ -193,6 +195,19 @@ const Address = () => {
                   fieldName="utilityBillImage"
                   text={"Upload Utility Bill (Optional)"}
                 />
+              </div>
+              <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">
+                <Image
+                  src="/icons/setting.svg"
+                  alt="morde details"
+                  width={16}
+                  height={16}
+                />
+                <p className="text-xs">
+                  Ensure the credentials provided by the customer matches their
+                  means of identification, Dot Technologies does not support
+                  third party account creation.
+                </p>
               </div>
             </div>
             <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">

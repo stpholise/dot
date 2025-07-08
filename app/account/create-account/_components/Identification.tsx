@@ -11,6 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 
+interface IdentityProps {
+  setIdFront: (state: File) => void;
+  setIdBack: (state: File) => void;
+}
+
 export interface IdentificationProps {
   idType: "NIN" | "Voter_ID" | "Driver_License" | "";
   idNumber: string;
@@ -42,7 +47,7 @@ const validationSchema = Yup.object().shape({
   idBack: Yup.mixed(),
 });
 
-const Identification = () => {
+const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
   const dispatch = useDispatch();
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
@@ -70,28 +75,30 @@ const Identification = () => {
         idBack: value.idBack,
       })
     );
-     
-      incrementStep()
+
+    incrementStep();
     action.resetForm();
   };
   return (
     <div>
       <div className=" lg:hidden flex gap-4 px-8 mt-4">
-              <Image
-                src={"/image/Frame 48.png"}
-                alt="doc"
-                height={80}
-                width={80}
-                className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 h-14 w-14"
-              />
-              <div className=" ">
-                <p className="text-xs sm:text-sm text-[#667085] text-medium">Customer Identification</p>
-                <h3 className="text-black text-base sm:text-3xl font-medium">
-                 Provide your current valid means of identification
-                </h3>
-              </div>
-            </div>
-       
+        <Image
+          src={"/image/Frame 48.png"}
+          alt="doc"
+          height={80}
+          width={80}
+          className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 h-14 w-14"
+        />
+        <div className=" ">
+          <p className="text-xs sm:text-sm text-[#667085] text-medium">
+            Customer Identification
+          </p>
+          <h3 className="text-black text-base sm:text-3xl font-medium">
+            Provide your current valid means of identification
+          </h3>
+        </div>
+      </div>
+
       <div className=" hidden lg:flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
         <Image
           alt="user"
@@ -154,6 +161,13 @@ const Identification = () => {
                 <Field
                   type="text"
                   name="idNumber"
+                  maxlength={11}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setFieldValue(
+                      "idNumber",
+                      e.target.value.replace(/\D/g, "")
+                    );
+                  }}
                   className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                   placeholder="Enter your id number"
                 />
@@ -171,7 +185,13 @@ const Identification = () => {
                 <Field
                   type="date"
                   name="issueDate"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue('issueDate', e.target.value.toString())}
+                  max={new Date().toISOString().split("T")[0]}
+                  onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                    (e.target as HTMLInputElement).showPicker()
+                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFieldValue("issueDate", e.target.value.toString())
+                  }
                   className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
                 />
                 <ErrorMessage
@@ -188,7 +208,13 @@ const Identification = () => {
                 <Field
                   type="date"
                   name="expiryDate"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>)=> setFieldValue('expiryDate', e.target.value.toString())}
+                  min={new Date().toISOString().split("T")[0]}
+                  onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                    (e.target as HTMLInputElement).showPicker()
+                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFieldValue("expiryDate", e.target.value.toString())
+                  }
                   className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
                 />
                 <ErrorMessage
@@ -201,14 +227,16 @@ const Identification = () => {
                 setFieldValue={setFieldValue}
                 fieldName="idFront"
                 text={" Upload ID Image (Front)"}
+                setFile={setIdFront}
               />
               <ImageDropzone
                 setFieldValue={setFieldValue}
                 fieldName="idBack"
                 text={" Upload ID Image (back)"}
+                setFile={setIdBack}
               />
             </div>
-            <footer className="flex gap-8 px-8 py-4 mt-auto flex-col-reverse">
+            <footer className="flex gap-8 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
                 text={"Go Back"}
                 className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
@@ -234,7 +262,6 @@ const Identification = () => {
                     }
                   )}
                   disabled={!isValid || !dirty || isSubmitting}
-             
                 />
               </div>
             </footer>

@@ -88,7 +88,9 @@ const CustomerDetailsForm = () => {
           className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 w-14 h-14"
         />
         <div className=" ">
-          <p className=" text-xs sm:text-sm text-[#667085] text-medium">Customer Details</p>
+          <p className=" text-xs sm:text-sm text-[#667085] text-medium">
+            Customer Details
+          </p>
           <h3 className="text-black text-base sm:text-3xl font-medium">
             {" "}
             Who is this account being created for?
@@ -208,6 +210,14 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="text"
                     name="phone"
+                    value={values.phone}
+                    inputmode="numeric"
+                    pattern="\d*"
+                    maxlength="11"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const clearedValue = e.target.value.replace(/\D/g, "");
+                      setFieldValue("phone", clearedValue);
+                    }}
                     className="w-full px-4 py-3 outline-none border border-gray-300  rounded-lg"
                     placeholder="Enter Phone Number"
                   />
@@ -224,6 +234,12 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="date"
                     name="dob"
+                    value={values.dob}
+                    max={"2015-01-01"}
+                    // todo look for the correct type here
+                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                        (e.target as HTMLInputElement).showPicker();
+                    }}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setFieldValue("dob", e.target.value.toString());
                     }}
@@ -291,7 +307,6 @@ const CustomerDetailsForm = () => {
               <PrimaryButtons
                 text={"Cancel"}
                 className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-               
               />
               <PrimaryButtons
                 text={"Proceed - Passport Capture"}

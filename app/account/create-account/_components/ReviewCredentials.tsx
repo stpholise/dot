@@ -71,7 +71,7 @@ const ReviewCredentials = () => {
     dispatch(setCurrentStep(newStep));
   };
   return (
-    <div className="px-8 py-8 flex flex-col gap-8 ">
+    <div className="px-10 py-8 flex flex-col gap-8 ">
       <div className=" flex items-center text-[#3FB12C] bg-[#EFFBEE] py-1 px-2 rounded-3xl font-medium w-fit">
         <Image
           src={"/icons/user_review.png"}
@@ -83,8 +83,8 @@ const ReviewCredentials = () => {
         Review Credentials
       </div>
 
-      <div className=" ">
-        <div className=" flex gap-8 items-center py-4">
+      <div className=" w-full">
+        <div className=" flex gap-8 items-center  py-4">
           <Image
             alt={"customer"}
             src={userImage}
@@ -102,7 +102,7 @@ const ReviewCredentials = () => {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-2  gap-4 py-4">
+        <div className="grid grid-cols-2 justify-between gap-4 py-4">
           <div className="flex flex-col gap-1">
             <p className="text-xs text-[#667085]">Phone Number</p>
             <div className=" flex gap-2 items-center">
@@ -241,7 +241,7 @@ const ReviewCredentials = () => {
           onClick={decrementStep}
         />
         <PrimaryButtons
-          text={"Proceed - Passport Capture"}
+          text={"Create Account "}
           onClick={CreateUserAccount}
           className={
             " h-[48px] bg-black text-white font-medium rounded-lg sm:w-96 justify-center items-center"

@@ -6,10 +6,12 @@ import { FormikHelpers } from "formik";
 import { IdentificationProps } from "../account/create-account/_components/Identification";
 import { CustomerAddress } from "../account/create-account/_components/Address";
 
+
 interface ImageDropzoneProps {
   setFieldValue: FormikHelpers<
     IdentificationProps | CustomerAddress
   >["setFieldValue"];
+  setFile?: (state: File) => void;
   fieldName: string;
   text: string;
 }
@@ -18,17 +20,21 @@ const ImageDropzone = ({
   setFieldValue,
   fieldName,
   text,
+  setFile,
 }: ImageDropzoneProps) => {
   const [itemFiles, setItemFiles] = useState<File[]>([]);
   const [isFile, setIsFile] = useState<boolean>(false);
+
+  
 
   const onDropItem = (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       setIsFile(true);
       setItemFiles(acceptedFiles);
+      if(setFile) setFile(acceptedFiles[0]);
       setTimeout(() => {
-        const imageUrl = URL.createObjectURL(acceptedFiles[0]);
-        setFieldValue(fieldName, imageUrl);
+        // const imageUrl = URL.createObjectURL(acceptedFiles[0]);
+        setFieldValue(fieldName, acceptedFiles[0].name );
       }, 500);
     }
   };
@@ -40,7 +46,7 @@ const ImageDropzone = ({
       "image/png": [".png"],
     },
     maxFiles: 1,
-    maxSize: 4145728,
+    maxSize: 3000000,
   };
 
   const { getRootProps, getInputProps } = useDropzone(dropzoneOptions);

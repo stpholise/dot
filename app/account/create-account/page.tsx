@@ -14,6 +14,7 @@ import {
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
+import { useState } from "react";
 interface Step {
   id: number;
   title: string;
@@ -27,6 +28,17 @@ const Page = () => {
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
 
+  const [picture, setPicture] = useState<File>();
+  const [idFront, setIdFront] = useState<File>();
+  const [idBack, setIdBack] = useState<File>();
+
+  if (idFront) {
+    console.log("id front", idFront);
+  }
+
+  if (idBack) {
+    console.log("id Back", idBack);
+  }
   const cancelRegistration = () => {
     dispatch(resetUserDetails());
     dispatch(setCurrentStep(0));
@@ -35,13 +47,10 @@ const Page = () => {
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
       <div
-        className={clsx(
-          " items-center justify-between mb-4",
-          {
-            hidden: currentStep == 5,
-            flex: currentStep !== 5,
-          }
-        )}
+        className={clsx(" items-center justify-between mb-4", {
+          hidden: currentStep == 5,
+          flex: currentStep !== 5,
+        })}
       >
         <div className="">
           <h4 className="text-sm text-[#454547] sm:block hidden">
@@ -78,8 +87,11 @@ const Page = () => {
       >
         <div
           className={clsx(
-            "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden lg:flex flex-col items-center gap-4 ",
-            currentStep >= 4 && "hidden"
+            "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden flex-col items-center gap-4 ",
+            {
+              hidden: currentStep >= 4,
+              "lg:flex": currentStep < 4,
+            }
           )}
         >
           <div className="grid gap-2 grid-cols-5 lg:gap-4 justify-stretch  ">
@@ -148,9 +160,14 @@ const Page = () => {
             }
           )}
         >
-          <div className={clsx("grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-8 py-4 mt-4 ",{
-            "hidden" : currentStep >= 4
-          })}>
+          <div
+            className={clsx(
+              "grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-8 py-4 mt-4 ",
+              {
+                hidden: currentStep >= 4,
+              }
+            )}
+          >
             {steps.map((step, index) => (
               <div
                 onClick={() => setCurrentStep(index)}
@@ -168,15 +185,15 @@ const Page = () => {
           {currentStep === 0 ? (
             <CustomerDetailsForm />
           ) : currentStep === 1 ? (
-            <CaptureCustomer />
+            <CaptureCustomer setPicture={setPicture} />
           ) : currentStep === 2 ? (
-            <Identification />
+            <Identification setIdFront={setIdFront} setIdBack={setIdBack} />
           ) : currentStep === 3 ? (
             <Address />
           ) : currentStep === 4 ? (
             <ReviewCredentials />
           ) : currentStep === 5 ? (
-            <Successful />
+            <Successful picture={picture} />
           ) : (
             <CustomerDetailsForm />
           )}

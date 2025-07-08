@@ -2,16 +2,18 @@ import Image from "next/image";
 import { RootState } from "@/app/store";
 import { useSelector, useDispatch } from "react-redux";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
-import { useEffect } from 'react'
+import { setCurrentStep } from "@/app/store/slices/UserAccountSlice"; 
 
 interface DotAccountBenefit {
   icon: string;
   title: string;
   text?: string;
 }
+interface SuccessfulProps{
+  picture?: File;
+}
 
-const Successful = () => {
+const Successful: React.FC<SuccessfulProps> = ({picture }) => {
   const dispatch = useDispatch();
   const customerAccountDetail = useSelector(
     (state: RootState) =>
@@ -29,11 +31,10 @@ const Successful = () => {
     dispatch(setCurrentStep(0));
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(setCurrentStep(0))
-    }
-  }, [])
+  if(picture) {
+    console.log(picture)
+  }
+  
 
   return (
     <div className="sm:px-10 sm:py-8 px-8 py-4">
@@ -45,7 +46,7 @@ const Successful = () => {
         className="mx-auto my-4 lg:my-10"
       />
 
-      <h2 className="text-center font-medium text-black text-lg">
+      <h2 className="text-center font-medium text-black text-lg ">
         Account created successfully, see details below.
       </h2>
       <div className="bg-[#F9F9F9] px-4 py-4 flex flex-col gap-3 my-4 rounded-2xl ">

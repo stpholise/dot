@@ -6,10 +6,14 @@ import {
   setCurrentStep,
   setCustomerImage,
 } from "@/app/store/slices/UserAccountSlice";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { RootState } from "@/app/store";
 
-const CaptureCustomer = () => {
+interface CaptureCustomerProp {
+  setPicture: (picture: File) => void;
+}
+
+const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
   const dispatch = useDispatch();
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -22,6 +26,11 @@ const CaptureCustomer = () => {
 
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
+  );
+
+  const customerFName = useSelector(
+    (state: RootState) =>
+      state.userAccount.userAccountInitialState.customerDetails.fname
   );
 
   const incrementStep = () => {
@@ -37,7 +46,7 @@ const CaptureCustomer = () => {
 
   const decrementStep = () => {
     handleStopCamera();
-    setIsValid(true);
+    setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
       const newStep = currentStep - 1;
@@ -46,16 +55,6 @@ const CaptureCustomer = () => {
   };
 
   const handleVideo = async () => {
-    await navigator.mediaDevices
-      .enumerateDevices()
-      .then((devices) => {
-        devices.forEach((device) => {
-          console.log(`${device.kind}: ${device.label} id=${device.deviceId}`);
-        });
-      })
-      .catch((err) => {
-        console.error(`${err.name}: ${err.message}`);
-      });
     await navigator.mediaDevices
       .getUserMedia({
         video: {
@@ -74,29 +73,38 @@ const CaptureCustomer = () => {
         }
         streamRef.current = stream;
         video.srcObject = stream;
-        video.play();
+        const handleCanPlay = () => {
+          video.play().catch((err) => {
+            console.error("Error playing video:", err);
+          });
+          video.removeEventListener("canplay", handleCanPlay);
+        };
+
+        video.addEventListener("canplay", handleCanPlay);
       })
       .catch((error) => {
         console.error("Error accessing camera:", error);
       });
   };
 
-  const handleStopCamera = () => {
-    const video = videoRef.current;
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => {
-        track.stop();
+  const handleStopCamera = useCallback(() => {
+    const videoElement = videoRef.current;
+    const mediaStream = streamRef.current;
+
+    // 1. Stop all tracks in the media stream
+    if (mediaStream) {
+      mediaStream.getTracks().forEach((track) => {
+        track.stop(); // Releases camera/mic resources
       });
-      if (video && video.srcObject) {
-        streamRef.current = null;
-        video.srcObject = null;
-      }
+      streamRef.current = null; // Clear the ref to indicate no active stream
     }
-    if (video) {
-      video.pause();
-      video.srcObject = null;
+
+    // 2. Disconnect video element from the stream and pause
+    if (videoElement) {
+      videoElement.srcObject = null;
+      videoElement.pause();
     }
-  };
+  }, []);
 
   const handleTakePicture = () => {
     const video = videoRef.current;
@@ -105,19 +113,71 @@ const CaptureCustomer = () => {
 
     if (video && canvas) {
       const context = canvas.getContext("2d");
-      if (!context) {
-        return;
+      if (!context) return;
+
+      const videoAspectRatio = video.videoWidth / video.videoHeight;
+      const canvasAspectRatio = canvas.width / canvas.height;
+
+      let sx = 0;
+      let sy = 0;
+      let sWidth = video.videoWidth;
+      let sHeight = video.videoHeight;
+
+      const dx = 0;
+      const dy = 0;
+      const dWidth = canvas.width;
+      const dHeight = canvas.height;
+
+      // Calculate source and destination dimensions to achieve "cover" effect
+      if (videoAspectRatio > canvasAspectRatio) {
+        // Crop video horizontally
+        sHeight = video.videoHeight;
+        sWidth = sHeight * canvasAspectRatio;
+        sx = (video.videoWidth - sWidth) / 2;
+      } else {
+        // Crop video vertically
+        sWidth = video.videoWidth;
+        sHeight = sWidth / canvasAspectRatio;
+        sy = (video.videoHeight - sHeight) / 2;
       }
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      context.drawImage(
+        video,
+        sx,
+        sy,
+        sWidth,
+        sHeight,
+        dx,
+        dy,
+        dWidth,
+        dHeight
+      );
+
       canvas.toBlob((blob) => {
         if (blob) {
           const photoUrl = URL.createObjectURL(blob);
+          const filename = `${
+            customerFName || "customer"
+          }_photo_${Date.now()}.png`;
+          const photoFile = blobToFile(blob, filename);
+          setPicture(photoFile);
           setCustomerPhoto(photoUrl);
         }
-      }, "image.png");
+      }, "image/png");
+
       setIsValid(true);
       handleStopCamera();
     }
+  };
+
+  const blobToFile = (
+    blob: Blob,
+    filename: string,
+    lastModified: number = Date.now()
+  ): File => {
+    return new File([blob], filename, { type: blob.type, lastModified });
   };
 
   const removePhoto = () => {
@@ -134,7 +194,7 @@ const CaptureCustomer = () => {
     return () => {
       handleStopCamera();
     };
-  }, []);
+  });
 
   return (
     <div>
@@ -160,11 +220,11 @@ const CaptureCustomer = () => {
                 <div className="flex items-center justify-center w-[336px] h-[408px]">
                   <Image
                     alt="user Snapshot"
-                    width={336}
-                    height={300}
+                    width={600}
+                    height={700}
                     src={customerPhoto}
                     className={clsx(
-                      "w-[336px] h-[408px] rounded-[50%]  object-cover shadow-lg object-center-top "
+                      "w-full min-w-full h-full min-h-full rounded-[50%] object-contain shadow-lg"
                     )}
                   />
                 </div>
@@ -179,7 +239,9 @@ const CaptureCustomer = () => {
               )}
               <canvas
                 ref={canvasRef}
-                className="w-72 h-96 rounded-full hidden"
+                width={336}
+                height={408}
+                className="w-[336px] h-[408px] rounded-full hidden"
               />
             </div>
 
