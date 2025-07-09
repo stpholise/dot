@@ -10,6 +10,6 @@ import type { NextRequest } from 'next/server'
     return NextResponse.next()
  }
 
- export const config = {
-    matcher: ['/'],
- }
+//  export const config = {
+//     matcher: ['/'],
+//  }

@@ -34,17 +34,18 @@ const initialValues: IdentificationProps = {
   idBack: null,
 };
 
+
 const validationSchema = Yup.object().shape({
-  idType: Yup.string().oneOf(["NIN", "voter_ID", "Drivers_License"]).required(),
-  idNumber: Yup.string().matches(/^\d{11}$/, "Id number is required"),
+  idType: Yup.string().oneOf(["NIN", "voter_ID", "Drivers_License"]).required('identification type is required'),
+  idNumber: Yup.string().matches(/^\d{11}$/, "Id must be 11 characters").required('identification number is required'),
   issueDate: Yup.date()
     .max(new Date(), "Date cannot be in the future")
-    .required(),
+    .required('issueance date is requireed'),
   expiryDate: Yup.date()
     .min(new Date(), "expiry date cannot be in the past")
-    .required(),
-  idFront: Yup.mixed(),
-  idBack: Yup.mixed(),
+    .required('expiry date is requried'),
+  idFront: Yup.mixed().required(),
+  idBack: Yup.mixed().required(),
 });
 
 const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
@@ -52,6 +53,7 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
+
   const decrementStep = () => {
     const newStep = currentStep - 1;
     dispatch(setCurrentStep(newStep));
@@ -71,8 +73,8 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
         idNumber: value.idNumber,
         issueDate: value.issueDate,
         expiryDate: value.expiryDate,
-        idFront: value.idFront,
-        idBack: value.idBack,
+        idFront: value.idFront?.name,
+        idBack: value.idBack?.name,
       })
     );
 
@@ -223,18 +225,24 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
                   className="text-xs text-red-500"
                 />
               </div>
-              <ImageDropzone
-                setFieldValue={setFieldValue}
-                fieldName="idFront"
-                text={" Upload ID Image (Front)"}
-                setFile={setIdFront}
-              />
-              <ImageDropzone
-                setFieldValue={setFieldValue}
-                fieldName="idBack"
-                text={" Upload ID Image (back)"}
-                setFile={setIdBack}
-              />
+              <div className="">
+                <ImageDropzone
+                  setFieldValue={setFieldValue}
+                  fieldName="idFront"
+                  text={" Upload ID Image (Front)"}
+                  setFile={setIdFront}
+                />
+              
+              </div>
+              <div className="">
+                <ImageDropzone
+                  setFieldValue={setFieldValue}
+                  fieldName="idBack"
+                  text={" Upload ID Image (back)"}
+                  setFile={setIdBack}
+                />
+             
+              </div>
             </div>
             <footer className="flex gap-8 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons

@@ -164,7 +164,7 @@ const Address = () => {
                   type="text"
                   name="city"
                   className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                  placeholder="Enter your city"
+                  placeholder="Enter your cityj"
                 />
                 <ErrorMessage
                   name="city"
