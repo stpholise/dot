@@ -25,14 +25,7 @@ export interface IdentificationProps {
   idBack: File | null;
 }
 
-const initialValues: IdentificationProps = {
-  idType: "",
-  idNumber: "",
-  issueDate: new Date(),
-  expiryDate: new Date(),
-  idFront: null,
-  idBack: null,
-};
+
 
 
 const validationSchema = Yup.object().shape({
@@ -48,11 +41,26 @@ const validationSchema = Yup.object().shape({
   idBack: Yup.mixed().required(),
 });
 
+
 const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
+
   const dispatch = useDispatch();
+
+  const storedIdentification = useSelector((state: RootState) => state.userAccount.userAccountInitialState.customerIdentification);
+  
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
+ 
+
+const initialValues: IdentificationProps = {
+  idType: storedIdentification.idType ||"",
+  idNumber: storedIdentification.idNumber || "",
+  issueDate: new Date(storedIdentification.issueDate) || new Date(),
+  expiryDate: new Date(storedIdentification.expiryDate) || new Date(),
+  idFront:   null,
+  idBack:  null,
+};
 
   const decrementStep = () => {
     const newStep = currentStep - 1;
@@ -62,6 +70,7 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
     const newStep = currentStep + 1;
     dispatch(setCurrentStep(newStep));
   };
+
 
   const onSubmit = (
     value: IdentificationProps,
@@ -254,15 +263,15 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
               <div className=" flex gap-4">
                 <PrimaryButtons
                   text={"skip"}
-                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
+                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg sm:w-5/12  justify-center items-center"
                   onClick={incrementStep}
                 />
 
                 <PrimaryButtons
-                  text={"Proceed - Passport Capture"}
+                  text={"Proceed "}
                   type="submit"
                   className={clsx(
-                    " h-[48px] font-medium rounded-lg w-44 justify-center items-center",
+                    " h-[48px] font-medium rounded-lg sm:w-60  justify-center items-center",
                     {
                       "bg-black text-white": isValid && dirty && !isSubmitting,
                       "bg-[#9A9A9A] text-white":

@@ -108,7 +108,7 @@ const ReviewCredentials = () => {
             <div className=" flex gap-2 items-center">
               <Image
                 alt={"country"}
-                src={userImage}
+                src={"/image/Countries.png"}
                 width={16}
                 height={16}
                 className="max-h-6"
@@ -142,37 +142,46 @@ const ReviewCredentials = () => {
               <p className="text-black">{CustomerAddress.address} </p>
             </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs text-[#667085]">ID Type</p>
-            <div className="">
-              <p className="text-black">{customerIdentification.idType} </p>
+
+          {customerIdentification.idType && (
+            <div className="flex flex-col gap-1">
+              <p className="text-xs text-[#667085]">ID Type</p>
+              <div className="">
+                <p className="text-black">{customerIdentification.idType} </p>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs text-[#667085]">ID Number</p>
-            <div className="">
-              <p className="text-black">{customerIdentification.idNumber} </p>
+          )}
+          {customerIdentification.idNumber && (
+            <div className="flex flex-col gap-1">
+              <p className="text-xs text-[#667085]">ID Number</p>
+              <div className="">
+                <p className="text-black">{customerIdentification.idNumber} </p>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs text-[#667085]">Issue Date</p>
-            <div className="">
-              <p className="text-black">
-                {customerIdentification.issueDate &&
-                  dateFn(customerIdentification.issueDate)}{" "}
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs text-[#667085]">Expiry Date</p>
-            <div className="">
-              {customerIdentification.expiryDate && (
+          )}
+          {customerIdentification.issueDate && (
+            <div className="flex flex-col gap-1">
+              <p className="text-xs text-[#667085]">Issue Date</p>
+              <div className="">
                 <p className="text-black">
-                  {dateFn(customerIdentification.expiryDate)}{" "}
+                  {customerIdentification.issueDate &&
+                    dateFn(customerIdentification.issueDate)}{" "}
                 </p>
-              )}
+              </div>
             </div>
-          </div>
+          )}
+          {customerIdentification.expiryDate && (
+            <div className="flex flex-col gap-1">
+              <p className="text-xs text-[#667085]">Expiry Date</p>
+              <div className="">
+                {customerIdentification.expiryDate && (
+                  <p className="text-black">
+                    {dateFn(customerIdentification.expiryDate)}{" "}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
         {customerIdentification.idFront && customerIdentification.idBack && (
           <div className="flex flex-col gap-4 py-4">

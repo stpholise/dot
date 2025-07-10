@@ -25,13 +25,19 @@ const CustomerDetailsForm = () => {
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
+
+  const storedCustomerDetails = useSelector(
+    (state: RootState) =>
+      state.userAccount.userAccountInitialState.customerDetails
+  );
+
   const initialValues: CustomerDetails = {
     withBvn: false,
-    bvn: "",
-    fname: "",
-    lname: "",
-    phone: "",
-    dob: "",
+    bvn: storedCustomerDetails.bvn || "",
+    fname: storedCustomerDetails.fname || "",
+    lname: storedCustomerDetails.lname || "",
+    phone: storedCustomerDetails.phone || "",
+    dob: storedCustomerDetails.dob || "",
     gender: "male",
   };
 
@@ -178,6 +184,7 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="text"
                     name="fname"
+                    value={values.fname}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter First Name"
                   />
@@ -194,6 +201,7 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="text"
                     name="lname"
+                    value={values.lname}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter Last Name"
                   />
@@ -238,7 +246,7 @@ const CustomerDetailsForm = () => {
                     max={"2015-01-01"}
                     // todo look for the correct type here
                     onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-                        (e.target as HTMLInputElement).showPicker();
+                      (e.target as HTMLInputElement).showPicker();
                     }}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setFieldValue("dob", e.target.value.toString());
@@ -314,7 +322,7 @@ const CustomerDetailsForm = () => {
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
-                    "bg-black text-white": isValid && dirty && !isSubmitting,
+                    "bg-black text-white": isValid && !isSubmitting,
                     "bg-[#9A9A9A] text-white":
                       !isValid || !dirty || isSubmitting,
                   }

@@ -193,6 +193,8 @@ const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
     handleVideo();
     return () => {
       handleStopCamera();
+      setCanTakePhoto(false);
+      URL.revokeObjectURL(customerPhoto || "");
     };
   });
 
@@ -298,7 +300,7 @@ const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
             onClick={decrementStep}
           />
           <PrimaryButtons
-            text={"Proceed - Passport Capture"}
+            text={"Proceed"}
             disabled={!isValid || isSubmitting}
             className={clsx(
               " h-[48px] font-medium rounded-lg sm:w-96 justify-center items-center",

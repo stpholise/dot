@@ -24,7 +24,7 @@ interface CusstomerImage {
 }
 
 interface CustomerIdentification {
-  idType: "NIN" | "Voter ID" | "Driver's License";
+  idType: "NIN" | "Voter_ID" | "Driver_License" | "";
   idNumber: string;
   issuedBy?: string;
   issueDate: string;
@@ -69,7 +69,7 @@ const initialState: UserAccountState = {
     signature: "",
   },
   customerIdentification: {
-    idType: "NIN",
+    idType: "",
     idNumber: "",
     issueDate: "",
     expiryDate: "",
