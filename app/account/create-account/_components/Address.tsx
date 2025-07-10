@@ -6,17 +6,19 @@ import {
   setCurrentStep,
   setCustomerAddress,
 } from "@/app/store/slices/UserAccountSlice";
-import { useFetchState } from "./useFetchState";
+import { useFetchState, useFetchLGA } from "./useFetchState";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import clsx from "clsx";
 import { RootState } from "@/app/store";
 import ImageDropzone from "@/app/_components/ImageDropzone";
+import { useState } from "react";
 
 export interface CustomerAddress {
   state: string;
   city: string;
   address: string;
+  lga: string;
   utilityBillImage?: File | null;
 }
 
@@ -27,7 +29,15 @@ const Address = () => {
     isLoading: boolean;
     error: string;
   };
-  console.log({ states: states, isLoading: isLoading, error: error });
+  const [selectedState, setSelectedState] = useState<string>("");
+
+  const { lga, loadingLga, errorFetchinLga } = useFetchLGA(selectedState) as {
+    lga: string[] | undefined;
+    loadingLga: boolean;
+    errorFetchinLga: string | null;
+  };
+
+   
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
@@ -44,6 +54,7 @@ const Address = () => {
     state: "",
     city: "",
     address: "",
+    lga: "",
     utilityBillImage: null,
   };
 
@@ -51,6 +62,9 @@ const Address = () => {
     state: Yup.string()
       .min(3, "at least 3 character needed")
       .required("this value is required"),
+      lga: Yup.string()
+      .min(3, "at least 3 character needed")
+      .required("LGA is required"),
     city: Yup.string()
       .min(3, "at least 3 characters required")
       .required("city is required"),
@@ -62,12 +76,7 @@ const Address = () => {
     value: CustomerAddress,
     actions: FormikHelpers<CustomerAddress>
   ) => {
-    console.log({
-      state: value.state,
-      city: value.city,
-      address: value.address,
-      utilityBillImage: value.utilityBillImage,
-    });
+     
     dispatch(
       setCustomerAddress({
         state: value.state,
@@ -132,11 +141,22 @@ const Address = () => {
                   <Field
                     as="select"
                     name="state"
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      setSelectedState(e.target.value);
+                      setFieldValue("state", e.target.value);
+                      setFieldValue("lga", "");
+                    }}
                     className="w-full px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
                   >
-                    <option value="" className="text-gray-300" disabled>
-                      select a state
-                    </option>
+                    {isLoading ? (
+                      <option value="" className="text-gray-300" disabled>
+                        Loading...
+                      </option>
+                    ) : (
+                      <option value="" className="text-gray-300" disabled>
+                        select a state
+                      </option>
+                    )}
                     {states &&
                       states.map((state) => (
                         <option
@@ -155,9 +175,59 @@ const Address = () => {
                   className="text-xs text-red-500"
                 />
               </div>
+              {
+              
+                <div className="">
+                  <label htmlFor="lga" className="text-sm text-[#454547]">
+                    Local Government Area *
+                  </label>
+                  {
+                  
+                  (
+                    <Field
+                      as="select"
+                      name="lga"
+                      className="w-full px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
+                    >
+                      {loadingLga ? (
+                        <option value="" className="text-gray-300" disabled>
+                          Loading...
+                        </option>
+                      ) : errorFetchinLga ? (
+                        <option value="" className="text-gray-300" disabled>
+                          Error fetching LGA
+                        </option>
+                      ) : !selectedState || selectedState == "" ? (
+                        <option value="" className="text-gray-300" disabled>
+                          select a state first 
+                        </option>
+                      ) : (
+                        <option value="" className="text-gray-300" disabled>
+                          select a local government area
+                        </option>
+                      )}
+                      {lga &&
+                        lga.map((lgaItem) => (
+                          <option
+                            className="text-black"
+                            value={lgaItem}
+                            key={lgaItem}
+                          >
+                            {lgaItem}
+                          </option>
+                        ))}
+                    </Field>
+                  )}
+                  <ErrorMessage
+                    name="lga"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+              }
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="fname" className="text-sm text-[#454547]">
+                <label htmlFor="city" className="text-sm text-[#454547]">
                   City *
                 </label>
                 <Field
@@ -174,7 +244,7 @@ const Address = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="fname" className="text-sm text-[#454547]">
+                <label htmlFor="address" className="text-sm text-[#454547]">
                   Street Address *
                 </label>
                 <Field
@@ -218,7 +288,7 @@ const Address = () => {
                 onClick={decrementStep}
               />
               <PrimaryButtons
-                text={"Proceed - Passport Capture"}
+                text={"Proceed - Confirm Details"}
                 type={"submit"}
                 className={clsx(
                   " h-[48px] font-medium rounded-lg sm:w-96 justify-center items-center",
