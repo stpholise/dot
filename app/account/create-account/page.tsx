@@ -14,7 +14,8 @@ import {
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useFetchState } from "./_components/useFetchState";
 interface Step {
   id: number;
   title: string;
@@ -24,6 +25,11 @@ interface Step {
 
 const Page = () => {
   const dispatch = useDispatch();
+  const { states, isLoading, error } = useFetchState() as {
+    states: string[];
+    isLoading: boolean;
+    error: string;
+  };
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
@@ -43,6 +49,10 @@ const Page = () => {
     dispatch(resetUserDetails());
     dispatch(setCurrentStep(0));
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentStep]);
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
@@ -189,7 +199,7 @@ const Page = () => {
           ) : currentStep === 2 ? (
             <Identification setIdFront={setIdFront} setIdBack={setIdBack} />
           ) : currentStep === 3 ? (
-            <Address />
+            <Address states={states} isLoading={isLoading} error={error} />
           ) : currentStep === 4 ? (
             <ReviewCredentials />
           ) : currentStep === 5 ? (

@@ -187,7 +187,7 @@ const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setCanTakePhoto(false);
     }, 500);
     handleVideo();
@@ -195,8 +195,10 @@ const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
       handleStopCamera();
       setCanTakePhoto(false);
       URL.revokeObjectURL(customerPhoto || "");
+
+      clearTimeout(timer);
     };
-  });
+  }, [customerPhoto]  );
 
   return (
     <div>

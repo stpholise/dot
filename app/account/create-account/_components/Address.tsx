@@ -6,7 +6,7 @@ import {
   setCurrentStep,
   setCustomerAddress,
 } from "@/app/store/slices/UserAccountSlice";
-import { useFetchState, useFetchLGA } from "./useFetchState";
+import {  useFetchLGA } from "./useFetchState";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import clsx from "clsx";
@@ -22,13 +22,15 @@ export interface CustomerAddress {
   utilityBillImage?: File | null;
 }
 
-const Address = () => {
+interface AddressProps {
+  states : string[];
+  isLoading: boolean;
+  error: string;
+}
+
+const Address = ({states, isLoading, error} : AddressProps) => {
   const dispatch = useDispatch();
-  const { states, isLoading, error } = useFetchState() as {
-    states: string[];
-    isLoading: boolean;
-    error: string;
-  };
+ 
   const [selectedState, setSelectedState] = useState<string>("");
 
   const { lga, loadingLga, errorFetchinLga } = useFetchLGA(selectedState) as {
@@ -60,15 +62,15 @@ const Address = () => {
 
   const validationSchema = Yup.object().shape({
     state: Yup.string()
-      .min(3, "at least 3 character needed")
-      .required("this value is required"),
+      .min(3, "at least 3 character needed").trim()
+      .required("Required"),
       lga: Yup.string()
-      .min(3, "at least 3 character needed")
-      .required("LGA is required"),
+      .min(3, "at least 3 character needed").trim()
+      .required("Required"),
     city: Yup.string()
-      .min(3, "at least 3 characters required")
-      .required("city is required"),
-    address: Yup.string().min(3).required("your address is requried"),
+      .min(3, "at least 3 characters required").trim()
+      .required("Required"),
+    address: Yup.string().min(3).required("Requried"),
     utilityBillImage: Yup.mixed().notRequired(),
   });
 

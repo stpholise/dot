@@ -1,5 +1,5 @@
 import { useDropzone, DropzoneOptions, FileRejection } from "react-dropzone";
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import { FormikHelpers } from "formik";
@@ -24,11 +24,12 @@ const ImageDropzone = ({
   const [itemFiles, setItemFiles] = useState<File[]>([]);
   const [isFile, setIsFile] = useState<boolean>(false);
   const [error, setError] = useState<string | null>();
-
+ 
   const maxFileSize = 3 * 1024 * 1024;
 
-  const onDropItem = (acceptedFiles: File[]) => {
+  const onDropItem = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
+      setError(null);
       setIsFile(true);
       setItemFiles(acceptedFiles);
       if (setFile) setFile(acceptedFiles[0]);
@@ -37,22 +38,17 @@ const ImageDropzone = ({
         setFieldValue(fieldName, acceptedFiles[0]);
       }, 500);
     }
-  };
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(null);
-      }, 1000);
-    }
-  }, [error]);
-
+  }, []); 
   const onDropRejected = (fileRejections: FileRejection[]) => {
     const firstError = fileRejections[0]?.errors[0];
+    const fileRejected = fileRejections[0]
+    if (!fileRejected) return;
+    const filesizeInMb = fileRejected.file?.size / (1024 * 1024);
 
     if (firstError) {
       switch (firstError.code) {
         case "file-too-large":
-          setError("File is too large. Max size is 3MB.");
+          setError(`File too large (${filesizeInMb.toFixed(2)}MB). Max size is 3MB.`); 
           break;
         case "file-invalid-type":
           setError("Unsupported file type. Only JPEG and PNG are allowed.");
