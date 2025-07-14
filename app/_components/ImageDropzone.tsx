@@ -24,7 +24,7 @@ const ImageDropzone = ({
   const [itemFiles, setItemFiles] = useState<File[]>([]);
   const [isFile, setIsFile] = useState<boolean>(false);
   const [error, setError] = useState<string | null>();
- 
+
   const maxFileSize = 3 * 1024 * 1024;
 
   const onDropItem = useCallback((acceptedFiles: File[]) => {
@@ -38,17 +38,19 @@ const ImageDropzone = ({
         setFieldValue(fieldName, acceptedFiles[0]);
       }, 500);
     }
-  }, []); 
+  }, []);
   const onDropRejected = (fileRejections: FileRejection[]) => {
     const firstError = fileRejections[0]?.errors[0];
-    const fileRejected = fileRejections[0]
+    const fileRejected = fileRejections[0];
     if (!fileRejected) return;
     const filesizeInMb = fileRejected.file?.size / (1024 * 1024);
 
     if (firstError) {
       switch (firstError.code) {
         case "file-too-large":
-          setError(`File too large (${filesizeInMb.toFixed(2)}MB). Max size is 3MB.`); 
+          setError(
+            `File too large (${filesizeInMb.toFixed(2)}MB). Max size is 3MB.`
+          );
           break;
         case "file-invalid-type":
           setError("Unsupported file type. Only JPEG and PNG are allowed.");
@@ -88,11 +90,14 @@ const ImageDropzone = ({
         <div className={clsx("flex items-center justify-between w-full", {})}>
           <div
             {...getRootProps()}
-            className={clsx("flex  w-full h-full items-center  gap-6", {
-              "justify-center": !isFile,
+            className={clsx(
+              "flex cursor-pointer  w-full h-full items-center  gap-6",
+              {
+                "justify-center": !isFile,
 
-              "justify-start ": isFile,
-            })}
+                "justify-start ": isFile,
+              }
+            )}
           >
             <input
               className="cursor-pointer hidden w-full h-full"

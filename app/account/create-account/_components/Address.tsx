@@ -6,7 +6,7 @@ import {
   setCurrentStep,
   setCustomerAddress,
 } from "@/app/store/slices/UserAccountSlice";
-import {  useFetchLGA } from "./useFetchState";
+import { useFetchLGA } from "./useFetchState";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import clsx from "clsx";
@@ -23,14 +23,14 @@ export interface CustomerAddress {
 }
 
 interface AddressProps {
-  states : string[];
+  states: string[];
   isLoading: boolean;
-  error: string;
+  error?: string;
 }
 
-const Address = ({states, isLoading, error} : AddressProps) => {
+const Address = ({ states, isLoading, error }: AddressProps) => {
   const dispatch = useDispatch();
- 
+
   const [selectedState, setSelectedState] = useState<string>("");
 
   const { lga, loadingLga, errorFetchinLga } = useFetchLGA(selectedState) as {
@@ -39,7 +39,6 @@ const Address = ({states, isLoading, error} : AddressProps) => {
     errorFetchinLga: string | null;
   };
 
-   
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
@@ -62,13 +61,16 @@ const Address = ({states, isLoading, error} : AddressProps) => {
 
   const validationSchema = Yup.object().shape({
     state: Yup.string()
-      .min(3, "at least 3 character needed").trim()
+      .min(3, "at least 3 character needed")
+      .trim()
       .required("Required"),
-      lga: Yup.string()
-      .min(3, "at least 3 character needed").trim()
+    lga: Yup.string()
+      .min(3, "at least 3 character needed")
+      .trim()
       .required("Required"),
     city: Yup.string()
-      .min(3, "at least 3 characters required").trim()
+      .min(3, "at least 3 characters required")
+      .trim()
       .required("Required"),
     address: Yup.string().min(3).required("Requried"),
     utilityBillImage: Yup.mixed().notRequired(),
@@ -78,7 +80,6 @@ const Address = ({states, isLoading, error} : AddressProps) => {
     value: CustomerAddress,
     actions: FormikHelpers<CustomerAddress>
   ) => {
-     
     dispatch(
       setCustomerAddress({
         state: value.state,
@@ -135,11 +136,7 @@ const Address = ({states, isLoading, error} : AddressProps) => {
                 <label htmlFor="fname" className="text-sm text-[#454547]">
                   State *
                 </label>
-                {isLoading ? (
-                  <p>Loading...</p>
-                ) : error ? (
-                  <p>Error: {error}</p>
-                ) : (
+                {
                   <Field
                     as="select"
                     name="state"
@@ -148,11 +145,15 @@ const Address = ({states, isLoading, error} : AddressProps) => {
                       setFieldValue("state", e.target.value);
                       setFieldValue("lga", "");
                     }}
-                    className="w-full px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
+                    className="w-full cursor-pointer px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
                   >
                     {isLoading ? (
                       <option value="" className="text-gray-300" disabled>
                         Loading...
+                      </option>
+                    ) : error ? (
+                      <option value="" className="text-gray-300" disabled>
+                        Error fetching LGA
                       </option>
                     ) : (
                       <option value="" className="text-gray-300" disabled>
@@ -170,7 +171,7 @@ const Address = ({states, isLoading, error} : AddressProps) => {
                         </option>
                       ))}
                   </Field>
-                )}
+                }
                 <ErrorMessage
                   name="state"
                   component="div"
@@ -178,18 +179,15 @@ const Address = ({states, isLoading, error} : AddressProps) => {
                 />
               </div>
               {
-              
                 <div className="">
                   <label htmlFor="lga" className="text-sm text-[#454547]">
                     Local Government Area *
                   </label>
                   {
-                  
-                  (
                     <Field
                       as="select"
                       name="lga"
-                      className="w-full px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
+                      className="w-full cursor-pointer px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
                     >
                       {loadingLga ? (
                         <option value="" className="text-gray-300" disabled>
@@ -201,7 +199,7 @@ const Address = ({states, isLoading, error} : AddressProps) => {
                         </option>
                       ) : !selectedState || selectedState == "" ? (
                         <option value="" className="text-gray-300" disabled>
-                          select a state first 
+                          select a state first
                         </option>
                       ) : (
                         <option value="" className="text-gray-300" disabled>
@@ -219,7 +217,7 @@ const Address = ({states, isLoading, error} : AddressProps) => {
                           </option>
                         ))}
                     </Field>
-                  )}
+                  }
                   <ErrorMessage
                     name="lga"
                     component="div"

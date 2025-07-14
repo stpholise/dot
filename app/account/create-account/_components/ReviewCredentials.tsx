@@ -7,9 +7,30 @@ import {
   setCustomerAccountDetail,
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+interface ReviewCredentialsProps {
+  setPicture: (picture: File | undefined) => void;
+  picture?: File;
+}
 
-const ReviewCredentials = () => {
+const ReviewCredentials = ({ picture, setPicture }: ReviewCredentialsProps) => {
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  console.log("Picture in ReviewCredentials:", picture);
+
+  useEffect(() => {
+    if (picture) {
+      const url = URL.createObjectURL(picture);
+      setImageUrl(url);
+    }
+  }, [picture]);
+  useEffect(() => {
+    return () => {
+      if (picture) {
+        URL.revokeObjectURL(imageUrl!);
+      }
+    };
+  }, [picture, imageUrl]);
+
   const generateAccountNumber = () => {
     let accountNumber = "";
     Array.from({ length: 11 }).forEach(() => {
@@ -29,14 +50,12 @@ const ReviewCredentials = () => {
       })
     );
     incrementStep();
+    setPicture(undefined);
     dispatch(resetUserDetails());
   };
   const dispatch = useDispatch();
   const [wantATM, setWantATM] = useState<boolean>(false);
-  const userImage = useSelector(
-    (state: RootState) =>
-      state.userAccount.userAccountInitialState.customerImage.url
-  );
+
   const customerDetails = useSelector(
     (state: RootState) =>
       state.userAccount.userAccountInitialState.customerDetails
@@ -86,8 +105,8 @@ const ReviewCredentials = () => {
       <div className=" w-full">
         <div className=" flex gap-8 items-center  py-4">
           <Image
-            alt={"customer"}
-            src={userImage}
+            alt={imageUrl || "user image"}
+            src={imageUrl || "/icons/user.png"}
             width={80}
             height={80}
             className="rounded-full w-20 h-20"
@@ -223,15 +242,19 @@ const ReviewCredentials = () => {
             </div>
           </div>
         )}
-        <div className="flex gap-4 py-4">
+        <div className="flex items-start gap-4 py-4">
           <input
             type="checkbox"
             name="withATM"
             checked={wantATM}
             onChange={() => setWantATM((prev) => !prev)}
-            className="w-4 h-4 rounded-md"
+            className="w-4 h-4 rounded-md cursor-pointer"
           />
-          <div className="">
+          <label
+            onClick={() => setWantATM((prev) => !prev)}
+            htmlFor="withATM"
+            className="cursor-pointer flex flex-col gap-1 justify-start"
+          >
             <h3 className="text-sm font-medium text-black">
               I want an ATM Card
             </h3>
@@ -239,7 +262,7 @@ const ReviewCredentials = () => {
               {" "}
               Request an ATM card for the customer to make payments.
             </p>
-          </div>
+          </label>
         </div>
       </div>
       <footer className="flex gap-4  py-4 mt-auto sm:flex-row flex-col-reverse">

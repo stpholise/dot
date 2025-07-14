@@ -9,33 +9,23 @@ interface DotAccountBenefit {
   title: string;
   text?: string;
 }
-interface SuccessfulProps{
-  picture?: File;
-}
+ 
 
-const Successful: React.FC<SuccessfulProps> = ({picture }) => {
+const Successful= () => {
   const dispatch = useDispatch();
   const customerAccountDetail = useSelector(
     (state: RootState) =>
       state.userAccount.userAccountInitialState.customerAccountDetail
   );
 
-  const currentStep = useSelector(
-    (state: RootState) => state.userAccount.initialStepState.currentStep
-  );
-  const decrementStep = () => {
-    const newStep = currentStep - 1;
-    dispatch(setCurrentStep(newStep));
+ 
+  const decrementStep = () => { 
+     dispatch(setCurrentStep(0));
   };
   const incrementStep = () => { 
     dispatch(setCurrentStep(0));
   };
-
-  if(picture) {
-    console.log(picture)
-  }
-  
-
+ 
   return (
     <div className="sm:px-10 sm:py-8 px-8 py-4">
       <Image

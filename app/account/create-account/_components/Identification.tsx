@@ -25,42 +25,47 @@ export interface IdentificationProps {
   idBack: File | null;
 }
 
-
-
-
 const validationSchema = Yup.object().shape({
-  idType: Yup.string().oneOf(["NIN", "voter_ID", "Drivers_License"]).required('identification type is required'),
-  idNumber: Yup.string().matches(/^\d{11}$/, "Id must be 11 characters").required('identification number is required'),
+  idType: Yup.string()
+    .oneOf(["NIN", "voter_ID", "Drivers_License"])
+    .required("Required"),
+  idNumber: Yup.string()
+    .matches(/^\d{11}$/, "Id must be 11 characters")
+    .required("Required"),
   issueDate: Yup.date()
+    .typeError("Invalid date format")
+    .min(new Date("1900-01-01"), "Date cannot be before 1900")
+    .nullable()
     .max(new Date(), "Date cannot be in the future")
-    .required('issueance date is requireed'),
+    .required("Requireed"),
   expiryDate: Yup.date()
+    .typeError("Invalid date format")
     .min(new Date(), "expiry date cannot be in the past")
-    .required('expiry date is requried'),
-  idFront: Yup.mixed().required(),
-  idBack: Yup.mixed().required(),
+    .required("Requried"),
+  idFront: Yup.mixed().required("Required"),
+  idBack: Yup.mixed().required("Required"),
 });
 
-
 const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
-
   const dispatch = useDispatch();
 
-  const storedIdentification = useSelector((state: RootState) => state.userAccount.userAccountInitialState.customerIdentification);
-  
+  const storedIdentification = useSelector(
+    (state: RootState) =>
+      state.userAccount.userAccountInitialState.customerIdentification
+  );
+
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
- 
 
-const initialValues: IdentificationProps = {
-  idType: storedIdentification.idType ||"",
-  idNumber: storedIdentification.idNumber || "",
-  issueDate: new Date(storedIdentification.issueDate) || new Date(),
-  expiryDate: new Date(storedIdentification.expiryDate) || new Date(),
-  idFront:   null,
-  idBack:  null,
-};
+  const initialValues: IdentificationProps = {
+    idType: storedIdentification.idType || "",
+    idNumber: storedIdentification.idNumber || "",
+    issueDate: new Date(storedIdentification.issueDate) || new Date(),
+    expiryDate: new Date(storedIdentification.expiryDate) || new Date(),
+    idFront: null,
+    idBack: null,
+  };
 
   const decrementStep = () => {
     const newStep = currentStep - 1;
@@ -70,7 +75,6 @@ const initialValues: IdentificationProps = {
     const newStep = currentStep + 1;
     dispatch(setCurrentStep(newStep));
   };
-
 
   const onSubmit = (
     value: IdentificationProps,
@@ -141,7 +145,7 @@ const initialValues: IdentificationProps = {
                   as="select"
                   name="idType"
                   className={clsx(
-                    "w-full px-4 py-3 outline-none border border-gray-300 rounded-lg focus:ring-1 focus:ring-black"
+                    "w-full cursor-pointer px-4 py-3 outline-none border border-gray-300 rounded-lg focus:ring-1 focus:ring-black"
                   )}
                   placeholder="select identity type"
                 >
@@ -203,7 +207,7 @@ const initialValues: IdentificationProps = {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setFieldValue("issueDate", e.target.value.toString())
                   }
-                  className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
+                  className="w-full cursor-pointer px-4 py-3 border outline-none border-gray-300 rounded-lg"
                 />
                 <ErrorMessage
                   name="issueDate"
@@ -226,7 +230,7 @@ const initialValues: IdentificationProps = {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setFieldValue("expiryDate", e.target.value.toString())
                   }
-                  className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
+                  className="w-full cursor-pointer px-4 py-3 border outline-none border-gray-300 rounded-lg"
                 />
                 <ErrorMessage
                   name="expiryDate"
@@ -241,7 +245,6 @@ const initialValues: IdentificationProps = {
                   text={" Upload ID Image (Front)"}
                   setFile={setIdFront}
                 />
-              
               </div>
               <div className="">
                 <ImageDropzone
@@ -250,7 +253,6 @@ const initialValues: IdentificationProps = {
                   text={" Upload ID Image (back)"}
                   setFile={setIdBack}
                 />
-             
               </div>
             </div>
             <footer className="flex gap-8 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">

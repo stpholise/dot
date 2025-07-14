@@ -126,25 +126,25 @@ const CustomerDetailsForm = () => {
             <div className="  font-medium px-9 py-4">
               <div className=" flex flex-col gap-2 border-b border-gray-100 py-6">
                 <p className="text-sm">Does the customer have a BVN? *</p>
-                <div className="flex sm:flex-row flex-col gap-4">
-                  <label className="sm:w-1/2 flex  justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
+                <div className="flex  sm:flex-row flex-col gap-4">
+                  <label className="  cursor-pointer sm:w-1/2 flex  justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
                     Yes, the BVN is present
                     <Field
                       type="radio"
                       name="withBvn"
                       value={true}
                       onChange={() => setFieldValue("withBvn", true)}
-                      className="cursor-pointer w-5 h-5"
+                      className="  w-5 h-5"
                     />
                   </label>
-                  <label className="flex sm:w-1/2 justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
+                  <label className="  cursor-pointer flex sm:w-1/2 justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
                     No, Bvn is not available
                     <Field
                       type="radio"
                       name="withBvn"
                       value={false}
                       onChange={() => setFieldValue("withBvn", false)}
-                      className="cursor-pointer w-5 h-5"
+                      className="  w-5 h-5"
                     />
                   </label>
                 </div>
@@ -219,9 +219,9 @@ const CustomerDetailsForm = () => {
                     type="text"
                     name="phone"
                     value={values.phone}
-                    inputmode="numeric"
+                    inputMode="numeric"
                     pattern="\d*"
-                    maxlength="11"
+                    maxLength="11"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const clearedValue = e.target.value.replace(/\D/g, "");
                       setFieldValue("phone", clearedValue);
@@ -251,7 +251,7 @@ const CustomerDetailsForm = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setFieldValue("dob", e.target.value.toString());
                     }}
-                    className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
+                    className="w-full  cursor-pointer px-4 py-3 border outline-none border-gray-300 rounded-lg"
                   />
                   <ErrorMessage
                     name="dob"
@@ -264,7 +264,7 @@ const CustomerDetailsForm = () => {
                   <div className="display flex gap-4 mt-2 w-full justify-stretch">
                     <label
                       htmlFor="gender_male"
-                      className="flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
+                      className=" cursor-pointer flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
                     >
                       Male
                       <Field
@@ -278,7 +278,7 @@ const CustomerDetailsForm = () => {
                     </label>
                     <label
                       htmlFor="gender_female"
-                      className="flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
+                      className=" cursor-pointer flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
                     >
                       Female
                       <Field

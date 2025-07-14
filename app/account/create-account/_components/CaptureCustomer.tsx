@@ -10,10 +10,11 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { RootState } from "@/app/store";
 
 interface CaptureCustomerProp {
-  setPicture: (picture: File) => void;
+  setPicture: (picture: File | undefined) => void;
+  picture: File | undefined;
 }
 
-const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
+const CaptureCustomer = ({ setPicture, picture }: CaptureCustomerProp) => {
   const dispatch = useDispatch();
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -23,6 +24,16 @@ const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
   const [isValid, setIsValid] = useState(false);
   const [canTakePhoto, setCanTakePhoto] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (picture) {
+      const photoUrl = URL.createObjectURL(picture);
+      setCustomerPhoto(photoUrl);
+    } else {
+      setCustomerPhoto(null);
+      setIsValid(false);
+    }
+  }, [picture]);
 
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
@@ -163,10 +174,10 @@ const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
           }_photo_${Date.now()}.png`;
           const photoFile = blobToFile(blob, filename);
           setPicture(photoFile);
-          setCustomerPhoto(photoUrl);
+          dispatch(setCustomerImage({ url: photoUrl }));
+          // if (picture) setCustomerPhoto(URL.createObjectURL(picture));
         }
       }, "image/png");
-
       setIsValid(true);
       handleStopCamera();
     }
@@ -181,7 +192,8 @@ const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
   };
 
   const removePhoto = () => {
-    setCustomerPhoto(null);
+    setPicture(undefined);
+    // setCustomerPhoto(null);
     setIsValid(false);
     handleVideo();
   };
@@ -195,10 +207,9 @@ const CaptureCustomer = ({ setPicture }: CaptureCustomerProp) => {
       handleStopCamera();
       setCanTakePhoto(false);
       URL.revokeObjectURL(customerPhoto || "");
-
       clearTimeout(timer);
     };
-  }, [customerPhoto]  );
+  }, [customerPhoto]);
 
   return (
     <div>

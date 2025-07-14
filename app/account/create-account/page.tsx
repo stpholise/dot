@@ -34,9 +34,9 @@ const Page = () => {
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
 
-  const [picture, setPicture] = useState<File>();
-  const [idFront, setIdFront] = useState<File>();
-  const [idBack, setIdBack] = useState<File>();
+  const [picture, setPicture] = useState<File | undefined>();
+  const [idFront, setIdFront] = useState<File | undefined>();
+  const [idBack, setIdBack] = useState<File | undefined>();
 
   if (idFront) {
     console.log("id front", idFront);
@@ -140,9 +140,9 @@ const Page = () => {
                 <Image
                   alt={step.title}
                   src={step.image ? step.image : ""}
-                  height={90}
+                  height={190}
                   width={359}
-                  className={clsx("lg:w-[390px]", step.style)}
+                  className={clsx("lg:w-[390px] h-[190px]", step.style)}
                 />
               </div>
             </div>
@@ -195,15 +195,15 @@ const Page = () => {
           {currentStep === 0 ? (
             <CustomerDetailsForm />
           ) : currentStep === 1 ? (
-            <CaptureCustomer setPicture={setPicture} />
+            <CaptureCustomer setPicture={setPicture} picture={picture} />
           ) : currentStep === 2 ? (
             <Identification setIdFront={setIdFront} setIdBack={setIdBack} />
           ) : currentStep === 3 ? (
             <Address states={states} isLoading={isLoading} error={error} />
           ) : currentStep === 4 ? (
-            <ReviewCredentials />
+            <ReviewCredentials picture={picture} setPicture={setPicture} />
           ) : currentStep === 5 ? (
-            <Successful picture={picture} />
+            <Successful />
           ) : (
             <CustomerDetailsForm />
           )}
