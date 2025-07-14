@@ -14,6 +14,8 @@ import ImageDropzone from "@/app/_components/ImageDropzone";
 interface IdentityProps {
   setIdFront: (state: File) => void;
   setIdBack: (state: File) => void;
+  idFront?: File | undefined;
+  idBack?: File | undefined;
 }
 
 export interface IdentificationProps {
@@ -46,7 +48,7 @@ const validationSchema = Yup.object().shape({
   idBack: Yup.mixed().required("Required"),
 });
 
-const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
+const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProps) => {
   const dispatch = useDispatch();
 
   const storedIdentification = useSelector(
@@ -134,7 +136,7 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {({ dirty, isSubmitting, isValid, setFieldValue }) => (
+        {({  isSubmitting, isValid, setFieldValue }) => (
           <Form>
             <div className="px-8 py-6 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
@@ -244,6 +246,7 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
                   fieldName="idFront"
                   text={" Upload ID Image (Front)"}
                   setFile={setIdFront}
+                  file={idFront}
                 />
               </div>
               <div className="">
@@ -252,6 +255,7 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
                   fieldName="idBack"
                   text={" Upload ID Image (back)"}
                   setFile={setIdBack}
+                  file={idBack}
                 />
               </div>
             </div>
@@ -275,12 +279,12 @@ const Identification = ({ setIdFront, setIdBack }: IdentityProps) => {
                   className={clsx(
                     " h-[48px] font-medium rounded-lg sm:w-60  justify-center items-center",
                     {
-                      "bg-black text-white": isValid && dirty && !isSubmitting,
+                      "bg-black text-white": isValid  && !isSubmitting,
                       "bg-[#9A9A9A] text-white":
-                        !isValid || !dirty || isSubmitting,
+                        !isValid ||  isSubmitting,
                     }
                   )}
-                  disabled={!isValid || !dirty || isSubmitting}
+                  disabled={!isValid  || isSubmitting}
                 />
               </div>
             </footer>

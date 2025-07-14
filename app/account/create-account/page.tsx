@@ -14,7 +14,7 @@ import {
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
-import { useState, useEffect } from "react";
+import { useState, useEffect, } from "react";
 import { useFetchState } from "./_components/useFetchState";
 interface Step {
   id: number;
@@ -38,6 +38,8 @@ const Page = () => {
   const [idFront, setIdFront] = useState<File | undefined>();
   const [idBack, setIdBack] = useState<File | undefined>();
 
+  useEffect(() => {
+    
   if (idFront) {
     console.log("id front", idFront);
   }
@@ -45,14 +47,18 @@ const Page = () => {
   if (idBack) {
     console.log("id Back", idBack);
   }
+  }, [idFront, idBack])
   const cancelRegistration = () => {
+     setPicture(undefined);
+    setIdFront(undefined);
+    setIdBack(undefined);
     dispatch(resetUserDetails());
     dispatch(setCurrentStep(0));
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentStep]);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, [currentStep]);
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
@@ -197,11 +203,11 @@ const Page = () => {
           ) : currentStep === 1 ? (
             <CaptureCustomer setPicture={setPicture} picture={picture} />
           ) : currentStep === 2 ? (
-            <Identification setIdFront={setIdFront} setIdBack={setIdBack} />
+            <Identification setIdFront={setIdFront} setIdBack={setIdBack} idFront={idFront} idBack={idBack} />
           ) : currentStep === 3 ? (
             <Address states={states} isLoading={isLoading} error={error} />
           ) : currentStep === 4 ? (
-            <ReviewCredentials picture={picture} setPicture={setPicture} />
+            <ReviewCredentials picture={picture} setPicture={setPicture} idFront={idFront} idBack={idBack} setIdFront={setIdFront} setIdBack={setIdBack} />
           ) : currentStep === 5 ? (
             <Successful />
           ) : (

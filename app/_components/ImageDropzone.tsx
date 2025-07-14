@@ -1,5 +1,5 @@
 import { useDropzone, DropzoneOptions, FileRejection } from "react-dropzone";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import { FormikHelpers } from "formik";
@@ -13,21 +13,34 @@ interface ImageDropzoneProps {
   setFile?: (state: File) => void;
   fieldName: string;
   text: string;
+  file?: File;
 }
 
 const ImageDropzone = ({
   setFieldValue,
   fieldName,
   text,
+  file,
   setFile,
 }: ImageDropzoneProps) => {
   const [itemFiles, setItemFiles] = useState<File[]>([]);
   const [isFile, setIsFile] = useState<boolean>(false);
   const [error, setError] = useState<string | null>();
 
+  useEffect(() => {
+    if (file) {
+      setItemFiles([file]);
+      setIsFile(true);
+    } else {
+      setItemFiles([]);
+      setIsFile(false);
+    }
+  }, [file]);
+
   const maxFileSize = 3 * 1024 * 1024;
 
   const onDropItem = useCallback((acceptedFiles: File[]) => {
+    
     if (acceptedFiles.length > 0) {
       setError(null);
       setIsFile(true);

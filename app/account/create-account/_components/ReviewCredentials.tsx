@@ -7,29 +7,45 @@ import {
   setCustomerAccountDetail,
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; 
 interface ReviewCredentialsProps {
   setPicture: (picture: File | undefined) => void;
+  setIdFront: (idFront: File | undefined) => void;
+  setIdBack: (idBack: File | undefined) => void;
+  idFront?: File;
+  idBack?: File;  
   picture?: File;
 }
 
-const ReviewCredentials = ({ picture, setPicture }: ReviewCredentialsProps) => {
+const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, setIdBack }: ReviewCredentialsProps) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
-  console.log("Picture in ReviewCredentials:", picture);
+  const [idFrontUrl, setIdFrontUrl] = useState<string | undefined>(undefined);
+  const [idBackUrl, setIdBackUrl] = useState<string | undefined>(undefined); 
 
   useEffect(() => {
-    if (picture) {
-      const url = URL.createObjectURL(picture);
-      setImageUrl(url);
-    }
-  }, [picture]);
+  if (!picture) return;
+
+  const url = URL.createObjectURL(picture);
+  setImageUrl(url);
+
+  return () => {
+    URL.revokeObjectURL(url);
+  };
+}, [picture]);
+
   useEffect(() => {
-    return () => {
-      if (picture) {
-        URL.revokeObjectURL(imageUrl!);
-      }
-    };
-  }, [picture, imageUrl]);
+    if (idFront) { 
+      setIdFrontUrl(idFront.name); 
+    }
+  }, [idFront]);
+
+  useEffect(() => {
+    if (idBack) { 
+      setIdBackUrl(idBack.name); 
+    }
+  }, [idBack]);
+
+   
 
   const generateAccountNumber = () => {
     let accountNumber = "";
@@ -51,6 +67,8 @@ const ReviewCredentials = ({ picture, setPicture }: ReviewCredentialsProps) => {
     );
     incrementStep();
     setPicture(undefined);
+    setIdFront(undefined);
+    setIdBack(undefined);
     dispatch(resetUserDetails());
   };
   const dispatch = useDispatch();
@@ -220,7 +238,7 @@ const ReviewCredentials = ({ picture, setPicture }: ReviewCredentialsProps) => {
               <div className="">
                 <h4 className="text-black text-sm">ID Image (Front)</h4>
                 <p className="text-[#868C98] text-xs overflow-hidden">
-                  {customerIdentification.idFront}
+                  {idFrontUrl ? idFrontUrl : "No ID front image uploaded"}
                 </p>
               </div>
             </div>
@@ -236,7 +254,7 @@ const ReviewCredentials = ({ picture, setPicture }: ReviewCredentialsProps) => {
               <div className="">
                 <h4 className="text-black text-sm">ID Image (Back)</h4>
                 <p className="text-[#868C98] text-xs overflow-hidden">
-                  {customerIdentification.idBack}
+                  {idBackUrl ? idBackUrl : "No ID back image uploaded"}
                 </p>
               </div>
             </div>

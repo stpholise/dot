@@ -42,7 +42,7 @@ const Successful= () => {
       <div className="bg-[#F9F9F9] px-4 py-4 flex flex-col gap-3 my-4 rounded-2xl ">
         <div className=" flex justify-between font-medium ">
           <h4>Account Name</h4>
-          <p className="text-black">{customerAccountDetail.AccountName}</p>
+          <p className="text-black capitalize">{customerAccountDetail.AccountName}</p>
         </div>
         <div className=" flex justify-between font-medium ">
           <h4>Account Number</h4>
