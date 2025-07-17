@@ -200,7 +200,7 @@ const CaptureCustomer = ({ setPicture, picture }: CaptureCustomerProp) => {
       URL.revokeObjectURL(customerPhoto || "");
       clearTimeout(timer);
     };
-  }, [customerPhoto]);
+  }, [customerPhoto, handleStopCamera]);
 
   return (
     <div>

@@ -47,7 +47,6 @@ const ImageDropzone = ({
       setItemFiles(acceptedFiles);
       if (setFile) setFile(acceptedFiles[0]);
       setTimeout(() => {
-        // const imageUrl = URL.createObjectURL(acceptedFiles[0]);
         setFieldValue(fieldName, acceptedFiles[0]);
       }, 500);
     }
@@ -99,7 +98,7 @@ if (setFile) {
   return (
     <div
       className={clsx(" bg-[#F7F7F7] flex rounded-3xl relative ", {
-        "sm:w-[520px] sm:h-[130px] px-6 py-6 justify-center ": !isFile,
+        "sm:w-[520px] lg:w-[339px] xl:w-[520px] sm:h-[130px] px-6 py-6 justify-center ": !isFile,
         "px-4 py-4  justify-start": isFile,
       })}
     >

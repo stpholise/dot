@@ -108,7 +108,7 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
     dispatch(setCurrentStep(newStep));
   };
   return (
-    <div className="px-10 py-8 flex flex-col gap-8 ">
+    <div className="px-10 py-8 flex flex-col gap-8  ">
       <div className=" flex items-center text-[#3FB12C] bg-[#EFFBEE] py-1 px-2 rounded-3xl font-medium w-fit">
         <Image
           src={"/icons/user_review.png"}

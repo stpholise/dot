@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Formik, Form, Field, ErrorMessage, FormikHelpers,  } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
@@ -74,7 +74,7 @@ const Identification = ({
     idNumber: storedIdentification.idNumber || "",
     issueDate: new Date(storedIdentification.issueDate) || new Date(),
     expiryDate: new Date(storedIdentification.expiryDate) || new Date(),
-    idFront: idFront|| null,
+    idFront: idFront || null,
     idBack: idBack || null,
   };
 
@@ -100,7 +100,7 @@ const Identification = ({
         idFront: idFront?.name,
         idBack: idBack?.name,
       })
-    );  
+    );
     incrementStep();
     action.resetForm();
   };
@@ -269,38 +269,38 @@ const Identification = ({
                 />
               </div>
             </div>
-            <footer className="flex gap-8 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
-              <PrimaryButtons
-                text={"Go Back"}
-                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
-                icon="/icons/arrow_back.png"
-                onClick={decrementStep}
-              />
-              <div className=" flex gap-4">
+            <footer className="flex gap-8 px-8 py-4 mt-auto sm:flex-row xl:flex-row lg:flex-col flex-col-reverse">
+              <div className=" flex gap-4 ">
                 <PrimaryButtons
-                  text={"skip"}
-                  type="button"
-                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg sm:w-5/12  justify-center items-center"
-                  onClick={incrementStep}
+                  text={"Go Back"}
+                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
+                  icon="/icons/arrow_back.png"
+                  onClick={decrementStep}
                 />
 
                 <PrimaryButtons
-                  text={"Proceed "}
-                  type="submit"
-                  className={clsx(
-                    " h-[48px] font-medium rounded-lg sm:w-60  justify-center items-center",
-                    {
-                      "bg-black text-white":dirty && isValid && !isSubmitting,
-                      "bg-[#9A9A9A] text-white": !isValid|| !dirty || isSubmitting,
-                    }
-                  )}
-                  disabled={
-                    storedIdentification
-                      ? false
-                      : !isValid || isSubmitting 
-                  }
+                  text={"skip"}
+                  type="button"
+                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg sm:w-5/12  lg:w-1/2 xl:w-5/12 justify-center items-center"
+                  onClick={incrementStep}
                 />
               </div>
+
+              <PrimaryButtons
+                text={"Proceed "}
+                type="submit"
+                className={clsx(
+                  " h-[48px] font-medium rounded-lg sm:w-60 lg:w-full justify-center items-center",
+                  {
+                    "bg-black text-white": dirty && isValid && !isSubmitting,
+                    "bg-[#9A9A9A] text-white":
+                      !isValid || !dirty || isSubmitting,
+                  }
+                )}
+                disabled={
+                  storedIdentification ? false : !isValid || isSubmitting
+                }
+              />
             </footer>
           </Form>
         )}

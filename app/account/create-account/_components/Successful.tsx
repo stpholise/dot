@@ -9,7 +9,7 @@ import clsx from "clsx";
 
 interface DotAccountBenefit {
   icon: string;
-  iconBg: string;
+  iconBg?: string;
   title: string;
   text?: string;
 }

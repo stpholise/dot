@@ -292,11 +292,11 @@ const Address = ({ states, isLoading, error, selectedState, setSelectedState }: 
                 </p>
               </div>
             </div>
-            <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
+            <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse lg:flex-col-reverse xl:flex-row">
               <PrimaryButtons
                 text={"Go Back"}
                 type="button"
-                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
+                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center  items-center"
                 icon="/icons/arrow_back.png"
                 onClick={decrementStep}
               />
@@ -305,7 +305,7 @@ const Address = ({ states, isLoading, error, selectedState, setSelectedState }: 
                 type={"submit"} 
                 disabled={!isValid || isSubmitting}
                 className={clsx(
-                  " h-[48px] font-medium rounded-lg sm:w-96 justify-center items-center",
+                  " h-[48px] font-medium rounded-lg sm:w-96 lg:w-full xl:w-96 justify-center items-center",
                   {
                     "bg-black text-white": isValid   && !isSubmitting,
                     "bg-[#9A9A9A] text-white":
