@@ -10,10 +10,10 @@ interface ImageDropzoneProps {
   setFieldValue: FormikHelpers<
     IdentificationProps | CustomerAddress
   >["setFieldValue"];
-  setFile?: (state: File) => void;
+  setFile?: (state: File | undefined) => void;
   fieldName: string;
   text: string;
-  file?: File;
+  file?: File | undefined;
 }
 
 const ImageDropzone = ({
@@ -90,7 +90,11 @@ const ImageDropzone = ({
   const resetFiles = () => {
     setItemFiles([]);
     setIsFile(false);
-  };
+    setFieldValue(fieldName, undefined);
+  
+if (setFile) {
+  setFile(undefined);
+}  };
 
   return (
     <div

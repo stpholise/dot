@@ -38,7 +38,7 @@ interface CustomerAddress {
   city: string;
   address: string;
   country?: string;
-  postalCode?: string;
+  lga?: string;
   utilityBillImage?: File | null;
 }
 
@@ -81,7 +81,7 @@ const initialState: UserAccountState = {
     city: "",
     address: "",
     country: "",
-    postalCode: "",
+    lga: "",
     utilityBillImage: null,
   },
   customerAccountDetail: {
@@ -118,7 +118,7 @@ export const userAccountSlice = createSlice({
         ...state.userAccountInitialState.customerIdentification,
         ...action.payload,
       };
-      console.log("customer identification :", action.payload);
+      
     },
     setCustomerAddress: (state, action) => {
       state.userAccountInitialState.customerAddress = {

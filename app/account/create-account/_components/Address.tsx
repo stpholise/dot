@@ -12,7 +12,8 @@ import * as Yup from "yup";
 import clsx from "clsx";
 import { RootState } from "@/app/store";
 import ImageDropzone from "@/app/_components/ImageDropzone";
-import { useState } from "react";
+import {  useEffect } from "react";
+import { scrollToTop } from "@/app/_utils/ScrollToTop"; 
 
 export interface CustomerAddress {
   state: string;
@@ -26,13 +27,16 @@ interface AddressProps {
   states: string[];
   isLoading: boolean;
   error?: string;
+  selectedState: string;
+  setSelectedState: (state: string) => void;
 }
 
-const Address = ({ states, isLoading, error }: AddressProps) => {
+const Address = ({ states, isLoading, error, selectedState, setSelectedState }: AddressProps) => {
   const dispatch = useDispatch();
-
-  const [selectedState, setSelectedState] = useState<string>("");
-
+  useEffect(() => {
+    scrollToTop();
+  }, []);
+ 
   const { lga, loadingLga, errorFetchinLga } = useFetchLGA(selectedState) as {
     lga: string[] | undefined;
     loadingLga: boolean;
@@ -41,6 +45,10 @@ const Address = ({ states, isLoading, error }: AddressProps) => {
 
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
+  );
+
+  const customerAddress = useSelector(
+    (state: RootState) => state.userAccount.userAccountInitialState.customerAddress
   );
   const decrementStep = () => {
     const newStep = currentStep - 1;
@@ -52,11 +60,11 @@ const Address = ({ states, isLoading, error }: AddressProps) => {
   };
 
   const initialState: CustomerAddress = {
-    state: "",
-    city: "",
-    address: "",
-    lga: "",
-    utilityBillImage: null,
+    state: selectedState || "",
+    city: customerAddress?.city || "",
+    address: customerAddress?.address || "",
+    lga: customerAddress?.lga || "",
+    utilityBillImage: undefined,
   };
 
   const validationSchema = Yup.object().shape({
@@ -85,11 +93,12 @@ const Address = ({ states, isLoading, error }: AddressProps) => {
         state: value.state,
         city: value.city,
         address: value.address,
+        lga: value.lga,
         utilityBillImage: value.utilityBillImage,
       })
     );
     actions.resetForm();
-    incrementStep();
+    incrementStep(); 
   };
 
   return (
@@ -129,7 +138,7 @@ const Address = ({ states, isLoading, error }: AddressProps) => {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {({ isValid, dirty, isSubmitting, setFieldValue }) => (
+        {({ isValid,  isSubmitting, setFieldValue }) => (
           <Form>
             <div className="px-8 py-8 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
@@ -140,6 +149,7 @@ const Address = ({ states, isLoading, error }: AddressProps) => {
                   <Field
                     as="select"
                     name="state"
+                    value={selectedState}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       setSelectedState(e.target.value);
                       setFieldValue("state", e.target.value);
@@ -155,7 +165,9 @@ const Address = ({ states, isLoading, error }: AddressProps) => {
                       <option value="" className="text-gray-300" disabled>
                         Error fetching LGA
                       </option>
-                    ) : (
+                    ) : 
+                   
+                     (
                       <option value="" className="text-gray-300" disabled>
                         select a state
                       </option>
@@ -283,19 +295,21 @@ const Address = ({ states, isLoading, error }: AddressProps) => {
             <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
                 text={"Go Back"}
+                type="button"
                 className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
                 icon="/icons/arrow_back.png"
                 onClick={decrementStep}
               />
               <PrimaryButtons
                 text={"Proceed - Confirm Details"}
-                type={"submit"}
+                type={"submit"} 
+                disabled={!isValid || isSubmitting}
                 className={clsx(
                   " h-[48px] font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
-                    "bg-black text-white": isValid && dirty && !isSubmitting,
+                    "bg-black text-white": isValid   && !isSubmitting,
                     "bg-[#9A9A9A] text-white":
-                      !isValid || !dirty || isSubmitting,
+                      !isValid   || isSubmitting,
                   }
                 )}
               />

@@ -7,7 +7,9 @@ import {
   setCustomerAccountDetail,
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
-import { useState, useEffect } from "react"; 
+import { useState, useEffect, } from "react"; 
+import { scrollToTop } from "@/app/_utils/ScrollToTop"; 
+import { dateFn } from "@/app/_utils/DateFormat";
 interface ReviewCredentialsProps {
   setPicture: (picture: File | undefined) => void;
   setIdFront: (idFront: File | undefined) => void;
@@ -15,12 +17,16 @@ interface ReviewCredentialsProps {
   idFront?: File;
   idBack?: File;  
   picture?: File;
+  setSelectedState: (state: string) => void;
 }
 
-const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, setIdBack }: ReviewCredentialsProps) => {
+const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, setIdBack, setSelectedState }: ReviewCredentialsProps) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [idFrontUrl, setIdFrontUrl] = useState<string | undefined>(undefined);
   const [idBackUrl, setIdBackUrl] = useState<string | undefined>(undefined); 
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   useEffect(() => {
   if (!picture) return;
@@ -68,7 +74,8 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
     incrementStep();
     setPicture(undefined);
     setIdFront(undefined);
-    setIdBack(undefined);
+    setIdBack(undefined); 
+    setSelectedState("");
     dispatch(resetUserDetails());
   };
   const dispatch = useDispatch();
@@ -91,13 +98,6 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
-  const dateFn = (date: string | Date) => {
-    return new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    }).format(new Date(date));
-  };
 
   const decrementStep = () => {
     const newStep = currentStep - 1;
@@ -177,6 +177,7 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
             <p className="text-xs text-[#667085]">Address</p>
             <div className="">
               <p className="text-black">{CustomerAddress.address} </p>
+              <p className="text-black">{CustomerAddress.lga}, {CustomerAddress.state} </p>
             </div>
           </div>
 
@@ -286,6 +287,7 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
       <footer className="flex gap-4  py-4 mt-auto sm:flex-row flex-col-reverse">
         <PrimaryButtons
           text={"Edit Credentials"}
+          type="button"
           className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
           icon="/icons/arrow_back.png"
           onClick={decrementStep}

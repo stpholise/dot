@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers,  } from "formik";
 import * as Yup from "yup";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
@@ -10,10 +10,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import ImageDropzone from "@/app/_components/ImageDropzone";
+import { scrollToTop } from "@/app/_utils/ScrollToTop";
+import { useEffect } from "react";
 
 interface IdentityProps {
-  setIdFront: (state: File) => void;
-  setIdBack: (state: File) => void;
+  setIdFront: (state: File | undefined) => void;
+  setIdBack: (state: File | undefined) => void;
   idFront?: File | undefined;
   idBack?: File | undefined;
 }
@@ -48,9 +50,16 @@ const validationSchema = Yup.object().shape({
   idBack: Yup.mixed().required("Required"),
 });
 
-const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProps) => {
+const Identification = ({
+  setIdFront,
+  setIdBack,
+  idFront,
+  idBack,
+}: IdentityProps) => {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
   const dispatch = useDispatch();
-
   const storedIdentification = useSelector(
     (state: RootState) =>
       state.userAccount.userAccountInitialState.customerIdentification
@@ -65,8 +74,8 @@ const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProp
     idNumber: storedIdentification.idNumber || "",
     issueDate: new Date(storedIdentification.issueDate) || new Date(),
     expiryDate: new Date(storedIdentification.expiryDate) || new Date(),
-    idFront: null,
-    idBack: null,
+    idFront: idFront|| null,
+    idBack: idBack || null,
   };
 
   const decrementStep = () => {
@@ -88,11 +97,10 @@ const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProp
         idNumber: value.idNumber,
         issueDate: value.issueDate,
         expiryDate: value.expiryDate,
-        idFront: value.idFront?.name,
-        idBack: value.idBack?.name,
+        idFront: idFront?.name,
+        idBack: idBack?.name,
       })
-    );
-
+    );  
     incrementStep();
     action.resetForm();
   };
@@ -135,12 +143,13 @@ const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProp
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
+        validateOnMount
       >
-        {({  isSubmitting, isValid, setFieldValue }) => (
+        {({ isSubmitting, isValid, setFieldValue, values, dirty }) => (
           <Form>
             <div className="px-8 py-6 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <label htmlFor="fname" className="text-sm text-[#454547]">
+                <label htmlFor="idType" className="text-sm text-[#454547]">
                   ID Type *
                 </label>
                 <Field
@@ -165,14 +174,14 @@ const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProp
                   </option>
                 </Field>
                 <ErrorMessage
-                  name="fname"
+                  name="idType"
                   component="div"
                   className="text-xs text-red-500"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="fname" className="text-sm text-[#454547]">
+                <label htmlFor="idNumber" className="text-sm text-[#454547]">
                   ID Number *
                 </label>
                 <Field
@@ -203,6 +212,7 @@ const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProp
                   type="date"
                   name="issueDate"
                   max={new Date().toISOString().split("T")[0]}
+                  value={values.issueDate}
                   onClick={(e: React.MouseEvent<HTMLInputElement>) =>
                     (e.target as HTMLInputElement).showPicker()
                   }
@@ -269,6 +279,7 @@ const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProp
               <div className=" flex gap-4">
                 <PrimaryButtons
                   text={"skip"}
+                  type="button"
                   className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg sm:w-5/12  justify-center items-center"
                   onClick={incrementStep}
                 />
@@ -279,12 +290,15 @@ const Identification = ({ setIdFront, setIdBack, idFront, idBack }: IdentityProp
                   className={clsx(
                     " h-[48px] font-medium rounded-lg sm:w-60  justify-center items-center",
                     {
-                      "bg-black text-white": isValid  && !isSubmitting,
-                      "bg-[#9A9A9A] text-white":
-                        !isValid ||  isSubmitting,
+                      "bg-black text-white":dirty && isValid && !isSubmitting,
+                      "bg-[#9A9A9A] text-white": !isValid|| !dirty || isSubmitting,
                     }
                   )}
-                  disabled={!isValid  || isSubmitting}
+                  disabled={
+                    storedIdentification
+                      ? false
+                      : !isValid || isSubmitting 
+                  }
                 />
               </div>
             </footer>

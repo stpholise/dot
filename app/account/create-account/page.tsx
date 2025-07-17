@@ -14,7 +14,7 @@ import {
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
-import { useState, useEffect, } from "react";
+import { useState } from "react";
 import { useFetchState } from "./_components/useFetchState";
 interface Step {
   id: number;
@@ -37,28 +37,16 @@ const Page = () => {
   const [picture, setPicture] = useState<File | undefined>();
   const [idFront, setIdFront] = useState<File | undefined>();
   const [idBack, setIdBack] = useState<File | undefined>();
+  const [selectedState, setSelectedState] = useState<string >("");
 
-  useEffect(() => {
-    
-  if (idFront) {
-    console.log("id front", idFront);
-  }
-
-  if (idBack) {
-    console.log("id Back", idBack);
-  }
-  }, [idFront, idBack])
   const cancelRegistration = () => {
-     setPicture(undefined);
+    setSelectedState("");
+    setPicture(undefined);
     setIdFront(undefined);
     setIdBack(undefined);
     dispatch(resetUserDetails());
     dispatch(setCurrentStep(0));
   };
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, [currentStep]);
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
@@ -199,19 +187,33 @@ const Page = () => {
             ))}
           </div>
           {currentStep === 0 ? (
-            <CustomerDetailsForm />
+            <CustomerDetailsForm setSelectedState={setSelectedState} setPicture={setPicture} setIdFront={setIdFront} setIdBack={setIdBack} />
           ) : currentStep === 1 ? (
             <CaptureCustomer setPicture={setPicture} picture={picture} />
           ) : currentStep === 2 ? (
-            <Identification setIdFront={setIdFront} setIdBack={setIdBack} idFront={idFront} idBack={idBack} />
+            <Identification
+              setIdFront={setIdFront}
+              setIdBack={setIdBack}
+              idFront={idFront}
+              idBack={idBack}
+            />
           ) : currentStep === 3 ? (
-            <Address states={states} isLoading={isLoading} error={error} />
+            <Address states={states} selectedState={selectedState} setSelectedState={setSelectedState} isLoading={isLoading} error={error} />
           ) : currentStep === 4 ? (
-            <ReviewCredentials picture={picture} setPicture={setPicture} idFront={idFront} idBack={idBack} setIdFront={setIdFront} setIdBack={setIdBack} />
+            <ReviewCredentials
+              picture={picture}
+              setPicture={setPicture}
+              idFront={idFront}
+              idBack={idBack}
+              setIdFront={setIdFront}
+              setIdBack={setIdBack}
+              setSelectedState={setSelectedState}
+            />
           ) : currentStep === 5 ? (
             <Successful />
           ) : (
-            <CustomerDetailsForm />
+            <CustomerDetailsForm setSelectedState={setSelectedState} setPicture={setPicture} setIdFront={setIdFront} setIdBack={setIdBack} />
+            
           )}
         </div>
       </div>

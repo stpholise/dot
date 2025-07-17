@@ -8,8 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentStep,
   setCustomerDetails,
+  resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
+import { scrollToTop } from "@/app/_utils/ScrollToTop";
+import { useEffect } from "react";
 interface CustomerDetails {
   withBvn: boolean;
   bvn?: string;
@@ -19,8 +22,17 @@ interface CustomerDetails {
   dob: string;
   gender: "male" | "female" | "other";
 }
+interface CustomerDetailsFormProps {
+  setPicture: (file: File | undefined) => void;
+  setIdFront: (file: File | undefined) => void;
+  setIdBack: (file: File | undefined) => void;
+  setSelectedState: (state: string) => void;
+}
 
-const CustomerDetailsForm = () => {
+const CustomerDetailsForm = ({ setPicture, setIdFront, setIdBack, setSelectedState }: CustomerDetailsFormProps) => {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
   const dispatch = useDispatch();
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
@@ -40,6 +52,22 @@ const CustomerDetailsForm = () => {
     dob: storedCustomerDetails.dob || "",
     gender: "male",
   };
+ 
+const cancelRegistration = () => {
+    dispatch(setCurrentStep(0));
+    setPicture(undefined);
+    setIdFront(undefined);
+    setIdBack(undefined);
+    setSelectedState("");
+    dispatch(resetUserDetails());
+  };
+
+  const storedCustomerDetailsCheck =
+    Object.keys(storedCustomerDetails).length > 0 &&
+    Object.entries(storedCustomerDetails)
+      .filter(([key]) => key !== "bvn")
+      .every(([, value]) => value !== "");
+
 
   const validationSchema = Yup.object().shape({
     withBvn: Yup.boolean().required("This Field is required"),
@@ -314,15 +342,17 @@ const CustomerDetailsForm = () => {
             <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
                 text={"Cancel"}
+                type="button"
                 className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-              />
+                onClick={cancelRegistration}
+             />
               <PrimaryButtons
                 text={"Proceed - Passport Capture"}
                 type="submit"
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
-                    "bg-black text-white": isValid && !isSubmitting,
+                    "bg-black text-white": (isValid && !isSubmitting && dirty) || (storedCustomerDetailsCheck && isValid && !dirty),
                     "bg-[#9A9A9A] text-white":
                       !isValid || !dirty || isSubmitting,
                   }

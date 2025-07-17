@@ -8,6 +8,8 @@ import {
 } from "@/app/store/slices/UserAccountSlice";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { RootState } from "@/app/store";
+import { scrollToTop } from "@/app/_utils/ScrollToTop";
+import { blobToFile } from "@/app/_utils/BlobToFile";
 
 interface CaptureCustomerProp {
   setPicture: (picture: File | undefined) => void;
@@ -15,13 +17,15 @@ interface CaptureCustomerProp {
 }
 
 const CaptureCustomer = ({ setPicture, picture }: CaptureCustomerProp) => {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
   const dispatch = useDispatch();
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
   const [customerPhoto, setCustomerPhoto] = useState<string | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isValid, setIsValid] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null); 
   const [canTakePhoto, setCanTakePhoto] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -30,8 +34,7 @@ const CaptureCustomer = ({ setPicture, picture }: CaptureCustomerProp) => {
       const photoUrl = URL.createObjectURL(picture);
       setCustomerPhoto(photoUrl);
     } else {
-      setCustomerPhoto(null);
-      setIsValid(false);
+      setCustomerPhoto(null); 
     }
   }, [picture]);
 
@@ -105,9 +108,9 @@ const CaptureCustomer = ({ setPicture, picture }: CaptureCustomerProp) => {
     // 1. Stop all tracks in the media stream
     if (mediaStream) {
       mediaStream.getTracks().forEach((track) => {
-        track.stop(); // Releases camera/mic resources
+        track.stop();  
       });
-      streamRef.current = null; // Clear the ref to indicate no active stream
+      streamRef.current = null; 
     }
 
     // 2. Disconnect video element from the stream and pause
@@ -174,27 +177,15 @@ const CaptureCustomer = ({ setPicture, picture }: CaptureCustomerProp) => {
           }_photo_${Date.now()}.png`;
           const photoFile = blobToFile(blob, filename);
           setPicture(photoFile);
-          dispatch(setCustomerImage({ url: photoUrl }));
-          // if (picture) setCustomerPhoto(URL.createObjectURL(picture));
+          dispatch(setCustomerImage({ url: photoUrl })); 
         }
-      }, "image/png");
-      setIsValid(true);
+      }, "image/png"); 
       handleStopCamera();
     }
   };
 
-  const blobToFile = (
-    blob: Blob,
-    filename: string,
-    lastModified: number = Date.now()
-  ): File => {
-    return new File([blob], filename, { type: blob.type, lastModified });
-  };
-
   const removePhoto = () => {
-    setPicture(undefined);
-    // setCustomerPhoto(null);
-    setIsValid(false);
+    setPicture(undefined); 
     handleVideo();
   };
 
@@ -308,18 +299,20 @@ const CaptureCustomer = ({ setPicture, picture }: CaptureCustomerProp) => {
         <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
           <PrimaryButtons
             text={"Go Back"}
+            type="button"
             className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
             icon="/icons/arrow_back.png"
             onClick={decrementStep}
           />
           <PrimaryButtons
             text={"Proceed"}
-            disabled={!isValid || isSubmitting}
+            type="button"
+            disabled={!picture || isSubmitting}
             className={clsx(
               " h-[48px] font-medium rounded-lg sm:w-96 justify-center items-center",
               {
-                "bg-black text-white": isValid && !isSubmitting,
-                "bg-[#9A9A9A] text-white": !isValid || isSubmitting,
+                "bg-black text-white": picture && !isSubmitting,
+                "bg-[#9A9A9A] text-white": !picture || isSubmitting,
               }
             )}
             onClick={incrementStep}
