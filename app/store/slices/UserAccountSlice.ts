@@ -24,7 +24,7 @@ interface CusstomerImage {
 }
 
 interface CustomerIdentification {
-  idType: "NIN" | "Voter ID" | "Driver's License";
+  idType: "NIN" | "Voter_ID" | "Driver_License" | "";
   idNumber: string;
   issuedBy?: string;
   issueDate: string;
@@ -38,7 +38,7 @@ interface CustomerAddress {
   city: string;
   address: string;
   country?: string;
-  postalCode?: string;
+  lga?: string;
   utilityBillImage?: File | null;
 }
 
@@ -69,7 +69,7 @@ const initialState: UserAccountState = {
     signature: "",
   },
   customerIdentification: {
-    idType: "NIN",
+    idType: "",
     idNumber: "",
     issueDate: "",
     expiryDate: "",
@@ -81,7 +81,7 @@ const initialState: UserAccountState = {
     city: "",
     address: "",
     country: "",
-    postalCode: "",
+    lga: "",
     utilityBillImage: null,
   },
   customerAccountDetail: {
@@ -118,7 +118,7 @@ export const userAccountSlice = createSlice({
         ...state.userAccountInitialState.customerIdentification,
         ...action.payload,
       };
-      console.log("customer identification :", action.payload);
+      
     },
     setCustomerAddress: (state, action) => {
       state.userAccountInitialState.customerAddress = {

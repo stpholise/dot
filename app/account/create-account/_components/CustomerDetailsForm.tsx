@@ -8,8 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentStep,
   setCustomerDetails,
+  resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
+import { scrollToTop } from "@/app/_utils/ScrollToTop";
+import { useEffect } from "react";
 interface CustomerDetails {
   withBvn: boolean;
   bvn?: string;
@@ -19,21 +22,52 @@ interface CustomerDetails {
   dob: string;
   gender: "male" | "female" | "other";
 }
+interface CustomerDetailsFormProps {
+  setPicture: (file: File | undefined) => void;
+  setIdFront: (file: File | undefined) => void;
+  setIdBack: (file: File | undefined) => void;
+  setSelectedState: (state: string) => void;
+}
 
-const CustomerDetailsForm = () => {
+const CustomerDetailsForm = ({ setPicture, setIdFront, setIdBack, setSelectedState }: CustomerDetailsFormProps) => {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
   const dispatch = useDispatch();
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
+
+  const storedCustomerDetails = useSelector(
+    (state: RootState) =>
+      state.userAccount.userAccountInitialState.customerDetails
+  );
+
   const initialValues: CustomerDetails = {
     withBvn: false,
-    bvn: "",
-    fname: "",
-    lname: "",
-    phone: "",
-    dob: "",
+    bvn: storedCustomerDetails.bvn || "",
+    fname: storedCustomerDetails.fname || "",
+    lname: storedCustomerDetails.lname || "",
+    phone: storedCustomerDetails.phone || "",
+    dob: storedCustomerDetails.dob || "",
     gender: "male",
   };
+ 
+const cancelRegistration = () => {
+    dispatch(setCurrentStep(0));
+    setPicture(undefined);
+    setIdFront(undefined);
+    setIdBack(undefined);
+    setSelectedState("");
+    dispatch(resetUserDetails());
+  };
+
+  const storedCustomerDetailsCheck =
+    Object.keys(storedCustomerDetails).length > 0 &&
+    Object.entries(storedCustomerDetails)
+      .filter(([key]) => key !== "bvn")
+      .every(([, value]) => value !== "");
+
 
   const validationSchema = Yup.object().shape({
     withBvn: Yup.boolean().required("This Field is required"),
@@ -88,7 +122,9 @@ const CustomerDetailsForm = () => {
           className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 w-14 h-14"
         />
         <div className=" ">
-          <p className=" text-xs sm:text-sm text-[#667085] text-medium">Customer Details</p>
+          <p className=" text-xs sm:text-sm text-[#667085] text-medium">
+            Customer Details
+          </p>
           <h3 className="text-black text-base sm:text-3xl font-medium">
             {" "}
             Who is this account being created for?
@@ -118,25 +154,25 @@ const CustomerDetailsForm = () => {
             <div className="  font-medium px-9 py-4">
               <div className=" flex flex-col gap-2 border-b border-gray-100 py-6">
                 <p className="text-sm">Does the customer have a BVN? *</p>
-                <div className="flex sm:flex-row flex-col gap-4">
-                  <label className="sm:w-1/2 flex  justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
+                <div className="flex  sm:flex-row flex-col gap-4">
+                  <label className="  cursor-pointer sm:w-1/2 flex  justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
                     Yes, the BVN is present
                     <Field
                       type="radio"
                       name="withBvn"
                       value={true}
                       onChange={() => setFieldValue("withBvn", true)}
-                      className="cursor-pointer w-5 h-5"
+                      className="  w-5 h-5"
                     />
                   </label>
-                  <label className="flex sm:w-1/2 justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
+                  <label className="  cursor-pointer flex sm:w-1/2 justify-between items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-black text-base rounded-lg">
                     No, Bvn is not available
                     <Field
                       type="radio"
                       name="withBvn"
                       value={false}
                       onChange={() => setFieldValue("withBvn", false)}
-                      className="cursor-pointer w-5 h-5"
+                      className="  w-5 h-5"
                     />
                   </label>
                 </div>
@@ -176,6 +212,7 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="text"
                     name="fname"
+                    value={values.fname}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter First Name"
                   />
@@ -192,6 +229,7 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="text"
                     name="lname"
+                    value={values.lname}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter Last Name"
                   />
@@ -208,6 +246,14 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="text"
                     name="phone"
+                    value={values.phone}
+                    inputMode="numeric"
+                    pattern="\d*"
+                    maxLength="11"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const clearedValue = e.target.value.replace(/\D/g, "");
+                      setFieldValue("phone", clearedValue);
+                    }}
                     className="w-full px-4 py-3 outline-none border border-gray-300  rounded-lg"
                     placeholder="Enter Phone Number"
                   />
@@ -224,10 +270,16 @@ const CustomerDetailsForm = () => {
                   <Field
                     type="date"
                     name="dob"
+                    value={values.dob}
+                    max={"2015-01-01"}
+                    // todo look for the correct type here
+                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                      (e.target as HTMLInputElement).showPicker();
+                    }}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setFieldValue("dob", e.target.value.toString());
                     }}
-                    className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
+                    className="w-full  cursor-pointer px-4 py-3 border outline-none border-gray-300 rounded-lg"
                   />
                   <ErrorMessage
                     name="dob"
@@ -240,7 +292,7 @@ const CustomerDetailsForm = () => {
                   <div className="display flex gap-4 mt-2 w-full justify-stretch">
                     <label
                       htmlFor="gender_male"
-                      className="flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
+                      className=" cursor-pointer flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
                     >
                       Male
                       <Field
@@ -254,7 +306,7 @@ const CustomerDetailsForm = () => {
                     </label>
                     <label
                       htmlFor="gender_female"
-                      className="flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
+                      className=" cursor-pointer flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
                     >
                       Female
                       <Field
@@ -290,16 +342,17 @@ const CustomerDetailsForm = () => {
             <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
                 text={"Cancel"}
+                type="button"
                 className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-               
-              />
+                onClick={cancelRegistration}
+             />
               <PrimaryButtons
                 text={"Proceed - Passport Capture"}
                 type="submit"
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
-                    "bg-black text-white": isValid && dirty && !isSubmitting,
+                    "bg-black text-white": (isValid && !isSubmitting && dirty) || (storedCustomerDetailsCheck && isValid && !dirty),
                     "bg-[#9A9A9A] text-white":
                       !isValid || !dirty || isSubmitting,
                   }

@@ -10,6 +10,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import ImageDropzone from "@/app/_components/ImageDropzone";
+import { scrollToTop } from "@/app/_utils/ScrollToTop";
+import { useEffect } from "react";
+
+interface IdentityProps {
+  setIdFront: (state: File | undefined) => void;
+  setIdBack: (state: File | undefined) => void;
+  idFront?: File | undefined;
+  idBack?: File | undefined;
+}
 
 export interface IdentificationProps {
   idType: "NIN" | "Voter_ID" | "Driver_License" | "";
@@ -20,33 +29,55 @@ export interface IdentificationProps {
   idBack: File | null;
 }
 
-const initialValues: IdentificationProps = {
-  idType: "",
-  idNumber: "",
-  issueDate: new Date(),
-  expiryDate: new Date(),
-  idFront: null,
-  idBack: null,
-};
-
 const validationSchema = Yup.object().shape({
-  idType: Yup.string().oneOf(["NIN", "voter_ID", "Drivers_License"]).required(),
-  idNumber: Yup.string().matches(/^\d{11}$/, "Id number is required"),
+  idType: Yup.string()
+    .oneOf(["NIN", "voter_ID", "Drivers_License"])
+    .required("Required"),
+  idNumber: Yup.string()
+    .matches(/^\d{11}$/, "Id must be 11 characters")
+    .required("Required"),
   issueDate: Yup.date()
+    .typeError("Invalid date format")
+    .min(new Date("1900-01-01"), "Date cannot be before 1900")
+    .nullable()
     .max(new Date(), "Date cannot be in the future")
-    .required(),
+    .required("Requireed"),
   expiryDate: Yup.date()
+    .typeError("Invalid date format")
     .min(new Date(), "expiry date cannot be in the past")
-    .required(),
-  idFront: Yup.mixed(),
-  idBack: Yup.mixed(),
+    .required("Requried"),
+  idFront: Yup.mixed().required("Required"),
+  idBack: Yup.mixed().required("Required"),
 });
 
-const Identification = () => {
+const Identification = ({
+  setIdFront,
+  setIdBack,
+  idFront,
+  idBack,
+}: IdentityProps) => {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
   const dispatch = useDispatch();
+  const storedIdentification = useSelector(
+    (state: RootState) =>
+      state.userAccount.userAccountInitialState.customerIdentification
+  );
+
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
+
+  const initialValues: IdentificationProps = {
+    idType: storedIdentification.idType || "",
+    idNumber: storedIdentification.idNumber || "",
+    issueDate: new Date(storedIdentification.issueDate) || new Date(),
+    expiryDate: new Date(storedIdentification.expiryDate) || new Date(),
+    idFront: idFront || null,
+    idBack: idBack || null,
+  };
+
   const decrementStep = () => {
     const newStep = currentStep - 1;
     dispatch(setCurrentStep(newStep));
@@ -66,32 +97,33 @@ const Identification = () => {
         idNumber: value.idNumber,
         issueDate: value.issueDate,
         expiryDate: value.expiryDate,
-        idFront: value.idFront,
-        idBack: value.idBack,
+        idFront: idFront?.name,
+        idBack: idBack?.name,
       })
     );
-     
-      incrementStep()
+    incrementStep();
     action.resetForm();
   };
   return (
     <div>
       <div className=" lg:hidden flex gap-4 px-8 mt-4">
-              <Image
-                src={"/image/Frame 48.png"}
-                alt="doc"
-                height={80}
-                width={80}
-                className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 h-14 w-14"
-              />
-              <div className=" ">
-                <p className="text-xs sm:text-sm text-[#667085] text-medium">Customer Identification</p>
-                <h3 className="text-black text-base sm:text-3xl font-medium">
-                 Provide your current valid means of identification
-                </h3>
-              </div>
-            </div>
-       
+        <Image
+          src={"/image/Frame 48.png"}
+          alt="doc"
+          height={80}
+          width={80}
+          className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 h-14 w-14"
+        />
+        <div className=" ">
+          <p className="text-xs sm:text-sm text-[#667085] text-medium">
+            Customer Identification
+          </p>
+          <h3 className="text-black text-base sm:text-3xl font-medium">
+            Provide your current valid means of identification
+          </h3>
+        </div>
+      </div>
+
       <div className=" hidden lg:flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
         <Image
           alt="user"
@@ -111,19 +143,20 @@ const Identification = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
+        validateOnMount
       >
-        {({ dirty, isSubmitting, isValid, setFieldValue }) => (
+        {({ isSubmitting, isValid, setFieldValue, values, dirty }) => (
           <Form>
             <div className="px-8 py-6 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <label htmlFor="fname" className="text-sm text-[#454547]">
+                <label htmlFor="idType" className="text-sm text-[#454547]">
                   ID Type *
                 </label>
                 <Field
                   as="select"
                   name="idType"
                   className={clsx(
-                    "w-full px-4 py-3 outline-none border border-gray-300 rounded-lg focus:ring-1 focus:ring-black"
+                    "w-full cursor-pointer px-4 py-3 outline-none border border-gray-300 rounded-lg focus:ring-1 focus:ring-black"
                   )}
                   placeholder="select identity type"
                 >
@@ -141,19 +174,26 @@ const Identification = () => {
                   </option>
                 </Field>
                 <ErrorMessage
-                  name="fname"
+                  name="idType"
                   component="div"
                   className="text-xs text-red-500"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="fname" className="text-sm text-[#454547]">
+                <label htmlFor="idNumber" className="text-sm text-[#454547]">
                   ID Number *
                 </label>
                 <Field
                   type="text"
                   name="idNumber"
+                  maxlength={11}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setFieldValue(
+                      "idNumber",
+                      e.target.value.replace(/\D/g, "")
+                    );
+                  }}
                   className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                   placeholder="Enter your id number"
                 />
@@ -171,8 +211,15 @@ const Identification = () => {
                 <Field
                   type="date"
                   name="issueDate"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue('issueDate', e.target.value.toString())}
-                  className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
+                  max={new Date().toISOString().split("T")[0]}
+                  value={values.issueDate}
+                  onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                    (e.target as HTMLInputElement).showPicker()
+                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFieldValue("issueDate", e.target.value.toString())
+                  }
+                  className="w-full cursor-pointer px-4 py-3 border outline-none border-gray-300 rounded-lg"
                 />
                 <ErrorMessage
                   name="issueDate"
@@ -188,8 +235,14 @@ const Identification = () => {
                 <Field
                   type="date"
                   name="expiryDate"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>)=> setFieldValue('expiryDate', e.target.value.toString())}
-                  className="w-full px-4 py-3 border outline-none border-gray-300 rounded-lg"
+                  min={new Date().toISOString().split("T")[0]}
+                  onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                    (e.target as HTMLInputElement).showPicker()
+                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFieldValue("expiryDate", e.target.value.toString())
+                  }
+                  className="w-full cursor-pointer px-4 py-3 border outline-none border-gray-300 rounded-lg"
                 />
                 <ErrorMessage
                   name="expiryDate"
@@ -197,46 +250,57 @@ const Identification = () => {
                   className="text-xs text-red-500"
                 />
               </div>
-              <ImageDropzone
-                setFieldValue={setFieldValue}
-                fieldName="idFront"
-                text={" Upload ID Image (Front)"}
-              />
-              <ImageDropzone
-                setFieldValue={setFieldValue}
-                fieldName="idBack"
-                text={" Upload ID Image (back)"}
-              />
+              <div className="">
+                <ImageDropzone
+                  setFieldValue={setFieldValue}
+                  fieldName="idFront"
+                  text={" Upload ID Image (Front)"}
+                  setFile={setIdFront}
+                  file={idFront}
+                />
+              </div>
+              <div className="">
+                <ImageDropzone
+                  setFieldValue={setFieldValue}
+                  fieldName="idBack"
+                  text={" Upload ID Image (back)"}
+                  setFile={setIdBack}
+                  file={idBack}
+                />
+              </div>
             </div>
-            <footer className="flex gap-8 px-8 py-4 mt-auto flex-col-reverse">
-              <PrimaryButtons
-                text={"Go Back"}
-                className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
-                icon="/icons/arrow_back.png"
-                onClick={decrementStep}
-              />
-              <div className=" flex gap-4">
+            <footer className="flex gap-8 px-8 py-4 mt-auto sm:flex-row xl:flex-row lg:flex-col flex-col-reverse">
+              <div className=" flex gap-4 ">
                 <PrimaryButtons
-                  text={"skip"}
-                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
-                  onClick={incrementStep}
+                  text={"Go Back"}
+                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[52px] rounded-lg  justify-center items-center"
+                  icon="/icons/arrow_back.png"
+                  onClick={decrementStep}
                 />
 
                 <PrimaryButtons
-                  text={"Proceed - Passport Capture"}
-                  type="submit"
-                  className={clsx(
-                    " h-[48px] font-medium rounded-lg w-44 justify-center items-center",
-                    {
-                      "bg-black text-white": isValid && dirty && !isSubmitting,
-                      "bg-[#9A9A9A] text-white":
-                        !isValid || !dirty || isSubmitting,
-                    }
-                  )}
-                  disabled={!isValid || !dirty || isSubmitting}
-             
+                  text={"skip"}
+                  type="button"
+                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg sm:w-5/12  lg:w-1/2 xl:w-5/12 justify-center items-center"
+                  onClick={incrementStep}
                 />
               </div>
+
+              <PrimaryButtons
+                text={"Proceed "}
+                type="submit"
+                className={clsx(
+                  " h-[48px] font-medium rounded-lg sm:w-60 lg:w-full justify-center items-center",
+                  {
+                    "bg-black text-white": dirty && isValid && !isSubmitting,
+                    "bg-[#9A9A9A] text-white":
+                      !isValid || !dirty || isSubmitting,
+                  }
+                )}
+                disabled={
+                  storedIdentification ? false : !isValid || isSubmitting
+                }
+              />
             </footer>
           </Form>
         )}

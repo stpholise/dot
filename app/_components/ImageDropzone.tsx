@@ -1,5 +1,5 @@
-import { useDropzone, DropzoneOptions } from "react-dropzone";
-import { useState } from "react";
+import { useDropzone, DropzoneOptions, FileRejection } from "react-dropzone";
+import { useState, useCallback, useEffect } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import { FormikHelpers } from "formik";
@@ -10,26 +10,66 @@ interface ImageDropzoneProps {
   setFieldValue: FormikHelpers<
     IdentificationProps | CustomerAddress
   >["setFieldValue"];
+  setFile?: (state: File | undefined) => void;
   fieldName: string;
   text: string;
+  file?: File | undefined;
 }
 
 const ImageDropzone = ({
   setFieldValue,
   fieldName,
   text,
+  file,
+  setFile,
 }: ImageDropzoneProps) => {
   const [itemFiles, setItemFiles] = useState<File[]>([]);
   const [isFile, setIsFile] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>();
 
-  const onDropItem = (acceptedFiles: File[]) => {
+  useEffect(() => {
+    if (file) {
+      setItemFiles([file]);
+      setIsFile(true);
+    } else {
+      setItemFiles([]);
+      setIsFile(false);
+    }
+  }, [file]);
+
+  const maxFileSize = 3 * 1024 * 1024;
+
+  const onDropItem = useCallback((acceptedFiles: File[]) => {
+    
     if (acceptedFiles.length > 0) {
+      setError(null);
       setIsFile(true);
       setItemFiles(acceptedFiles);
+      if (setFile) setFile(acceptedFiles[0]);
       setTimeout(() => {
-        const imageUrl = URL.createObjectURL(acceptedFiles[0]);
-        setFieldValue(fieldName, imageUrl);
+        setFieldValue(fieldName, acceptedFiles[0]);
       }, 500);
+    }
+  }, []);
+  const onDropRejected = (fileRejections: FileRejection[]) => {
+    const firstError = fileRejections[0]?.errors[0];
+    const fileRejected = fileRejections[0];
+    if (!fileRejected) return;
+    const filesizeInMb = fileRejected.file?.size / (1024 * 1024);
+
+    if (firstError) {
+      switch (firstError.code) {
+        case "file-too-large":
+          setError(
+            `File too large (${filesizeInMb.toFixed(2)}MB). Max size is 3MB.`
+          );
+          break;
+        case "file-invalid-type":
+          setError("Unsupported file type. Only JPEG and PNG are allowed.");
+          break;
+        default:
+          setError("File upload error.");
+      }
     }
   };
 
@@ -39,8 +79,9 @@ const ImageDropzone = ({
       "image/jpeg": [".jpg", ".jpeg"],
       "image/png": [".png"],
     },
+    onDropRejected,
     maxFiles: 1,
-    maxSize: 4145728,
+    maxSize: maxFileSize,
   };
 
   const { getRootProps, getInputProps } = useDropzone(dropzoneOptions);
@@ -48,25 +89,25 @@ const ImageDropzone = ({
   const resetFiles = () => {
     setItemFiles([]);
     setIsFile(false);
-  };
+    setFieldValue(fieldName, undefined);
+  
+if (setFile) {
+  setFile(undefined);
+}  };
 
   return (
     <div
-      className={clsx(" bg-[#F7F7F7] flex rounded-3xl ", {
-        "sm:w-[520px] sm:h-[130px] px-6 py-6 justify-center ": !isFile,
+      className={clsx(" bg-[#F7F7F7] flex rounded-3xl relative ", {
+        "sm:w-[520px] lg:w-[339px] xl:w-[520px] sm:h-[130px] px-6 py-6 justify-center ": !isFile,
         "px-4 py-4  justify-start": isFile,
       })}
     >
       {
-        <div
-          className={clsx("flex items-center justify-between w-full", {
-            
-          })}
-        >
+        <div className={clsx("flex items-center justify-between w-full", {})}>
           <div
             {...getRootProps()}
             className={clsx(
-              "flex  w-full h-full items-center  gap-6",
+              "flex cursor-pointer  w-full h-full items-center  gap-6",
               {
                 "justify-center": !isFile,
 
@@ -105,7 +146,7 @@ const ImageDropzone = ({
             </div>
             <div className=" ">
               <p className="text-black font-medium flex gap-2 ">
-                {text} 
+                {text}
                 {isFile && (
                   <Image
                     src={"/icons/good.png"}
@@ -136,6 +177,12 @@ const ImageDropzone = ({
           )}
         </div>
       }
+
+      {error && (
+        <div className="text-xs text-red-400 absolute bottom-1 text-center">
+          {error}{" "}
+        </div>
+      )}
     </div>
   );
 };

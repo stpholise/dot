@@ -14,6 +14,9 @@ import {
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
 import { RootState } from "@/app/store";
+import { useState } from "react";
+import { useFetchState } from "./_components/useFetchState";
+ 
 interface Step {
   id: number;
   title: string;
@@ -23,11 +26,25 @@ interface Step {
 
 const Page = () => {
   const dispatch = useDispatch();
+  const { states, isLoading, error } = useFetchState() as {
+    states: string[];
+    isLoading: boolean;
+    error: string;
+  };
   const currentStep = useSelector(
     (state: RootState) => state.userAccount.initialStepState.currentStep
   );
 
+  const [picture, setPicture] = useState<File | undefined>();
+  const [idFront, setIdFront] = useState<File | undefined>();
+  const [idBack, setIdBack] = useState<File | undefined>();
+  const [selectedState, setSelectedState] = useState<string>("");
+
   const cancelRegistration = () => {
+    setSelectedState("");
+    setPicture(undefined);
+    setIdFront(undefined);
+    setIdBack(undefined);
     dispatch(resetUserDetails());
     dispatch(setCurrentStep(0));
   };
@@ -35,16 +52,13 @@ const Page = () => {
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
       <div
-        className={clsx(
-          " items-center justify-between mb-4",
-          {
-            hidden: currentStep == 5,
-            flex: currentStep !== 5,
-          }
-        )}
+        className={clsx(" items-center justify-between mb-4", {
+          hidden: currentStep == 5,
+          flex: currentStep !== 5,
+        })}
       >
         <div className="">
-          <h4 className="text-sm text-[#454547] sm:block hidden">
+          <h4 className="text-sm text-[#454547] sm:block hidden md:hidden lg:block">
             Dot MFB Account Opening \ Create Account
           </h4>
           <h1 className="h1 text-base sm:text-2xl font-medium text-black">
@@ -59,7 +73,7 @@ const Page = () => {
           onClick={cancelRegistration}
         />
         <button
-          className=" text-black flex lg:hidden bg-white border border-gray-300 hover:bg-gray-100 h-[40px] w-[40px] items-center justify-center rounded-lg"
+          className=" text-black flex md:hidden bg-white border border-gray-300 hover:bg-gray-100 h-[40px] w-[40px] items-center justify-center rounded-lg"
           disabled={currentStep === 1}
           onClick={cancelRegistration}
         >
@@ -72,14 +86,20 @@ const Page = () => {
             className=""
           />
         </button>
+        <p className="bg-[#EBF8FE] text-[#46809B] rounded-3xl py-1 px-2 w-fit hidden lg:hidden md:flex">
+          step {currentStep + 1} of {steps.length}
+        </p>
       </div>
       <div
         className={" flex lg:gap-8  gap-5 lg:justify-between justify-center"}
       >
         <div
           className={clsx(
-            "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden lg:flex flex-col items-center gap-4 ",
-            currentStep >= 4 && "hidden"
+            "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden flex-col items-center gap-4 ",
+            {
+              hidden: currentStep >= 4,
+              "lg:flex": currentStep < 4,
+            }
           )}
         >
           <div className="grid gap-2 grid-cols-5 lg:gap-4 justify-stretch  ">
@@ -106,7 +126,7 @@ const Page = () => {
                 currentStep === index ? " flex" : "hidden"
               )}
             >
-              <div className=" flex flex-col gap-3 items-start justify-start  w-10/12">
+              <div className=" flex flex-col gap-3 items-start justify-start  xl:w-10/12 w-10/12 lg:w-full">
                 <p className="bg-[#EBF8FE] text-[#46809B] rounded-3xl py-1 px-2 w-fit">
                   step {step.id + 1} of {steps.length}
                 </p>
@@ -118,9 +138,9 @@ const Page = () => {
                 <Image
                   alt={step.title}
                   src={step.image ? step.image : ""}
-                  height={90}
+                  height={190}
                   width={359}
-                  className={clsx("lg:w-[390px]", step.style)}
+                  className={clsx("lg:w-[390px] h-[190px]", step.style)}
                 />
               </div>
             </div>
@@ -142,15 +162,20 @@ const Page = () => {
         </div>
         <div
           className={clsx(
-            "lg:w-[600px] max-w-[600px] w-full   min-h-[580px] text-[#667085] bg-white rounded-3xl  ",
+            "xl:w-[600px] max-w-[600px] w-full lg:w-[400px]   min-h-[580px] text-[#667085] bg-white rounded-3xl  ",
             {
-              "lg:mx-auto ": currentStep >= 4,
+              "lg:mx-auto lg:w-[750px]  xl:w-[600px]": currentStep >= 4,
             }
           )}
         >
-          <div className={clsx("grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-8 py-4 mt-4 ",{
-            "hidden" : currentStep >= 4
-          })}>
+          <div
+            className={clsx(
+              "grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-8 py-4 mt-4 ",
+              {
+                hidden: currentStep >= 4,
+              }
+            )}
+          >
             {steps.map((step, index) => (
               <div
                 onClick={() => setCurrentStep(index)}
@@ -166,19 +191,48 @@ const Page = () => {
             ))}
           </div>
           {currentStep === 0 ? (
-            <CustomerDetailsForm />
+            <CustomerDetailsForm
+              setSelectedState={setSelectedState}
+              setPicture={setPicture}
+              setIdFront={setIdFront}
+              setIdBack={setIdBack}
+            />
           ) : currentStep === 1 ? (
-            <CaptureCustomer />
+            <CaptureCustomer setPicture={setPicture} picture={picture} />
           ) : currentStep === 2 ? (
-            <Identification />
+            <Identification
+              setIdFront={setIdFront}
+              setIdBack={setIdBack}
+              idFront={idFront}
+              idBack={idBack}
+            />
           ) : currentStep === 3 ? (
-            <Address />
+            <Address
+              states={states}
+              selectedState={selectedState}
+              setSelectedState={setSelectedState}
+              isLoading={isLoading}
+              error={error}
+            />
           ) : currentStep === 4 ? (
-            <ReviewCredentials />
+            <ReviewCredentials
+              picture={picture}
+              setPicture={setPicture}
+              idFront={idFront}
+              idBack={idBack}
+              setIdFront={setIdFront}
+              setIdBack={setIdBack}
+              setSelectedState={setSelectedState}
+            />
           ) : currentStep === 5 ? (
             <Successful />
           ) : (
-            <CustomerDetailsForm />
+            <CustomerDetailsForm
+              setSelectedState={setSelectedState}
+              setPicture={setPicture}
+              setIdFront={setIdFront}
+              setIdBack={setIdBack}
+            />
           )}
         </div>
       </div>
