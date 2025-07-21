@@ -1,19 +1,3 @@
-// import { NextResponse } from 'next/server'
-// import type { NextRequest } from 'next/server'
-
-//  export function middleware(request: NextRequest) {
-//    const pathname = request.nextUrl.pathname
-
-//     if ( pathname === '/'){
-//         return NextResponse.rewrite( new URL('/home', request.url))
-//     }
-//     return NextResponse.next()
-//  }
-
-//  export const config = {
-//     matcher: ['/'],
-//  }
-
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -40,6 +24,7 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
   if (response.status !== 404) {
     await auth.protect();
   }
+
   return NextResponse.next();
 });
 
