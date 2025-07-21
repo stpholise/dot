@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "./_components/layout/Header";
 import Sidebar from "./_components/layout/Sidebar";
 import Providers from "./Providers";
+import { ClerkProvider } from "@clerk/nextjs";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,16 +26,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} ${geistSans.variable}  bg-[#FAF9F9] text-[#667085] `}
-      >
-        <Providers>
-          <Header />
-          <Sidebar />
-          {children}
-        </Providers>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${inter.className} ${geistSans.variable}  bg-[#FAF9F9] text-[#667085] `}
+        >
+          <Providers>
+            <Header />
+            <Sidebar />
+            {children}
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
