@@ -6,6 +6,7 @@ import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
 import { scrollToTop } from "@/app/_utils/ScrollToTop";
 import { useEffect } from "react";
 import clsx from "clsx";
+import { useRouter } from 'next/navigation'
 
 interface DotAccountBenefit {
   icon: string;
@@ -16,6 +17,9 @@ interface DotAccountBenefit {
  
 
 const Successful= () => { 
+
+  const router = useRouter()
+
   useEffect(() => {
     scrollToTop();
   }, []);
@@ -31,6 +35,7 @@ const Successful= () => {
   };
   const incrementStep = () => { 
     dispatch(setCurrentStep(0));
+    router.push('/account')
   };
  
   return (
