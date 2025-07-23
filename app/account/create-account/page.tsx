@@ -39,6 +39,7 @@ const Page = () => {
   const [picture, setPicture] = useState<File | undefined>();
   const [idFront, setIdFront] = useState<File | undefined>();
   const [idBack, setIdBack] = useState<File | undefined>();
+  const [utilityBill, setUtilityBill] = useState<File | undefined>();
   const [selectedState, setSelectedState] = useState<string>("");
 
   const cancelRegistration = () => {
@@ -214,6 +215,8 @@ const Page = () => {
               setSelectedState={setSelectedState}
               isLoading={isLoading}
               error={error}
+              setUtilityBill={setUtilityBill}
+              utilityBill={utilityBill}
             />
           ) : currentStep === 4 ? (
             <ReviewCredentials
@@ -224,6 +227,7 @@ const Page = () => {
               setIdFront={setIdFront}
               setIdBack={setIdBack}
               setSelectedState={setSelectedState}
+              utilityBill={utilityBill}
             />
           ) : currentStep === 5 ? (
             <Successful />

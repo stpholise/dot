@@ -29,9 +29,11 @@ interface AddressProps {
   error?: string;
   selectedState: string;
   setSelectedState: (state: string) => void;
+  setUtilityBill: (state: File | undefined) => void;
+  utilityBill: File | undefined;
 }
 
-const Address = ({ states, isLoading, error, selectedState, setSelectedState }: AddressProps) => {
+const Address = ({ states, isLoading, error, selectedState, setSelectedState, setUtilityBill, utilityBill }: AddressProps) => {
   const dispatch = useDispatch();
   useEffect(() => {
     scrollToTop();
@@ -276,6 +278,8 @@ const Address = ({ states, isLoading, error, selectedState, setSelectedState }: 
                   setFieldValue={setFieldValue}
                   fieldName="utilityBillImage"
                   text={"Upload Utility Bill (Optional)"}
+                  setFile={setUtilityBill}
+                  file={utilityBill}
                 />
               </div>
               <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">

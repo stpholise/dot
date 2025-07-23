@@ -17,10 +17,11 @@ interface ReviewCredentialsProps {
   idFront?: File;
   idBack?: File;  
   picture?: File;
+  utilityBill?: File;
   setSelectedState: (state: string) => void;
 }
 
-const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, setIdBack, setSelectedState }: ReviewCredentialsProps) => {
+const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, setIdBack, setSelectedState, utilityBill }: ReviewCredentialsProps) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [idFrontUrl, setIdFrontUrl] = useState<string | undefined>(undefined);
   const [idBackUrl, setIdBackUrl] = useState<string | undefined>(undefined); 
@@ -259,6 +260,23 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
                 </p>
               </div>
             </div>
+{
+              utilityBill  &&
+            <div className=" flex gap-4 rounded-2xl h-16 py-2 px-4 bg-[#F7F7F7]">
+              <Image
+                src={"/icons/document.png"}
+                alt={"document"}
+                width={40}
+                height={40}
+                className=""
+              />
+              <div className="">
+                <h4 className="text-black text-sm">ID Image (Back)</h4>
+                <p className="text-[#868C98] text-xs overflow-hidden">
+                  {utilityBill ? utilityBill.name : "No ID back image uploaded"}
+                </p>
+              </div>
+            </div>}
           </div>
         )}
         <div className="flex items-start gap-4 py-4">

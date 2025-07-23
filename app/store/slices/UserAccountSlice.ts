@@ -24,7 +24,7 @@ interface CusstomerImage {
 }
 
 interface CustomerIdentification {
-  idType: "NIN" | "Voter_ID" | "Driver_License" | "";
+  idType: "NIN" | "Voter ID" | "Driver License" | "";
   idNumber: string;
   issuedBy?: string;
   issueDate: string;
@@ -118,7 +118,6 @@ export const userAccountSlice = createSlice({
         ...state.userAccountInitialState.customerIdentification,
         ...action.payload,
       };
-      
     },
     setCustomerAddress: (state, action) => {
       state.userAccountInitialState.customerAddress = {

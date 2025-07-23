@@ -21,7 +21,7 @@ interface IdentityProps {
 }
 
 export interface IdentificationProps {
-  idType: "NIN" | "Voter_ID" | "Driver_License" | "";
+  idType: "NIN" | "Voter ID" | "Driver License" | "";
   idNumber: string;
   issueDate: string;
   expiryDate: string;
@@ -31,7 +31,7 @@ export interface IdentificationProps {
 
 const validationSchema = Yup.object().shape({
   idType: Yup.string()
-    .oneOf(["NIN", "voter_ID", "Drivers_License"])
+    .oneOf(["NIN", "voter ID", "Drivers License"])
     .required("Required"),
   idNumber: Yup.string()
     .matches(/^\d{11}$/, "Id must be 11 characters")
@@ -166,10 +166,10 @@ const Identification = ({
                   <option className="text-black" value="NIN">
                     NIN
                   </option>
-                  <option className="text-black" value="voter_ID">
+                  <option className="text-black" value="voter ID">
                     Voter ID
                   </option>
-                  <option className="text-black" value="Drivers_License">
+                  <option className="text-black" value="Drivers License">
                     Drivers License
                   </option>
                 </Field>
@@ -281,7 +281,7 @@ const Identification = ({
                 <PrimaryButtons
                   text={"skip"}
                   type="button"
-                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg sm:w-5/12  lg:w-1/2 xl:w-5/12 justify-center items-center"
+                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg w-full sm:w-5/12  lg:w-1/2 xl:w-5/12 justify-center items-center"
                   onClick={incrementStep}
                 />
               </div>
