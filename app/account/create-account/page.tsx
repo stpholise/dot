@@ -16,7 +16,7 @@ import {
 import { RootState } from "@/app/store";
 import { useState } from "react";
 import { useFetchState } from "./_components/useFetchState";
- 
+ import { useRouter } from 'next/navigation'
 
 interface Step {
   id: number;
@@ -27,6 +27,7 @@ interface Step {
 
 const Page = () => {
   const dispatch = useDispatch();
+  const router = useRouter()
   const { states, isLoading, error } = useFetchState() as {
     states: string[];
     isLoading: boolean;
@@ -43,12 +44,15 @@ const Page = () => {
   const [selectedState, setSelectedState] = useState<string>("");
 
   const cancelRegistration = () => {
+    router.push('/account')
     setSelectedState("");
     setPicture(undefined);
     setIdFront(undefined);
     setIdBack(undefined);
+    setUtilityBill(undefined)
     dispatch(resetUserDetails());
     dispatch(setCurrentStep(0));
+
   };
 
   return (
@@ -227,6 +231,7 @@ const Page = () => {
               setIdFront={setIdFront}
               setIdBack={setIdBack}
               setSelectedState={setSelectedState}
+              setUtilityBill={setUtilityBill}
               utilityBill={utilityBill}
             />
           ) : currentStep === 5 ? (
