@@ -13,7 +13,7 @@ const isProtectedRoute = createRouteMatcher(["/account(.*)"]);
 export default clerkMiddleware(async (auth, request: NextRequest) => {
   const url = new URL(request.url);
   const path = url.pathname;
-  // console.log(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+ 
   if (isPublicRoute(request)) {
     if (path === "/") {
       return NextResponse.rewrite(new URL("/home", request.url));
