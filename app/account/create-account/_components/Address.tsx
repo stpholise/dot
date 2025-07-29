@@ -29,9 +29,11 @@ interface AddressProps {
   error?: string;
   selectedState: string;
   setSelectedState: (state: string) => void;
+  setUtilityBill: (state: File | undefined) => void;
+  utilityBill: File | undefined;
 }
 
-const Address = ({ states, isLoading, error, selectedState, setSelectedState }: AddressProps) => {
+const Address = ({ states, isLoading, error, selectedState, setSelectedState, setUtilityBill, utilityBill }: AddressProps) => {
   const dispatch = useDispatch();
   useEffect(() => {
     scrollToTop();
@@ -103,7 +105,7 @@ const Address = ({ states, isLoading, error, selectedState, setSelectedState }: 
 
   return (
     <div>
-      <div className=" lg:hidden flex gap-4 px-8 mt-4">
+      <div className=" lg:hidden flex gap-4 px-4 sm:px-8 mt-4">
         <Image
           src={"/image/Frame 48.png"}
           alt="doc"
@@ -140,7 +142,7 @@ const Address = ({ states, isLoading, error, selectedState, setSelectedState }: 
       >
         {({ isValid,  isSubmitting, setFieldValue }) => (
           <Form>
-            <div className="px-8 py-8 flex flex-col gap-4">
+            <div className="px-4 sm:px-8 py-8 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <label htmlFor="fname" className="text-sm text-[#454547]">
                   State *
@@ -276,6 +278,8 @@ const Address = ({ states, isLoading, error, selectedState, setSelectedState }: 
                   setFieldValue={setFieldValue}
                   fieldName="utilityBillImage"
                   text={"Upload Utility Bill (Optional)"}
+                  setFile={setUtilityBill}
+                  file={utilityBill}
                 />
               </div>
               <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">
@@ -292,7 +296,7 @@ const Address = ({ states, isLoading, error, selectedState, setSelectedState }: 
                 </p>
               </div>
             </div>
-            <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse lg:flex-col-reverse xl:flex-row">
+            <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse lg:flex-col-reverse xl:flex-row">
               <PrimaryButtons
                 text={"Go Back"}
                 type="button"

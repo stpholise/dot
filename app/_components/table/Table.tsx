@@ -7,30 +7,31 @@ import {
   getFilteredRowModel,
   flexRender,
   type SortingState,
-  type  ColumnDef,
-} from "@tanstack/react-table"; 
+  type ColumnDef,
+} from "@tanstack/react-table";
 import { getPaginationRange } from "./PaginationRange";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
-type TanStackTableProps<T> ={
+type TanStackTableProps<T> = {
   data: T[];
-  columns: ColumnDef<T, unknown>[]
-}
+  columns: ColumnDef<T, unknown>[];
+  sortByValues?: {
+    value: string;
+    label: string;
+  }[];
+  onRowClick: (row: T) => void;
+};
 
 const TanStackTable = <T,>({
-data,
-columns
-}:TanStackTableProps<T>
-
-) => {
+  data,
+  columns,
+  sortByValues,
+  onRowClick,
+}: TanStackTableProps<T>) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
-  const columnsMemo = useMemo(
-    ()=>columns, [columns]
-  );
-  const dataMemo = useMemo(
-    ()=>data, [data]
-  )
+  const columnsMemo = useMemo(() => columns, [columns]);
+  const dataMemo = useMemo(() => data, [data]);
   const table = useReactTable({
     data: dataMemo,
     columns: columnsMemo,
@@ -50,6 +51,21 @@ columns
   const totalPages = table.getPageCount();
   const paginationRange = getPaginationRange(currentPage, totalPages, 6);
 
+  const defaultSort = [
+    {
+      value: "sn",
+      label: "S/N",
+    },
+    {
+      value: "accountName",
+      label: "Account Name",
+    },
+    {
+      value: "createdAt",
+      label: "Created At",
+    },
+  ];
+
   return (
     <div className="p-4 lg:p-0">
       <div className=" p-4 flex items-center outline-none justify-between ">
@@ -63,9 +79,14 @@ columns
               className="outline-none w-8/10"
             >
               <option value="">Sort by</option>
-              <option value="sn">S/N</option>
-              <option value="accountName">Account Name</option>
-              <option value="createdAt">Created At</option>
+
+              {(sortByValues ?? defaultSort).map(
+                (val: { value: string; label: string }) => (
+                  <option value={val.value} key={val.value}>
+                    {val.label}
+                  </option>
+                )
+              )}
             </select>
           </div>
           <div className="w-80 h-10 border border-[#D2D5E1] rounded-lg">
@@ -79,7 +100,7 @@ columns
           </div>
         </div>
       </div>
-      <div className="w-full overflow-x-scroll">
+      <div className="w-full overflow-x-scroll lg:overflow-x-hidden">
         <table className="min-w-full  text-sm ">
           <thead className="bg-[#FAFAFA] border-y border-[#EAEAEA]">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -105,17 +126,47 @@ columns
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="border-b border-[#eaeaea]  ">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-4 ">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
+              <React.Fragment key={row.id}>
+                <tr
+                  className="hidden sm:table-row border-b border-[#eaeaea] cursor-pointer "
+                  onClick={() => {
+                    onRowClick(row.original);
+                    console.log(row.original);
+                  }}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-4 py-4 ">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+                <tr
+                  className="sm:hidden border-b border-[#eaeaea] cursor-pointer "
+                  onClick={() => {
+                    onRowClick(row.original);
+                    console.log(row.original);
+                  }}
+                >
+                <div className=""></div>
+
+                  {/* {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-4 py-4 ">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))} */}
+                </tr>
+              </React.Fragment>
             ))}
           </tbody>
         </table>
       </div>
+
       <div className="flex items-center justify-between p-4 text-sm">
         <button
           onClick={() => table.previousPage()}

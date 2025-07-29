@@ -2,10 +2,11 @@ import Image from "next/image";
 import { RootState } from "@/app/store";
 import { useSelector, useDispatch } from "react-redux";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-import { setCurrentStep } from "@/app/store/slices/UserAccountSlice"; 
+import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
 import { scrollToTop } from "@/app/_utils/ScrollToTop";
 import { useEffect } from "react";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 
 interface DotAccountBenefit {
   icon: string;
@@ -13,9 +14,10 @@ interface DotAccountBenefit {
   title: string;
   text?: string;
 }
- 
 
-const Successful= () => { 
+const Successful = () => {
+  const router = useRouter();
+
   useEffect(() => {
     scrollToTop();
   }, []);
@@ -25,14 +27,14 @@ const Successful= () => {
       state.userAccount.userAccountInitialState.customerAccountDetail
   );
 
- 
-  const decrementStep = () => { 
-     dispatch(setCurrentStep(0));
-  };
-  const incrementStep = () => { 
+  const decrementStep = () => {
     dispatch(setCurrentStep(0));
   };
- 
+  const incrementStep = () => {
+    router.push("/account");
+    dispatch(setCurrentStep(0));
+  };
+
   return (
     <div className="sm:px-10 sm:py-8 px-8 py-4">
       <Image
@@ -49,7 +51,9 @@ const Successful= () => {
       <div className="bg-[#F9F9F9] px-4 py-4 flex flex-col gap-3 my-4 rounded-2xl ">
         <div className=" flex justify-between font-medium ">
           <h4>Account Name</h4>
-          <p className="text-black capitalize">{customerAccountDetail.AccountName}</p>
+          <p className="text-black capitalize">
+            {customerAccountDetail.AccountName}
+          </p>
         </div>
         <div className=" flex justify-between font-medium ">
           <h4>Account Number</h4>
@@ -63,15 +67,17 @@ const Successful= () => {
 
       <div className="">
         <h4 className="text-[#667085] text-center">
-        
           Here are some benefits of owning a DOT account
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 my-4 gap-4">
           {dotAccountBenefit.map((item, index) => (
             <div className="flex gap-3 items-start" key={item.title + index}>
-              <div className={clsx("w-10 h-10 rounded-full p-2 flex items-center justify-center",
-                item.iconBg ? item.iconBg : "bg-[#F3F4F6]"
-              )}>
+              <div
+                className={clsx(
+                  "w-10 h-10 rounded-full p-2 flex items-center justify-center",
+                  item.iconBg ? item.iconBg : "bg-[#F3F4F6]"
+                )}
+              >
                 <Image
                   src={item.icon}
                   alt={item.title}
@@ -84,10 +90,11 @@ const Successful= () => {
                 <h4 className="text-base font-medium text-black mb-1">
                   {item.title}
                 </h4>
-                { item.text &&
-                <p className="text-xs front-medium text-[#454547]">
-                  {item.text}
-                </p>}
+                {item.text && (
+                  <p className="text-xs front-medium text-[#454547]">
+                    {item.text}
+                  </p>
+                )}
               </div>
             </div>
           ))}
@@ -115,25 +122,25 @@ const Successful= () => {
 const dotAccountBenefit: DotAccountBenefit[] = [
   {
     icon: "/icons/quick_loan_frame.png",
-    iconBg: 'bg-[#FDF3EB]',
+    iconBg: "bg-[#FDF3EB]",
     title: "Quick Loans",
     text: "Call 09088991091 to request personal or business loans.",
   },
   {
     icon: "/icons/health_insurance_frame.png",
-    iconBg: 'bg-[#EAFAE9]',
+    iconBg: "bg-[#EAFAE9]",
     title: "Health Insurance",
     text: "Call 08170369507 to access Dot health insurance plan.",
   },
   {
     icon: "/icons/offline_banking_frame.png",
-    iconBg: 'bg-[#EBF8FE]',
+    iconBg: "bg-[#EBF8FE]",
     title: "Offline Banking",
     text: "Dial *5525# on your mobile to transfer, pay bills, buy airtime or check account balance.",
   },
   {
     icon: "/icons/Confetti.png",
-    iconBg: 'bg-[#F3F4F6]',
+    iconBg: "bg-[#F3F4F6]",
     title: "and many more",
   },
 ];

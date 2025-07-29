@@ -44,7 +44,10 @@ const Sidebar = () => {
             <p className="text-[#667085] font-mdeium text-sm uppercase ml-6 my-2">
               MAIN
             </p>
-            <div role="list" className="flex flex-col gap-2 w-full 2xs:w-11/12 sm:w-11/12">
+            <div
+              role="list"
+              className="flex flex-col gap-2 w-full 2xs:w-11/12 sm:w-11/12"
+            >
               {navItems.map((item) => (
                 <button
                   onClick={() => handleNavigation(item)}
@@ -94,9 +97,12 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-        {isMenuOpen && (
-          <div onClick={() =>dispatch(toggleMenu())} className="overlay  w-screen h-screen -z-60 bg-transparent fixed top-0 right-0 bottom-0 left-0"></div>
-        )}
+      {isMenuOpen && (
+        <div
+          onClick={() => dispatch(toggleMenu())}
+          className="overlay  w-screen h-screen -z-60 bg-transparent fixed top-0 right-0 bottom-0 left-0"
+        ></div>
+      )}
     </div>
   );
 };
@@ -121,7 +127,7 @@ const navItems: NavItems[] = [
   {
     icon: "/icons/remitance.svg",
     title: "Remittance",
-    link: "/remottance",
+    link: "/remittance",
   },
 ];
 

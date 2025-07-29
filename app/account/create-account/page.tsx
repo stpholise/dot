@@ -16,7 +16,7 @@ import {
 import { RootState } from "@/app/store";
 import { useState } from "react";
 import { useFetchState } from "./_components/useFetchState";
- 
+ import { useRouter } from 'next/navigation'
 
 interface Step {
   id: number;
@@ -27,6 +27,7 @@ interface Step {
 
 const Page = () => {
   const dispatch = useDispatch();
+  const router = useRouter()
   const { states, isLoading, error } = useFetchState() as {
     states: string[];
     isLoading: boolean;
@@ -39,21 +40,25 @@ const Page = () => {
   const [picture, setPicture] = useState<File | undefined>();
   const [idFront, setIdFront] = useState<File | undefined>();
   const [idBack, setIdBack] = useState<File | undefined>();
+  const [utilityBill, setUtilityBill] = useState<File | undefined>();
   const [selectedState, setSelectedState] = useState<string>("");
 
   const cancelRegistration = () => {
+    router.push('/account')
     setSelectedState("");
     setPicture(undefined);
     setIdFront(undefined);
     setIdBack(undefined);
+    setUtilityBill(undefined)
     dispatch(resetUserDetails());
     dispatch(setCurrentStep(0));
+
   };
 
   return (
-    <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 px-4 py-6">
+    <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
       <div
-        className={clsx(" items-center justify-between mb-4", {
+        className={clsx(" items-center justify-between mb-4 px-4 xs:px-0", {
           hidden: currentStep == 5,
           flex: currentStep !== 5,
         })}
@@ -163,7 +168,7 @@ const Page = () => {
         </div>
         <div
           className={clsx(
-            "xl:w-[600px] max-w-[600px] w-full lg:w-[400px]   min-h-[580px] text-[#667085] bg-white rounded-3xl  ",
+            "xl:w-[600px] max-w-[600px] w-full lg:w-[400px]   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-3xl  ",
             {
               "lg:mx-auto lg:w-[750px]  xl:w-[600px]": currentStep >= 4,
             }
@@ -171,7 +176,7 @@ const Page = () => {
         >
           <div
             className={clsx(
-              "grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-8 py-4 mt-4 ",
+              "grid gap-2 grid-cols-5 lg:gap-4 justify-stretch lg:hidden px-4 sm:px-8 py-4 mt-4 ",
               {
                 hidden: currentStep >= 4,
               }
@@ -214,6 +219,8 @@ const Page = () => {
               setSelectedState={setSelectedState}
               isLoading={isLoading}
               error={error}
+              setUtilityBill={setUtilityBill}
+              utilityBill={utilityBill}
             />
           ) : currentStep === 4 ? (
             <ReviewCredentials
@@ -224,6 +231,8 @@ const Page = () => {
               setIdFront={setIdFront}
               setIdBack={setIdBack}
               setSelectedState={setSelectedState}
+              setUtilityBill={setUtilityBill}
+              utilityBill={utilityBill}
             />
           ) : currentStep === 5 ? (
             <Successful />

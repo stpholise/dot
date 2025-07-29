@@ -7,51 +7,61 @@ import {
   setCustomerAccountDetail,
   resetUserDetails,
 } from "@/app/store/slices/UserAccountSlice";
-import { useState, useEffect, } from "react"; 
-import { scrollToTop } from "@/app/_utils/ScrollToTop"; 
+import { useState, useEffect } from "react";
+import { scrollToTop } from "@/app/_utils/ScrollToTop";
 import { dateFn } from "@/app/_utils/DateFormat";
 interface ReviewCredentialsProps {
   setPicture: (picture: File | undefined) => void;
   setIdFront: (idFront: File | undefined) => void;
   setIdBack: (idBack: File | undefined) => void;
+  setUtilityBill: (state: File | undefined) => void;
   idFront?: File;
-  idBack?: File;  
+  idBack?: File;
   picture?: File;
+  utilityBill?: File;
   setSelectedState: (state: string) => void;
 }
 
-const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, setIdBack, setSelectedState }: ReviewCredentialsProps) => {
+const ReviewCredentials = ({
+  picture,
+  setPicture,
+  idFront,
+  idBack,
+  setIdFront,
+  setIdBack,
+  setSelectedState,
+  utilityBill,
+  setUtilityBill,
+}: ReviewCredentialsProps) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [idFrontUrl, setIdFrontUrl] = useState<string | undefined>(undefined);
-  const [idBackUrl, setIdBackUrl] = useState<string | undefined>(undefined); 
+  const [idBackUrl, setIdBackUrl] = useState<string | undefined>(undefined);
   useEffect(() => {
     scrollToTop();
   }, []);
 
   useEffect(() => {
-  if (!picture) return;
+    if (!picture) return;
 
-  const url = URL.createObjectURL(picture);
-  setImageUrl(url);
+    const url = URL.createObjectURL(picture);
+    setImageUrl(url);
 
-  return () => {
-    URL.revokeObjectURL(url);
-  };
-}, [picture]);
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [picture]);
 
   useEffect(() => {
-    if (idFront) { 
-      setIdFrontUrl(idFront.name); 
+    if (idFront) {
+      setIdFrontUrl(idFront.name);
     }
   }, [idFront]);
 
   useEffect(() => {
-    if (idBack) { 
-      setIdBackUrl(idBack.name); 
+    if (idBack) {
+      setIdBackUrl(idBack.name);
     }
   }, [idBack]);
-
-   
 
   const generateAccountNumber = () => {
     let accountNumber = "";
@@ -74,7 +84,8 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
     incrementStep();
     setPicture(undefined);
     setIdFront(undefined);
-    setIdBack(undefined); 
+    setIdBack(undefined);
+    setUtilityBill(undefined);
     setSelectedState("");
     dispatch(resetUserDetails());
   };
@@ -134,8 +145,7 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
               {customerDetails.fname} {customerDetails.lname}
             </h3>
             <p className="text-sm">
-              BVN{" "}
-              {customerDetails.bvn ? customerDetails.bvn : "no bvn submitted"}
+              BVN {customerDetails.bvn ? customerDetails.bvn : " _"}
             </p>
           </div>
         </div>
@@ -177,7 +187,9 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
             <p className="text-xs text-[#667085]">Address</p>
             <div className="">
               <p className="text-black">{CustomerAddress.address} </p>
-              <p className="text-black">{CustomerAddress.lga}, {CustomerAddress.state} </p>
+              <p className="text-black">
+                {CustomerAddress.lga}, {CustomerAddress.state}{" "}
+              </p>
             </div>
           </div>
 
@@ -221,46 +233,69 @@ const ReviewCredentials = ({ picture, setPicture, idFront, idBack, setIdFront, s
             </div>
           )}
         </div>
-        {customerIdentification.idFront && customerIdentification.idBack && (
+        {
           <div className="flex flex-col gap-4 py-4">
             <div className="flex gap-4 whitespace-nowrap items-center text-xs uppercase font-medium">
               Uploaded Documents
               <div className="h-0 border border-gray-200 w-full"></div>
             </div>
 
-            <div className="flex gap-4 rounded-2xl h-16 px-4 py-2 bg-[#F7F7F7]  ">
-              <Image
-                src={"/icons/document.png"}
-                alt={"document"}
-                width={40}
-                height={40}
-                className=""
-              />
-              <div className="">
-                <h4 className="text-black text-sm">ID Image (Front)</h4>
-                <p className="text-[#868C98] text-xs overflow-hidden">
-                  {idFrontUrl ? idFrontUrl : "No ID front image uploaded"}
-                </p>
+            {customerIdentification.idFront && (
+              <div className="flex gap-4 rounded-2xl h-16 px-4 py-2 bg-[#F7F7F7]  ">
+                <Image
+                  src={"/icons/document.png"}
+                  alt={"document"}
+                  width={40}
+                  height={40}
+                  className=""
+                />
+                <div className="">
+                  <h4 className="text-black text-sm">ID Image (Front)</h4>
+                  <p className="text-[#868C98] text-xs overflow-hidden">
+                    {idFrontUrl ? idFrontUrl : "No ID front image uploaded"}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className=" flex gap-4 rounded-2xl h-16 py-2 px-4 bg-[#F7F7F7]">
-              <Image
-                src={"/icons/document.png"}
-                alt={"document"}
-                width={40}
-                height={40}
-                className=""
-              />
-              <div className="">
-                <h4 className="text-black text-sm">ID Image (Back)</h4>
-                <p className="text-[#868C98] text-xs overflow-hidden">
-                  {idBackUrl ? idBackUrl : "No ID back image uploaded"}
-                </p>
+            {customerIdentification.idBack && (
+              <div className=" flex gap-4 rounded-2xl h-16 py-2 px-4 bg-[#F7F7F7]">
+                <Image
+                  src={"/icons/document.png"}
+                  alt={"document"}
+                  width={40}
+                  height={40}
+                  className=""
+                />
+                <div className="">
+                  <h4 className="text-black text-sm">ID Image (Back)</h4>
+                  <p className="text-[#868C98] text-xs overflow-hidden">
+                    {idBackUrl ? idBackUrl : "No ID back image uploaded"}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
+            {utilityBill && (
+              <div className=" flex gap-4 rounded-2xl h-16 py-2 px-4 bg-[#F7F7F7]">
+                <Image
+                  src={"/icons/document.png"}
+                  alt={"document"}
+                  width={40}
+                  height={40}
+                  className=""
+                />
+                <div className="">
+                  <h4 className="text-black text-sm">ID Image (Back)</h4>
+                  <p className="text-[#868C98] text-xs overflow-hidden">
+                    {utilityBill
+                      ? utilityBill.name
+                      : "No ID back image uploaded"}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        }
         <div className="flex items-start gap-4 py-4">
           <input
             type="checkbox"

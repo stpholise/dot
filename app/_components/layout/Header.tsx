@@ -5,11 +5,15 @@ import MenuButton from "./MenuButton";
 import { useClerk, UserButton } from "@clerk/nextjs";
 import PrimaryButtons from "../ui/units/buttons/PrimaryButtons";
 
+ 
 const Header = () => {
-  const { isSignedIn, openSignIn, openSignUp, openUserProfile,
-    //  signOut 
-    } =
-    useClerk();
+  const {
+    isSignedIn,
+    openSignIn,
+    openSignUp,
+    openUserProfile,
+    //  signOut
+  } = useClerk();
 
   return (
     <div className=" sticky top-0 right-0 z-50 h-20 lg:h-20 md:gap-12 bg-white w-full lg:w-[calc(100%-222px)] lg:ml-56 flex justify-between items-center text-[#343434] font-medium p-4 xs:px-10">
@@ -78,8 +82,6 @@ const Header = () => {
           />
         </div>
       )}
-    
-    
     </div>
   );
 };

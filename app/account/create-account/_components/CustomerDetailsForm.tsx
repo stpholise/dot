@@ -113,7 +113,7 @@ const cancelRegistration = () => {
   };
   return (
     <div>
-      <div className=" lg:hidden flex gap-4 px-8 mt-4">
+      <div className=" lg:hidden flex gap-4 px-4 sm:px-8 mt-4">
         <Image
           src={"/image/Frame 48.png"}
           alt="doc"
@@ -151,7 +151,7 @@ const cancelRegistration = () => {
       >
         {({ setFieldValue, isValid, dirty, isSubmitting, values }) => (
           <Form>
-            <div className="  font-medium px-9 py-4">
+            <div className="  font-medium  px-4 sm:px-8 py-4">
               <div className=" flex flex-col gap-2 border-b border-gray-100 py-6">
                 <p className="text-sm">Does the customer have a BVN? *</p>
                 <div className="flex  sm:flex-row flex-col gap-4">
@@ -271,8 +271,7 @@ const cancelRegistration = () => {
                     type="date"
                     name="dob"
                     value={values.dob}
-                    max={"2015-01-01"}
-                    // todo look for the correct type here
+                    max={"2007-12-31"} 
                     onClick={(e: React.MouseEvent<HTMLInputElement>) => {
                       (e.target as HTMLInputElement).showPicker();
                     }}
@@ -339,7 +338,7 @@ const cancelRegistration = () => {
                 </div>
               </div>
             </div>
-            <footer className="flex gap-4 px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
+            <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
                 text={"Cancel"}
                 type="button"

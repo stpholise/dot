@@ -8,20 +8,25 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
 ]);
+const isProtectedRoute = createRouteMatcher(["/account(.*)"]);
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
   const url = new URL(request.url);
   const path = url.pathname;
-
+ 
   if (isPublicRoute(request)) {
     if (path === "/") {
       return NextResponse.rewrite(new URL("/home", request.url));
     }
+    if (path === "/home") {
+      return NextResponse.next();
+    }
     return NextResponse.next();
   }
 
-  const response = await fetch(url.origin + path, { method: "HEAD" }); // validating route
-  if (response.status !== 404) {
+  // const response = await fetch(url.origin + path, { method: "HEAD" }); // validating route
+
+  if (isProtectedRoute(request)) {
     await auth.protect();
   }
 

@@ -21,17 +21,17 @@ interface IdentityProps {
 }
 
 export interface IdentificationProps {
-  idType: "NIN" | "Voter_ID" | "Driver_License" | "";
+  idType: "NIN" | "Voter ID" | "Driver License" | "";
   idNumber: string;
-  issueDate: Date;
-  expiryDate: Date;
+  issueDate: string;
+  expiryDate: string;
   idFront: File | null;
   idBack: File | null;
 }
 
 const validationSchema = Yup.object().shape({
   idType: Yup.string()
-    .oneOf(["NIN", "voter_ID", "Drivers_License"])
+    .oneOf(["NIN", "voter ID", "Drivers License"])
     .required("Required"),
   idNumber: Yup.string()
     .matches(/^\d{11}$/, "Id must be 11 characters")
@@ -45,7 +45,7 @@ const validationSchema = Yup.object().shape({
   expiryDate: Yup.date()
     .typeError("Invalid date format")
     .min(new Date(), "expiry date cannot be in the past")
-    .required("Requried"),
+    .notRequired(),
   idFront: Yup.mixed().required("Required"),
   idBack: Yup.mixed().required("Required"),
 });
@@ -72,8 +72,8 @@ const Identification = ({
   const initialValues: IdentificationProps = {
     idType: storedIdentification.idType || "",
     idNumber: storedIdentification.idNumber || "",
-    issueDate: new Date(storedIdentification.issueDate) || new Date(),
-    expiryDate: new Date(storedIdentification.expiryDate) || new Date(),
+    issueDate: storedIdentification.issueDate || "",
+    expiryDate: storedIdentification.expiryDate || "",
     idFront: idFront || null,
     idBack: idBack || null,
   };
@@ -106,7 +106,7 @@ const Identification = ({
   };
   return (
     <div>
-      <div className=" lg:hidden flex gap-4 px-8 mt-4">
+      <div className=" lg:hidden flex gap-4 px-4 sm:px-8 mt-4">
         <Image
           src={"/image/Frame 48.png"}
           alt="doc"
@@ -147,7 +147,7 @@ const Identification = ({
       >
         {({ isSubmitting, isValid, setFieldValue, values, dirty }) => (
           <Form>
-            <div className="px-8 py-6 flex flex-col gap-4">
+            <div className="px-4 sm:px-8 py-6 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <label htmlFor="idType" className="text-sm text-[#454547]">
                   ID Type *
@@ -166,10 +166,10 @@ const Identification = ({
                   <option className="text-black" value="NIN">
                     NIN
                   </option>
-                  <option className="text-black" value="voter_ID">
+                  <option className="text-black" value="voter ID">
                     Voter ID
                   </option>
-                  <option className="text-black" value="Drivers_License">
+                  <option className="text-black" value="Drivers License">
                     Drivers License
                   </option>
                 </Field>
@@ -187,7 +187,7 @@ const Identification = ({
                 <Field
                   type="text"
                   name="idNumber"
-                  maxlength={11}
+                  maxLength={11}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setFieldValue(
                       "idNumber",
@@ -269,7 +269,7 @@ const Identification = ({
                 />
               </div>
             </div>
-            <footer className="flex gap-8 px-8 py-4 mt-auto sm:flex-row xl:flex-row lg:flex-col flex-col-reverse">
+            <footer className="flex gap-8 px-4 sm:px-8 py-4 mt-auto sm:flex-row xl:flex-row lg:flex-col flex-col-reverse">
               <div className=" flex gap-4 ">
                 <PrimaryButtons
                   text={"Go Back"}
@@ -281,7 +281,7 @@ const Identification = ({
                 <PrimaryButtons
                   text={"skip"}
                   type="button"
-                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg sm:w-5/12  lg:w-1/2 xl:w-5/12 justify-center items-center"
+                  className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg w-full sm:w-5/12  lg:w-1/2 xl:w-5/12 justify-center items-center"
                   onClick={incrementStep}
                 />
               </div>
