@@ -11,9 +11,8 @@ const Page = () => {
     DummyRemittance | undefined
   >(undefined);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const handleRowClick = (data: DummyRemittance) => {
-    console.log(data);
+const columns = remittanceColumn({ setSelectedRowData, setIsModalOpen })
+  const handleRowClick = (data: DummyRemittance) => { 
     setSelectedRowData(data);
     setIsModalOpen(true);
   };
@@ -35,24 +34,13 @@ const Page = () => {
       )}
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)] py-4 px-4 lg:px-0 rounded-2xl bg-white">
         <TanStackTable
-          columns={remittanceColumn}
+          columns={columns}
           data={dummyRemittance}
-          sortByValues={sortByValues}
           onRowClick={handleRowClick}
         />
       </div>
     </div>
   );
 };
-
-const sortByValues: { label: string; value: string }[] = [
-  {
-    value: "sn",
-    label: "S/N",
-  },
-  {
-    value: "remittanceName",
-    label: "Remittance Name",
-  },
-];
+ 
 export default Page;
