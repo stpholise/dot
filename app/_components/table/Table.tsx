@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { getPaginationRange } from "./PaginationRange";
 import React, { useMemo, useState } from "react";
-
+ 
 type TanStackTableProps<T> = {
   data: T[];
   columns: ColumnDef<T, unknown>[];
@@ -21,6 +21,8 @@ type TanStackTableProps<T> = {
   }[];
   onRowClick: (row: T) => void;
 };
+ 
+
 
 const TanStackTable = <T,>({
   data,
@@ -32,6 +34,8 @@ const TanStackTable = <T,>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const columnsMemo = useMemo(() => columns, [columns]);
   const dataMemo = useMemo(() => data, [data]);
+  
+  
   const table = useReactTable({
     data: dataMemo,
     columns: columnsMemo,
@@ -108,17 +112,14 @@ const TanStackTable = <T,>({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className={"px-4 py-2 text-left font-medium text-gray-600"}
-                    // onClick={header.column.getToggleSortingHandler()}
+                    className={(header.column.columnDef.meta as any)?.className}
+                  
                   >
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
                     )}
-                    {{
-                      // asc: " 🔼",
-                      // desc: " 🔽",
-                    }[header.column.getIsSorted() as string] ?? null}
+                    
                   </th>
                 ))}
               </tr>
@@ -128,39 +129,23 @@ const TanStackTable = <T,>({
             {table.getRowModel().rows.map((row) => (
               <React.Fragment key={row.id}>
                 <tr
-                  className="hidden sm:table-row border-b border-[#eaeaea] cursor-pointer "
+                  className="table-row lg:border-b border-[#eaeaea] cursor-pointer "
                   onClick={() => {
                     onRowClick(row.original);
-                    console.log(row.original);
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-4 ">
+                    <td
+                      key={cell.id}
+                      className=" flex grow lg:table-cell "
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
                     </td>
                   ))}
-                </tr>
-                <tr
-                  className="sm:hidden border-b border-[#eaeaea] cursor-pointer "
-                  onClick={() => {
-                    onRowClick(row.original);
-                    console.log(row.original);
-                  }}
-                >
-                <div className=""></div>
-
-                  {/* {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-4 ">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))} */}
-                </tr>
+                </tr> 
               </React.Fragment>
             ))}
           </tbody>

@@ -7,7 +7,7 @@ export const columns: ColumnDef<DummyUser>[] = [
     header: "S/N",
     cell: (info) => {
       const value = info.getValue() as string;
-      return <span className="text-gray-600">#{value}</span>;
+      return <span className="text-gray-600 px-4 ">#{value}</span>;
     },
   },
   {
@@ -19,7 +19,7 @@ export const columns: ColumnDef<DummyUser>[] = [
     header: "ACCOUNT NUMBER",
     cell: (info) => {
       const value = info.getValue() as string;
-      return <span className="text-gray-600">{value}</span>;
+      return <span className="text-gray-600 px-4 py-4">{value}</span>;
     },
   },
   {
@@ -27,7 +27,7 @@ export const columns: ColumnDef<DummyUser>[] = [
     header: "GENDER",
     cell: (info) => {
       const value = info.getValue() as string;
-      return <span className="text-gray-600">{value}</span>;
+      return <span className="text-gray-600 px-4 py-4">{value}</span>;
     },
   },
   {
@@ -35,7 +35,7 @@ export const columns: ColumnDef<DummyUser>[] = [
     header: "PHONE NUMBER",
     cell: (info) => {
       const value = info.getValue() as string;
-      return <span className="text-gray-600">{value}</span>;
+      return <span className="text-gray-600 px-4 py-4">{value}</span>;
     },
   },
   {
@@ -44,7 +44,7 @@ export const columns: ColumnDef<DummyUser>[] = [
     cell: (info) => {
       const value = info.getValue() as string;
       const color = value === "Submitted" ? "text-green-600" : "text-red-400";
-      return <span className={`font-medium ${color}`}>{value}</span>;
+      return <div className={`font-medium px-4 py-4 ${color}`}>{value}</div>;
     },
   },
   {
