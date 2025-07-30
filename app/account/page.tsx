@@ -18,6 +18,20 @@ const Page = () => {
   const handleClick = () => {
     router.push("/account/create-account");
   };
+  const defaultSort = [
+    {
+      value: "sn",
+      label: "S/N",
+    },
+    {
+      value: "accountName",
+      label: "Account Name",
+    },
+    {
+      value: "createdAt",
+      label: "Created At",
+    },
+  ];
   return (
     <div className="bg-[#FAF9F9] text-black min-h-screen w-screen">
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)] py-4 px-4 lg:px-1">
@@ -44,7 +58,11 @@ const Page = () => {
           </div>
           <div className="">
             <div className="bg-white rounded-3xl py-4 ">
-              <TanStackTable columns={columns} data={dummyUsers} />
+              <TanStackTable
+                columns={columns}
+                data={dummyUsers}
+                sortByValues={defaultSort}
+              />
             </div>
           </div>
         </div>
