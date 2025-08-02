@@ -1,15 +1,17 @@
 "use client";
 import { DummyRemittance } from "@/app/_data/RemittanceData";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef} from "@tanstack/react-table";
+ 
 import clsx from "clsx";
 
+ 
 export const remittanceColumn = ({
   setSelectedRowData,
   setIsModalOpen,
 }: {
   setSelectedRowData: (row: DummyRemittance) => void;
   setIsModalOpen: (isOpen: boolean) => void;
-}): ColumnDef<DummyRemittance>[] => [
+}): ColumnDef<DummyRemittance >[] => [
   {
     accessorKey: "sn",
     id: "sn",

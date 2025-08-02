@@ -7,10 +7,11 @@ import {
   getFilteredRowModel,
   flexRender,
   type SortingState,
-  type ColumnDef,
+  type ColumnDef,  
 } from "@tanstack/react-table";
 import { getPaginationRange } from "./PaginationRange";
 import React, { useMemo, useState } from "react";
+ 
 
 type TanStackTableProps<T> = {
   data: T[];
@@ -96,7 +97,7 @@ const TanStackTable = <T,>({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className={(header.column.columnDef.meta as any)?.className}
+                    className={(header.column.columnDef.meta as { className?: string })?.className}
                   >
                     {flexRender(
                       header.column.columnDef.header,
