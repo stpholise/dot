@@ -20,7 +20,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
 
   return (
     <>
-      <div className="w-96 lg:w-[600px] min-h-96 h-full z-80 fixed bottom-0 top-0 right-0 bg-white overflow-y-scroll pb-6">
+      <div className="w-full  lg:w-[600px] min-h-96 h-full z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-white overflow-y-scroll pb-6">
         <div className="px-8 py-8  border-b font-medium text-2xl border-b-[#EAEAEA] flex justify-between text-black">
           <div className="flex items-center justify-start gap-3">
             <div className=" size-9 rounded-lg bg-black flex items-center justify-center">
@@ -60,7 +60,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
               Remittance Code:
             </h4>
           </div>
-          <div className="bg-[#f9f9f9] rounded-lg px-2 py-2 flex items-center justify-between w-80">
+          <div className="bg-[#f9f9f9] rounded-lg px-2 py-2 flex flex-col sm:flex-row items-end  lg:items-center justify-between w-80">
             <p className="font-medium  text-black px-2">
               {selectedRowData?.remittanceName}
             </p>
@@ -86,7 +86,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
             Remittance Details
           </h3>
           <div className="rounded-3xl border">
-            <div className="bg-[#F9F9F9] px-8 py-6 flex  gap-8 justify-between rounded-t-3xl">
+            <div className="bg-[#F9F9F9] px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl">
               <div className="">
                 <h4 className="text-sm text-#667085 font-medium">
                   Total Customers
