@@ -122,17 +122,15 @@ const TanStackTable = <T,>({
             {table.getRowModel().rows.map((row) => (
               <React.Fragment key={row.id}>
                 <tr
-                  className={clsx(
-                    "table-row lg:border-b border-[#eaeaea] cursor-pointer ",
-                    {
-                      "bg-[rgba(0,0,0,0.05)]": selectedRowsId?.some(
-                        (item) => (item as { id: string }).id === row.id
-                      ),
-                      "bg-transparent": !selectedRowsId?.some(
-                        (item) => (item as { id: string }).id === row.id
-                      ),
-                    }
-                  )}
+                  className={clsx("table-row lg:border-b border-[#eaeaea] ", {
+                    "bg-[rgba(0,0,0,0.05)]": selectedRowsId?.some(
+                      (item) => (item as { id: string }).id === row.id
+                    ),
+                    "bg-transparent": !selectedRowsId?.some(
+                      (item) => (item as { id: string }).id === row.id
+                    ),
+                    "cursor-pointer ": onRowClick,
+                  })}
                   onClick={() => {
                     if (window.innerWidth > 860 && onRowClick) {
                       onRowClick(row.original);

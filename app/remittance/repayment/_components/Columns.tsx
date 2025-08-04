@@ -44,7 +44,7 @@ export const LoanColumns = ({
       return (
         <div
           onClick={() => settingSelectedRow()}
-          className="flex xl:px-6 py-4 gap-4 items-center font-medium text-base text-black "
+          className="flex xl:px-6 py-4 gap-4 items-center font-medium text-base text-black cursor-pointer  "
         >
           <div
             className={clsx("w-4 h-4  rounded-sm", {
