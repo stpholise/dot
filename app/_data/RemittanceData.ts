@@ -49,7 +49,7 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
 
 export const dummyRemittance: DummyRemittance[] = generateDummyRemittance(40);
 
-export interface DummyLoanData {
+export interface DummyLoanData { 
   customerName: string;
   loanedAmount: string;
   repaidAmount: string;

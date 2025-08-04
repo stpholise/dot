@@ -5,12 +5,16 @@ import React from "react";
 import clsx from "clsx";
 import Image from "next/image";
 
+interface LoanRowData extends DummyLoanData {
+  id: string;
+}
+
 export const LoanColumns = ({
   setSelectedRowsId,
   selectedRowsId,
 }: {
-  setSelectedRowsId: React.Dispatch<React.SetStateAction<string[]>>;
-  selectedRowsId: string[];
+  setSelectedRowsId: React.Dispatch<React.SetStateAction<LoanRowData[]>>;
+  selectedRowsId: LoanRowData[];
 }): ColumnDef<DummyLoanData>[] => [
   {
     accessorKey: "customerName",
@@ -23,12 +27,18 @@ export const LoanColumns = ({
     cell: (cell) => {
       const value = cell.getValue() as string;
       const rowId = cell.row.id;
+      const rowData = { id: rowId, ...cell.row.original };
       const settingSelectedRow = () => {
-        if (selectedRowsId.includes(rowId)) {
-          const newArry = selectedRowsId.filter((id) => id !== rowId);
+        const alreadySelected = selectedRowsId.some(
+          (item) => item.id === rowId
+        );
+
+        if (alreadySelected) {
+          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
           setSelectedRowsId(newArry);
         } else {
-          setSelectedRowsId((prev: string[]) => [...prev, rowId]);
+          setSelectedRowsId((prev: LoanRowData[]) => [...prev, rowData]);
+          console.log(selectedRowsId);
         }
       };
       return (
@@ -38,10 +48,12 @@ export const LoanColumns = ({
         >
           <div
             className={clsx("w-4 h-4  rounded-sm", {
-              "border border-[#D0D5DD]": !selectedRowsId.includes(rowId),
+              "border border-[#D0D5DD]": !selectedRowsId.some(
+                (item) => item.id === rowId
+              ),
             })}
           >
-            {selectedRowsId.includes(rowId) && (
+            {selectedRowsId.some((item) => item.id === rowId) && (
               <Image
                 src="/icons/table_checked.png"
                 alt="/checked"

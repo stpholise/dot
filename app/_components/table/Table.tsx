@@ -20,7 +20,7 @@ type TanStackTableProps<T> = {
     value: string;
     label: string;
   }[];
-  selectedRowsId?: string[];
+  selectedRowsId?: T[];
   onRowClick?: (row: T) => void;
 };
 
@@ -125,8 +125,12 @@ const TanStackTable = <T,>({
                   className={clsx(
                     "table-row lg:border-b border-[#eaeaea] cursor-pointer ",
                     {
-                      "bg-[rgba(0,0,0,0.05)]": selectedRowsId?.includes(row.id),
-                      "bg-transparent": !selectedRowsId?.includes(row.id),
+                      "bg-[rgba(0,0,0,0.05)]": selectedRowsId?.some(
+                        (item) => (item as { id: string }).id === row.id
+                      ),
+                      "bg-transparent": !selectedRowsId?.some(
+                        (item) => (item as { id: string }).id === row.id
+                      ),
                     }
                   )}
                   onClick={() => {
