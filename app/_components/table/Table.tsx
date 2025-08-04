@@ -7,11 +7,11 @@ import {
   getFilteredRowModel,
   flexRender,
   type SortingState,
-  type ColumnDef,  
+  type ColumnDef,
 } from "@tanstack/react-table";
 import { getPaginationRange } from "./PaginationRange";
 import React, { useMemo, useState } from "react";
- 
+import clsx from "clsx";
 
 type TanStackTableProps<T> = {
   data: T[];
@@ -20,6 +20,7 @@ type TanStackTableProps<T> = {
     value: string;
     label: string;
   }[];
+  selectedRowsId?: T[];
   onRowClick?: (row: T) => void;
 };
 
@@ -28,6 +29,7 @@ const TanStackTable = <T,>({
   columns,
   onRowClick,
   sortByValues,
+  selectedRowsId,
 }: TanStackTableProps<T>) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -47,37 +49,42 @@ const TanStackTable = <T,>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onGlobalFilterChange: setGlobalFilter,
+    enableRowSelection: true,
+    onRowSelectionChange: () => {
+      const selectedRows = table
+        .getSelectedRowModel()
+        .rows.map((row) => row.original);
+      console.log(selectedRows);
+    },
   });
 
   const currentPage = table.getState().pagination.pageIndex;
   const totalPages = table.getPageCount();
   const paginationRange = getPaginationRange(currentPage, totalPages, 6);
 
-   
-
   return (
     <div className="p-4 lg:p-0">
       <div className=" p-4 flex items-center outline-none justify-between ">
         <div className="flex sm:flex-row flex-col gap-4 lg:gap-9">
-         {sortByValues && <div className="flex gap-2 w-40 text-gray-500 border border-[#d2d5e1] rounded-lg py-2 px-3">
-            <p className="text-black">All</p>
-            <select
-              onChange={(e) =>
-                setSorting([{ id: e.target.value, desc: false }])
-              }
-              className="outline-none w-8/10"
-            >
-              <option value="">Sort by</option>
+          {sortByValues && (
+            <div className="flex gap-2 w-40 text-gray-500 border border-[#d2d5e1] rounded-lg py-2 px-3">
+              <p className="text-black">All</p>
+              <select
+                onChange={(e) =>
+                  setSorting([{ id: e.target.value, desc: false }])
+                }
+                className="outline-none w-8/10"
+              >
+                <option value="">Sort by</option>
 
-              {(sortByValues).map(
-                (val: { value: string; label: string }) => (
+                {sortByValues.map((val: { value: string; label: string }) => (
                   <option value={val.value} key={val.value}>
                     {val.label}
                   </option>
-                )
-              )}
-            </select>
-          </div>}
+                ))}
+              </select>
+            </div>
+          )}
           <div className="w-80 h-10 border border-[#D2D5E1] rounded-lg">
             <input
               type="text"
@@ -97,7 +104,10 @@ const TanStackTable = <T,>({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className={(header.column.columnDef.meta as { className?: string })?.className}
+                    className={
+                      (header.column.columnDef.meta as { className?: string })
+                        ?.className
+                    }
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -112,7 +122,15 @@ const TanStackTable = <T,>({
             {table.getRowModel().rows.map((row) => (
               <React.Fragment key={row.id}>
                 <tr
-                  className="table-row lg:border-b border-[#eaeaea] cursor-pointer "
+                  className={clsx("table-row lg:border-b border-[#eaeaea] ", {
+                    "bg-[rgba(0,0,0,0.05)]": selectedRowsId?.some(
+                      (item) => (item as { id: string }).id === row.id
+                    ),
+                    "bg-transparent": !selectedRowsId?.some(
+                      (item) => (item as { id: string }).id === row.id
+                    ),
+                    "cursor-pointer ": onRowClick,
+                  })}
                   onClick={() => {
                     if (window.innerWidth > 860 && onRowClick) {
                       onRowClick(row.original);
