@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { getPaginationRange } from "./PaginationRange";
 import React, { useMemo, useState } from "react";
+import clsx from "clsx";
 
 type TanStackTableProps<T> = {
   data: T[];
@@ -19,6 +20,7 @@ type TanStackTableProps<T> = {
     value: string;
     label: string;
   }[];
+  selectedRowsId?: string[];
   onRowClick?: (row: T) => void;
 };
 
@@ -27,12 +29,13 @@ const TanStackTable = <T,>({
   columns,
   onRowClick,
   sortByValues,
+  selectedRowsId,
 }: TanStackTableProps<T>) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const columnsMemo = useMemo(() => columns, [columns]);
   const dataMemo = useMemo(() => data, [data]);
- 
+
   const table = useReactTable({
     data: dataMemo,
     columns: columnsMemo,
@@ -119,7 +122,13 @@ const TanStackTable = <T,>({
             {table.getRowModel().rows.map((row) => (
               <React.Fragment key={row.id}>
                 <tr
-                  className="table-row lg:border-b border-[#eaeaea] cursor-pointer "
+                  className={clsx(
+                    "table-row lg:border-b border-[#eaeaea] cursor-pointer ",
+                    {
+                      "bg-[rgba(0,0,0,0.05)]": selectedRowsId?.includes(row.id),
+                      "bg-transparent": !selectedRowsId?.includes(row.id),
+                    }
+                  )}
                   onClick={() => {
                     if (window.innerWidth > 860 && onRowClick) {
                       onRowClick(row.original);
