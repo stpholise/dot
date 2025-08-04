@@ -19,8 +19,7 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
     const remittanceAmount = faker.commerce.price({
       min: 1000,
       max: 5000,
-      dec: 2,
-      symbol: "₦",
+      dec: 2, 
     });
     const remittanceDate = faker.date.between({
       from: "2020-01-01T00:00:00.000Z",
@@ -49,3 +48,54 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
 };
 
 export const dummyRemittance: DummyRemittance[] = generateDummyRemittance(40);
+
+
+export interface DummyLoanData {
+  customerName: string;
+  loanedAmount: string;
+  repaidAmount: string;
+  tenure: string;
+  instalment: string;
+  overdue: string;
+  repayment: string;
+}
+
+const GenerateDummyRepaymentData = (count: number) => {
+  const  loanData :DummyLoanData[] = []
+  
+  for(let i = 1 ; i <= count; i++) { 
+
+    const loanedAmount = Number(faker.commerce.price({
+      min: 1000,
+      max:20000,
+      dec: 2,
+    }))
+    const repaidAmount = faker.commerce.price({
+      min: 500, 
+      max: loanedAmount,
+      dec:2,
+    }) 
+    const tenure = faker.number.int({min:6, max:52})
+
+    const instalment = Math.ceil(loanedAmount/tenure) + 10
+    
+    const overdue = Math.random() < 0.7 ? 'N/A' : faker.number.int({min:1, max:tenure})
+    
+    const repayment= faker.number.int({min:6, max:tenure})
+
+
+    loanData.push({
+        customerName: `${faker.person.firstName()} ${faker.person.lastName()}`,
+        loanedAmount: `${loanedAmount.toLocaleString('en-NG', {minimumFractionDigits: 2})}`,
+        repaidAmount,
+        tenure: `${tenure} weeks`,
+        instalment: `${instalment}`,
+        overdue: ` ${overdue}`,
+        repayment: `week ${repayment}`,
+    })
+
+  }
+  return loanData
+}
+
+export const dummyLoanData: DummyLoanData[] = GenerateDummyRepaymentData(20)

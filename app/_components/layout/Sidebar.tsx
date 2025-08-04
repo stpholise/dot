@@ -6,15 +6,36 @@ import { usePathname } from "next/navigation";
 import { menuState, toggleMenu } from "@/app/store/slices/AppSlice";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import { useClerk } from "@clerk/nextjs";
 
 const Sidebar = () => {
+  const { isSignedIn, signOut } = useClerk();
   const dispatch = useDispatch();
   const pathname = usePathname();
   const router = useRouter();
   const isMenuOpen = useSelector((state: RootState) => state.app.isMenuOpen);
 
-  const handleNavigation = (item: NavItems) => {
-    router.push(item.link);
+  const secondaryNavItems: NavItems[] = [
+    {
+      icon: "/icons/setting.svg",
+      title: "Settings",
+      link: "/setting",
+      onClick: () => handleNavigation("/setting"),
+    },
+    {
+      icon: "/icons/logout.svg",
+      title: "Logout",
+      link: "/login",
+      onClick: () => signOut,
+    },
+  ];
+
+  const handleNavigation = (item: NavItems | string) => {
+    if (typeof item === "string") {
+      router.push(item);
+    } else {
+      router.push(item.link);
+    }
     dispatch(menuState(false));
   };
 
@@ -78,22 +99,23 @@ const Sidebar = () => {
             role="list"
             className="flex flex-col gap-2 w-11/12 sticky bottom-10 "
           >
-            {secondaryNavItems.map((item) => (
-              <button
-                onClick={() => handleNavigation(item)}
-                className="flex  transition duration-300 ease lg:px-6 xs:px-6 px-4 lg:text-black lg:text-base font-medium py-2 justify-start items-center gap-4 text-[#363739]  whitespace-nowrap  group"
-                key={item.title}
-              >
-                <Image
-                  className="group-hover:stroke-white"
-                  alt={item.title}
-                  src={item.icon}
-                  height="17"
-                  width="16"
-                />{" "}
-                {item.title}{" "}
-              </button>
-            ))}
+            {isSignedIn &&
+              secondaryNavItems.map((item) => (
+                <button
+                  onClick={() => handleNavigation(item)}
+                  className="flex  transition duration-300 ease lg:px-6 xs:px-6 px-4 lg:text-black lg:text-base font-medium py-2 justify-start items-center gap-4 text-[#363739]  whitespace-nowrap  group"
+                  key={item.title}
+                >
+                  <Image
+                    className="group-hover:stroke-white"
+                    alt={item.title}
+                    src={item.icon}
+                    height="17"
+                    width="16"
+                  />{" "}
+                  {item.title}{" "}
+                </button>
+              ))}
           </div>
         </div>
       </div>
@@ -111,6 +133,7 @@ interface NavItems {
   icon: string;
   title: string;
   link: string;
+  onClick?: () => void;
 }
 
 const navItems: NavItems[] = [
@@ -128,19 +151,6 @@ const navItems: NavItems[] = [
     icon: "/icons/remitance.svg",
     title: "Remittance",
     link: "/remittance",
-  },
-];
-
-const secondaryNavItems: NavItems[] = [
-  {
-    icon: "/icons/setting.svg",
-    title: "Settings",
-    link: "/setting",
-  },
-  {
-    icon: "/icons/logout.svg",
-    title: "Logout",
-    link: "/login",
   },
 ];
 
