@@ -91,14 +91,14 @@ const GenerateDummyRepaymentData = (count: number) => {
 
     loanData.push({
       customerName: `${faker.person.firstName()} ${faker.person.lastName()}`,
-      loanedAmount: `${currency}${loanedAmount.toLocaleString("en-NG", {
+      loanedAmount: `${loanedAmount.toLocaleString("en-NG", {
         minimumFractionDigits: 2,
       })}`,
-      repaidAmount: `${currency}${repaidAmount.toLocaleString("en-NG", {
+      repaidAmount: ` ${repaidAmount.toLocaleString("en-NG", {
         minimumFractionDigits: 2,
       })}`,
       tenure: `${tenure} Weeks`,
-      instalment: `${currency}${instalment.toLocaleString("en-NG", {
+      instalment: ` ${instalment.toLocaleString("en-NG", {
         minimumFractionDigits: 2,
       })}`,
       overdue: `${overdue}`,
