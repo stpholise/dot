@@ -5,13 +5,13 @@ import { LoanColumns } from "./_components/Columns";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Modal from "./_components/Modal";
-interface LoanRowData extends DummyLoanData {
+export interface LoanRowData extends DummyLoanData {
   id: string;
 }
 
 const Page = () => {
   const pathname = usePathname();
-  const [selectedRowsId, setSelectedRowsId] = useState<LoanRowData[]>([]);
+  const [selectedRowsId, setSelectedRowsId] = useState<LoanRowData[] >([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const columns = LoanColumns({ setSelectedRowsId, selectedRowsId });
 
@@ -24,7 +24,11 @@ const Page = () => {
     <>
       {isModalOpen && (
         <div className=" ">
-          <Modal setIsModalOpen={setIsModalOpen} />
+          <Modal setIsModalOpen={setIsModalOpen} 
+            selectedRowsItems={selectedRowsId}
+            setSelectedRowsItems={setSelectedRowsId}
+          />
+          
         </div>
       )}
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)]">
