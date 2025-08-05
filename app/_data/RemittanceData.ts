@@ -8,6 +8,7 @@ export type DummyRemittance = {
   remittanceTime: string;
   remittanceStatus: "Submitted" | "Pending";
 };
+ const currency = '₦'
 
 const generateDummyRemittance = (count: number): DummyRemittance[] => {
   const remittance: DummyRemittance[] = [];
@@ -16,11 +17,11 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
       "Submitted",
       "Pending",
     ]);
-    const remittanceAmount = faker.commerce.price({
+    const remittanceAmount = Number(faker.commerce.price({
       min: 1000,
       max: 5000,
       dec: 2,
-    });
+    }));
     const remittanceDate = faker.date.between({
       from: "2020-01-01T00:00:00.000Z",
       to: new Date(),
@@ -39,7 +40,9 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
         minute: "2-digit",
         hour12: true,
       }),
-      remittanceAmount,
+      remittanceAmount: `${currency}${remittanceAmount.toLocaleString('en-NG', {
+        minimumFractionDigits: 2,
+      })}`,
       remittanceStatus,
     });
   }
@@ -49,7 +52,7 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
 
 export const dummyRemittance: DummyRemittance[] = generateDummyRemittance(40);
 
-export interface DummyLoanData { 
+export interface DummyLoanData {
   customerName: string;
   loanedAmount: string;
   repaidAmount: string;
@@ -70,11 +73,13 @@ const GenerateDummyRepaymentData = (count: number) => {
         dec: 2,
       })
     );
-    const repaidAmount = faker.commerce.price({
-      min: 500,
-      max: loanedAmount,
-      dec: 2,
-    });
+    const repaidAmount = Number(
+      faker.commerce.price({
+        min: 500,
+        max: loanedAmount,
+        dec: 2,
+      })
+    );
     const tenure = faker.number.int({ min: 6, max: 52 });
 
     const instalment = Math.ceil(loanedAmount / tenure) + 10;
@@ -89,9 +94,13 @@ const GenerateDummyRepaymentData = (count: number) => {
       loanedAmount: `${loanedAmount.toLocaleString("en-NG", {
         minimumFractionDigits: 2,
       })}`,
-      repaidAmount,
+      repaidAmount: ` ${repaidAmount.toLocaleString("en-NG", {
+        minimumFractionDigits: 2,
+      })}`,
       tenure: `${tenure} Weeks`,
-      instalment: `${instalment}`,
+      instalment: ` ${instalment.toLocaleString("en-NG", {
+        minimumFractionDigits: 2,
+      })}`,
       overdue: `${overdue}`,
       repayment: `Week ${repayment}`,
     });
