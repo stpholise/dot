@@ -59,8 +59,15 @@ const Modal = ({
         minimumFractionDigits: 0,
       })
     );
-
-    setButtonValidation(false);
+    if (!selectedRowsItems) {
+      setButtonValidation(false);
+    } else if (selectedRowsItems?.length !== Object.keys(rawValue).length) {
+      setButtonValidation(false);
+    } else if (Object.values(rawValue).some((val) => val === "")  || Object.values(rawValue).some((val) => val == "0") ) {
+      setButtonValidation(false);
+    } else {
+      setButtonValidation(true);
+    }
   }, [rawValue]);
 
   const cancelRemittanceCreattion = () => {
@@ -200,7 +207,7 @@ const Modal = ({
               text={`Submit for ${selectedRowsItems?.length} People`}
               className={clsx(
                 "  px-5 py-3 rounded-lg text-white",
-                buttonValidation ? "bg-[#9A9A9A]" : "bg-black"
+                buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
               )}
               onClick={handleRemittance}
             />
