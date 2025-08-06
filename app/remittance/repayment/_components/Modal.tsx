@@ -22,7 +22,7 @@ const Modal = ({
   }, []);
 
   const [rawValue, setRawValue] = useState<Record<string, string>>({});
-
+  const [totalRemittance, setTotalRemittance] = useState("");
   const removeItemFromList = (id: string) => {
     if (selectedRowsItems) {
       const newArray = selectedRowsItems.filter((items) => items.id !== id);
@@ -40,6 +40,24 @@ const Modal = ({
       ...prev,
       [id]: formatAmount,
     }));
+  };
+
+  useEffect(() => {
+    const total = Object.values(rawValue).reduce(
+      (sum, item) => sum + parseInt(item.replace(/,/g, "")),
+      0
+    );
+
+    setTotalRemittance(
+      total.toLocaleString("en-NG", {
+        minimumFractionDigits: 0,
+      })
+    );
+  }, [rawValue]);
+
+  const cancelRemittanceCreattion = () => {
+    setSelectedRowsItems([]);
+    setIsModalOpen(false);
   };
 
   return (
@@ -80,11 +98,11 @@ const Modal = ({
             />
           </button>
         </div>
-        <div className="xl:px-8 py-6">
+        <div className="xl:px-8 xl:py-6 md:px-6 py-4">
           {selectedRowsItems &&
             selectedRowsItems.map((item) => (
               <div
-                className="bg-white h-40  w-full lg:min-96 xl:px-8 py-6 mb-4 rounded-2xl"
+                className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
                 key={item.id}
               >
                 <p className="text-black text-2xl font-medium">
@@ -117,6 +135,7 @@ const Modal = ({
                   <div className="border border-[#D2D5E1] w-full px-4 h-12 rounded-lg py-2 text-black flex items-center gap-1">
                     ₦
                     <input
+                      maxLength={7}
                       type="text"
                       value={rawValue[item.id]}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -138,7 +157,7 @@ const Modal = ({
         </div>
         <div className="sticky mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between">
           <div className="">
-            <h2 className="text-black">₦{""}</h2>
+            <h2 className="text-black">₦{totalRemittance}</h2>
             <p className="text-xs font-medium text-[#667085]">
               Total Remittance
             </p>
@@ -147,6 +166,7 @@ const Modal = ({
             <PrimaryButtons
               text={`Cancel`}
               className="bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 py-3 rounded-lg "
+              onClick={cancelRemittanceCreattion}
             />
             <PrimaryButtons
               text={`Submit for ${selectedRowsItems?.length} People`}
