@@ -23,10 +23,16 @@ const Modal = ({
 
   const [rawValue, setRawValue] = useState<Record<string, string>>({});
   const [totalRemittance, setTotalRemittance] = useState("");
+  const [buttonValidation, setButtonValidation] = useState<boolean>(false);
   const removeItemFromList = (id: string) => {
     if (selectedRowsItems) {
       const newArray = selectedRowsItems.filter((items) => items.id !== id);
       setSelectedRowsItems(newArray);
+      if (Object.keys(rawValue).some((key) => key === id)) {
+        const rawArray = Object.entries(rawValue).filter(([key]) => key !== id);
+
+        setRawValue(Object.fromEntries(rawArray));
+      }
     }
   };
 
@@ -47,17 +53,23 @@ const Modal = ({
       (sum, item) => sum + parseInt(item.replace(/,/g, "")),
       0
     );
-
+    console.log(rawValue);
     setTotalRemittance(
       total.toLocaleString("en-NG", {
         minimumFractionDigits: 0,
       })
     );
+
+    setButtonValidation(false);
   }, [rawValue]);
 
   const cancelRemittanceCreattion = () => {
     setSelectedRowsItems([]);
     setIsModalOpen(false);
+  };
+
+  const handleRemittance = () => {
+    console.log("testing remittance");
   };
 
   return (
@@ -71,7 +83,7 @@ const Modal = ({
             " transition transform -translate-x-100 opacity-0 ease-in-out duration-500":
               !isVisible,
             "h-fit ": selectedRowsItems?.length === 1,
-            "h-full": selectedRowsItems?.length !== 1,
+            "h-full": selectedRowsItems?.length !== 1 || !selectedRowsItems,
           }
         )}
       >
@@ -99,7 +111,7 @@ const Modal = ({
           </button>
         </div>
         <div className="xl:px-8 xl:py-6 md:px-6 py-4">
-          {selectedRowsItems &&
+          {selectedRowsItems ? (
             selectedRowsItems.map((item) => (
               <div
                 className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
@@ -153,7 +165,22 @@ const Modal = ({
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <div className=" flex items center justify-col h-full min-h-40 xl:px-8 xl:py-6 md:px-6 py-4 border-4 border-red-400">
+              <Image
+                src="/image/Frame 48.png"
+                alt="frame"
+                width={40}
+                height={40}
+              />
+              <h3 className="">No Customer Added</h3>
+              <p className="">
+                Click on the more &quot;i&quot; icon to add a customer to the
+                remittance
+              </p>
+            </div>
+          )}
         </div>
         <div className="sticky mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between">
           <div className="">
@@ -169,8 +196,13 @@ const Modal = ({
               onClick={cancelRemittanceCreattion}
             />
             <PrimaryButtons
+              disabled={buttonValidation}
               text={`Submit for ${selectedRowsItems?.length} People`}
-              className="bg-black  px-5 py-3 rounded-lg text-white"
+              className={clsx(
+                "  px-5 py-3 rounded-lg text-white",
+                buttonValidation ? "bg-[#9A9A9A]" : "bg-black"
+              )}
+              onClick={handleRemittance}
             />
           </div>
         </div>

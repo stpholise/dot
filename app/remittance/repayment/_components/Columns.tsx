@@ -38,7 +38,7 @@ export const LoanColumns = ({
           setSelectedRowsId(newArry);
         } else {
           setSelectedRowsId((prev: LoanRowData[]) => [...prev, rowData]);
-          console.log(selectedRowsId);
+ 
         }
       };
       return (
