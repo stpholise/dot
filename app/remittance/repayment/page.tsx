@@ -5,13 +5,15 @@ import { LoanColumns } from "./_components/Columns";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Modal from "./_components/Modal";
+import Image from "next/image";
+
 export interface LoanRowData extends DummyLoanData {
   id: string;
 }
 
 const Page = () => {
   const pathname = usePathname();
-  const [selectedRowsId, setSelectedRowsId] = useState<LoanRowData[] >([]);
+  const [selectedRowsId, setSelectedRowsId] = useState<LoanRowData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const columns = LoanColumns({ setSelectedRowsId, selectedRowsId });
 
@@ -24,11 +26,11 @@ const Page = () => {
     <>
       {isModalOpen && (
         <div className=" ">
-          <Modal setIsModalOpen={setIsModalOpen} 
+          <Modal
+            setIsModalOpen={setIsModalOpen}
             selectedRowsItems={selectedRowsId}
             setSelectedRowsItems={setSelectedRowsId}
           />
-          
         </div>
       )}
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)]">
@@ -37,7 +39,18 @@ const Page = () => {
             <p className="text-sm text-black capitalize">
               {pathname.replace("/", " ")}
             </p>
-            <div className="">Loan Repayment</div>
+            <div className="text-black text-3xl font-medium flex gap-2">
+              {" "}
+              <div className=" size-9 rounded-lg bg-white p-2 border border-[#D0D5DD] ">
+                <Image
+                  src={"/icons/arrow_back.png"}
+                  alt={"prev"}
+                  width={20}
+                  height={16}
+                />
+              </div>{" "}
+              Loan Repayment
+            </div>
           </div>
           <button
             onClick={handleModalOpening}
