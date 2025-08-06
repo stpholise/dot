@@ -48,17 +48,17 @@ const Modal = ({
       0
     );
 
-    console.log(
-      Object.values(rawValue).map((val) =>
-        console.log(parseFloat(val.replace(/,/g, "")))
-      )
-    );
     setTotalRemittance(
       total.toLocaleString("en-NG", {
         minimumFractionDigits: 0,
       })
     );
   }, [rawValue]);
+
+  const cancelRemittanceCreattion = () => {
+    setSelectedRowsItems([]);
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -166,6 +166,7 @@ const Modal = ({
             <PrimaryButtons
               text={`Cancel`}
               className="bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 py-3 rounded-lg "
+              onClick={cancelRemittanceCreattion}
             />
             <PrimaryButtons
               text={`Submit for ${selectedRowsItems?.length} People`}
