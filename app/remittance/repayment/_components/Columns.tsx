@@ -79,16 +79,7 @@ export const LoanColumns = ({
       const rowId = cell.row.id;
       const rowData = { id: rowId, ...cell.row.original };
       const settingSelectedRow = () => {
-        const alreadySelected = selectedRowsId.some(
-          (item) => item.id === rowId
-        );
-
-        if (alreadySelected) {
-          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
-          setSelectedRowsId(newArry);
-        } else {
-          setSelectedRowsId([rowData]);
-        }
+        setSelectedRowsId([rowData]);
       };
       const handleButtonClick = () => {
         settingSelectedRow();
@@ -117,16 +108,7 @@ export const LoanColumns = ({
       const rowId = cell.row.id;
       const rowData = { id: rowId, ...cell.row.original };
       const settingSelectedRow = () => {
-        const alreadySelected = selectedRowsId.some(
-          (item) => item.id === rowId
-        );
-
-        if (alreadySelected) {
-          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
-          setSelectedRowsId(newArry);
-        } else {
-          setSelectedRowsId([rowData]);
-        }
+        setSelectedRowsId([rowData]);
       };
       const handleButtonClick = () => {
         settingSelectedRow();
@@ -156,16 +138,7 @@ export const LoanColumns = ({
       const rowId = cell.row.id;
       const rowData = { id: rowId, ...cell.row.original };
       const settingSelectedRow = () => {
-        const alreadySelected = selectedRowsId.some(
-          (item) => item.id === rowId
-        );
-
-        if (alreadySelected) {
-          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
-          setSelectedRowsId(newArry);
-        } else {
-          setSelectedRowsId([rowData]);
-        }
+        setSelectedRowsId([rowData]);
       };
       const handleButtonClick = () => {
         settingSelectedRow();
@@ -195,16 +168,7 @@ export const LoanColumns = ({
       const rowId = cell.row.id;
       const rowData = { id: rowId, ...cell.row.original };
       const settingSelectedRow = () => {
-        const alreadySelected = selectedRowsId.some(
-          (item) => item.id === rowId
-        );
-
-        if (alreadySelected) {
-          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
-          setSelectedRowsId(newArry);
-        } else {
-          setSelectedRowsId([rowData]);
-        }
+        setSelectedRowsId([rowData]);
       };
       const handleButtonClick = () => {
         settingSelectedRow();
@@ -235,16 +199,7 @@ export const LoanColumns = ({
       const rowId = cell.row.id;
       const rowData = { id: rowId, ...cell.row.original };
       const settingSelectedRow = () => {
-        const alreadySelected = selectedRowsId.some(
-          (item) => item.id === rowId
-        );
-
-        if (alreadySelected) {
-          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
-          setSelectedRowsId(newArry);
-        } else {
-          setSelectedRowsId([rowData]);
-        }
+        setSelectedRowsId([rowData]);
       };
       const handleButtonClick = () => {
         settingSelectedRow();
@@ -277,16 +232,7 @@ export const LoanColumns = ({
       const rowId = cell.row.id;
       const rowData = { id: rowId, ...cell.row.original };
       const settingSelectedRow = () => {
-        const alreadySelected = selectedRowsId.some(
-          (item) => item.id === rowId
-        );
-
-        if (alreadySelected) {
-          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
-          setSelectedRowsId(newArry);
-        } else {
-          setSelectedRowsId([rowData]);
-        }
+        setSelectedRowsId([rowData]);
       };
       const handleButtonClick = () => {
         settingSelectedRow();
