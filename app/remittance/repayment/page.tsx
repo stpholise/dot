@@ -14,12 +14,11 @@ export interface LoanRowData extends DummyLoanData {
 const Page = () => {
   const pathname = usePathname();
   const [selectedRowsId, setSelectedRowsId] = useState<LoanRowData[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const columns = LoanColumns({ setSelectedRowsId, selectedRowsId });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); 
+  const columns = LoanColumns({ setSelectedRowsId, selectedRowsId,  setIsModalOpen });
 
   const handleModalOpening = () => {
     setIsModalOpen(true);
-    console.log("testing");
   };
 
   return (
@@ -33,6 +32,17 @@ const Page = () => {
           />
         </div>
       )}
+      {/* {isClickModalOpen && (
+        <>
+          <div className="bg-white w-116 h-96 rounded-2xl">
+
+          </div>
+          <div
+            onClick={() => setIsModalOpen(false)}
+            className="fixed top-0 left-0 right-0 bottom-0 w-full z-60 bg-[rgba(0,0,0,0.5)]"
+          ></div>
+        </>
+      )} */}
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)]">
         <div className="flex justify-between items-center mb-8">
           <div className="">
@@ -40,7 +50,6 @@ const Page = () => {
               {pathname.replace("/", " ")}
             </p>
             <div className="text-black text-3xl font-medium flex gap-2">
-              {" "}
               <div className=" size-9 rounded-lg bg-white p-2 border border-[#D0D5DD] ">
                 <Image
                   src={"/icons/arrow_back.png"}
