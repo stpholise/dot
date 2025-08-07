@@ -12,9 +12,11 @@ interface LoanRowData extends DummyLoanData {
 export const LoanColumns = ({
   setSelectedRowsId,
   selectedRowsId,
+  setIsModalOpen,
 }: {
   setSelectedRowsId: React.Dispatch<React.SetStateAction<LoanRowData[]>>;
   selectedRowsId: LoanRowData[];
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }): ColumnDef<DummyLoanData>[] => [
   {
     accessorKey: "customerName",
@@ -38,15 +40,12 @@ export const LoanColumns = ({
           setSelectedRowsId(newArry);
         } else {
           setSelectedRowsId((prev: LoanRowData[]) => [...prev, rowData]);
- 
         }
       };
       return (
-        <div
-          onClick={() => settingSelectedRow()}
-          className="flex xl:px-6 py-4 gap-4 items-center font-medium text-base text-black cursor-pointer  "
-        >
-          <div
+        <div className="flex xl:px-6 py-4 gap-4 items-center font-medium text-base text-black cursor-pointer  ">
+          <button
+            onClick={() => settingSelectedRow()}
             className={clsx("w-4 h-4  rounded-sm", {
               "border border-[#D0D5DD]": !selectedRowsId.some(
                 (item) => item.id === rowId
@@ -61,8 +60,8 @@ export const LoanColumns = ({
                 height={16}
               />
             )}
-          </div>
-          {value}
+          </button>
+          <button onClick={() => setSelectedRowsId([rowData])}>{value}</button>
         </div>
       );
     },
@@ -77,10 +76,31 @@ export const LoanColumns = ({
     ),
     cell: (cell) => {
       const value = cell.getValue() as string;
+      const rowId = cell.row.id;
+      const rowData = { id: rowId, ...cell.row.original };
+      const settingSelectedRow = () => {
+        const alreadySelected = selectedRowsId.some(
+          (item) => item.id === rowId
+        );
+
+        if (alreadySelected) {
+          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
+          setSelectedRowsId(newArry);
+        } else {
+          setSelectedRowsId([rowData]);
+        }
+      };
+      const handleButtonClick = () => {
+        settingSelectedRow();
+        setIsModalOpen(true);
+      };
       return (
-        <div className="xl:px-6 py-4 text-[#667085] font-medium text-base">
+        <button
+          onClick={handleButtonClick}
+          className="xl:px-6 py-4 text-[#667085] font-medium text-base"
+        >
           {value}
-        </div>
+        </button>
       );
     },
   },
@@ -94,11 +114,31 @@ export const LoanColumns = ({
     ),
     cell: (cell) => {
       const value = cell.getValue() as string;
+      const rowId = cell.row.id;
+      const rowData = { id: rowId, ...cell.row.original };
+      const settingSelectedRow = () => {
+        const alreadySelected = selectedRowsId.some(
+          (item) => item.id === rowId
+        );
 
+        if (alreadySelected) {
+          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
+          setSelectedRowsId(newArry);
+        } else {
+          setSelectedRowsId([rowData]);
+        }
+      };
+      const handleButtonClick = () => {
+        settingSelectedRow();
+        setIsModalOpen(true);
+      };
       return (
-        <div className="xl:px-6 py-4 text-[#667085] font-normal text-base">
+        <button
+          onClick={handleButtonClick}
+          className="xl:px-6 py-4 text-[#667085] font-normal text-base"
+        >
           {value}
-        </div>
+        </button>
       );
     },
   },
@@ -113,11 +153,32 @@ export const LoanColumns = ({
     ),
     cell: (cell) => {
       const value = cell.getValue() as string;
+      const rowId = cell.row.id;
+      const rowData = { id: rowId, ...cell.row.original };
+      const settingSelectedRow = () => {
+        const alreadySelected = selectedRowsId.some(
+          (item) => item.id === rowId
+        );
+
+        if (alreadySelected) {
+          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
+          setSelectedRowsId(newArry);
+        } else {
+          setSelectedRowsId([rowData]);
+        }
+      };
+      const handleButtonClick = () => {
+        settingSelectedRow();
+        setIsModalOpen(true);
+      };
       return (
-        <div className="xl:px-6 py-4 text-[#667085] font-normal text-base">
+        <button
+          onClick={handleButtonClick}
+          className="xl:px-6 py-4 text-[#667085] font-normal text-base"
+        >
           {" "}
           {value}
-        </div>
+        </button>
       );
     },
   },
@@ -131,11 +192,32 @@ export const LoanColumns = ({
     ),
     cell: (cell) => {
       const value = cell.getValue() as string;
+      const rowId = cell.row.id;
+      const rowData = { id: rowId, ...cell.row.original };
+      const settingSelectedRow = () => {
+        const alreadySelected = selectedRowsId.some(
+          (item) => item.id === rowId
+        );
+
+        if (alreadySelected) {
+          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
+          setSelectedRowsId(newArry);
+        } else {
+          setSelectedRowsId([rowData]);
+        }
+      };
+      const handleButtonClick = () => {
+        settingSelectedRow();
+        setIsModalOpen(true);
+      };
       return (
-        <div className="xl:px-6 py-4 text-[#667085] font-normal text-base">
+        <button
+          onClick={handleButtonClick}
+          className="xl:px-6 py-4 text-[#667085] font-normal text-base"
+        >
           {" "}
           {value}{" "}
-        </div>
+        </button>
       );
     },
   },
@@ -150,15 +232,34 @@ export const LoanColumns = ({
     ),
     cell: (cell) => {
       const value = cell.getValue() as string;
+      const rowId = cell.row.id;
+      const rowData = { id: rowId, ...cell.row.original };
+      const settingSelectedRow = () => {
+        const alreadySelected = selectedRowsId.some(
+          (item) => item.id === rowId
+        );
+
+        if (alreadySelected) {
+          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
+          setSelectedRowsId(newArry);
+        } else {
+          setSelectedRowsId([rowData]);
+        }
+      };
+      const handleButtonClick = () => {
+        settingSelectedRow();
+        setIsModalOpen(true);
+      };
       return (
-        <div
+        <button
+          onClick={handleButtonClick}
           className={clsx("xl:px-6 py-4  font-normal text-base", {
             "text-[#667085]": value === "N/A",
             "text-red-400": value.trim() !== "N/A",
           })}
         >
           {value}
-        </div>
+        </button>
       );
     },
   },
@@ -173,16 +274,34 @@ export const LoanColumns = ({
     cell: (cell) => {
       const value = cell.getValue() as string;
       const { overdue } = cell.row.original;
+      const rowId = cell.row.id;
+      const rowData = { id: rowId, ...cell.row.original };
+      const settingSelectedRow = () => {
+        const alreadySelected = selectedRowsId.some(
+          (item) => item.id === rowId
+        );
 
+        if (alreadySelected) {
+          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
+          setSelectedRowsId(newArry);
+        } else {
+          setSelectedRowsId([rowData]);
+        }
+      };
+      const handleButtonClick = () => {
+        settingSelectedRow();
+        setIsModalOpen(true);
+      };
       return (
-        <div
+        <button
+          onClick={handleButtonClick}
           className={clsx("xl:px-6 py-4 text-[#667085] font-normal text-base", {
             "text-red-400": overdue !== "N/A",
           })}
         >
           {" "}
           {value}{" "}
-        </div>
+        </button>
       );
     },
   },
