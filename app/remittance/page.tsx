@@ -37,7 +37,7 @@ const Page = () => {
             text="Create Remittance"
             icon="/icons/add.svg"
             className="rounded-lg bg-black gap-2 flex px-5 py-2.5 flex-row-reverse"
-            onClick={() => router.push("/repayment")}
+            onClick={() => router.push("/remittance/repayment")}
           />
         </div>
         <div className=" rounded-2xl bg-white">

@@ -5,7 +5,6 @@ import clsx from "clsx";
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 
-
 interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
   selectedRowsItems?: LoanRowData[];
@@ -17,31 +16,18 @@ const PopModal = ({
   selectedRowsItems,
   setSelectedRowsItems,
 }: ModalProp) => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  useEffect(() => {
+    setIsVisible(true);
+    setButtonValidation(false);
+  }, []);
 
-    const [isVisible, setIsVisible] = useState<boolean>(false);
-      useEffect(() => {
-        setIsVisible(true);
-        setButtonValidation(false);
-      }, []);
-    
-      
-        const [rawValue, setRawValue] = useState<Record<string, string>>({});
-        const [totalRemittance, setTotalRemittance] = useState("");
-        const [buttonValidation, setButtonValidation] = useState<boolean>(false);
-        const [currentModal, setCurrentModal] = useState<number>(0);
-        const removeItemFromList = (id: string) => {
-          if (selectedRowsItems) {
-            const newArray = selectedRowsItems.filter((items) => items.id !== id);
-            setSelectedRowsItems(newArray);
-            if (Object.keys(rawValue).some((key) => key === id)) {
-              const rawArray = Object.entries(rawValue).filter(([key]) => key !== id);
-      
-              setRawValue(Object.fromEntries(rawArray));
-            }
-          }
-        };
-      
-          const handleChange = (id: string, value: string) => {
+  const [rawValue, setRawValue] = useState<Record<string, string>>({});
+  const [totalRemittance, setTotalRemittance] = useState("");
+  const [buttonValidation, setButtonValidation] = useState<boolean>(false);
+  const [currentModal, setCurrentModal] = useState<number>(0);
+
+  const handleChange = (id: string, value: string) => {
     const raw = value.replace(/[^0-9]/g, "");
 
     const formatAmount = Number(raw).toLocaleString("en-NG", {
@@ -66,31 +52,30 @@ const PopModal = ({
     }
   };
 
+  useEffect(() => {
+    const total = Object.values(rawValue).reduce(
+      (sum, item) => sum + parseInt(item.replace(/,/g, "")),
+      0
+    );
+    console.log(rawValue);
+    setTotalRemittance(
+      total.toLocaleString("en-NG", {
+        minimumFractionDigits: 0,
+      })
+    );
+    handleButtonValidation();
+  }, [rawValue]);
 
-    useEffect(() => {
-      const total = Object.values(rawValue).reduce(
-        (sum, item) => sum + parseInt(item.replace(/,/g, "")),
-        0
-      );
-      console.log(rawValue);
-      setTotalRemittance(
-        total.toLocaleString("en-NG", {
-          minimumFractionDigits: 0,
-        })
-      );
-      handleButtonValidation();
-    }, [rawValue]);
-  
-    const cancelRemittanceCreattion = () => {
-      setSelectedRowsItems([]);
-      setIsModalOpen(false);
-    };
+  const cancelRemittanceCreattion = () => {
+    setSelectedRowsItems([]);
+    setIsModalOpen(false);
+  };
 
   return (
-      <>
+    <>
       <div
         className={clsx(
-          "w-full bg-[#F9F9F9] lg:w-[600px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-auto ",
+          "w-full bg-[#F9F9F9] lg:w-[468px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-auto ",
           {
             " transition-opacity transform  opacity-100 ease-in-out duration-500":
               isVisible,
@@ -98,7 +83,6 @@ const PopModal = ({
               !isVisible,
             "h-fit  top-1/2 right-1/2  transition-opacity translate-x-1/2 rounded-3xl  -translate-y-1/2 opacity-100 ease-in-out duration-500":
               selectedRowsItems,
-            
           }
         )}
       >
@@ -106,17 +90,13 @@ const PopModal = ({
           <div className="">
             <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
               <div className=" flex gap-2 items-center">
-                <Image
-                  src="/icons/table_checked.png"
-                  alt="/checked"
-                  width={32}
-                  height={32}
-                  className="w-8 h-8"
-                />
-                <p className="text-2xl text-black"> Selected Customers </p>
+                <p className="text-lg text-black">
+                  {" "}
+                  Add Customer to Remittance{" "}
+                </p>
               </div>
               <button
-                className="absolute top-4 bottom-4 right-8  px-4 py-2"
+                className="absolute top-4 bottom-4 right-4  px-4 py-2"
                 onClick={() => setIsModalOpen(false)}
               >
                 <Image
@@ -128,19 +108,22 @@ const PopModal = ({
               </button>
             </div>
             <div
-              className={clsx("h-[calc(100vh-180px)] overflow-y-auto", {
-                "h-fit ": selectedRowsItems?.length === 1,
-                "h-[calc(100vh-180px)] ": selectedRowsItems?.length !== 1,
-              })}
+              className={clsx(
+                "h-[calc(100vh-180px)] overflow-y-auto bg-white",
+                {
+                  "h-fit ": selectedRowsItems?.length === 1,
+                  "h-[calc(100vh-180px)] ": selectedRowsItems?.length !== 1,
+                }
+              )}
             >
-              <div className="xl:px-8 xl:py-6 md:px-6 pt-4 pb-12">
+              <div className="lg:py-6  md:px-6 pt-4 pb-12">
                 {selectedRowsItems && selectedRowsItems?.length !== 0 ? (
                   selectedRowsItems.map((item) => (
                     <div
-                      className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
+                      className="bg-[#F9F9F9] h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
                       key={item.id}
                     >
-                      <p className="text-black text-2xl font-medium">
+                      <p className="text-black text-base font-medium">
                         {item.customerName}
                       </p>
                       <div className="flex gap-2 mt-1 text-xs text-[#667085]">
@@ -169,7 +152,7 @@ const PopModal = ({
                       <div className=" flex justify-between gap-8 mt-4">
                         <div
                           className={
-                            "border border-[#D2D5E1] w-full px-4 h-12 rounded-lg py-2 text-black flex items-center gap-1"
+                            "border border-[#D2D5E1] bg-white w-full px-4 h-12 rounded-lg py-2 text-black flex items-center gap-1"
                           }
                         >
                           ₦
@@ -183,12 +166,6 @@ const PopModal = ({
                             inputMode="numeric"
                             className="outline-none border-none w-full h-full border-red-400"
                           />
-                        </div>
-                        <div
-                          className="text-[#F04438] rounded-lg w-40 bg-[#FEF3F2] h-12 flex items-center justify-center"
-                          onClick={() => removeItemFromList(item.id)}
-                        >
-                          - Remove
                         </div>
                       </div>
                     </div>
@@ -214,8 +191,8 @@ const PopModal = ({
                 )}
               </div>
             </div>
-            <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between">
-              <div
+            <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA]  px-8 py-6 flex justify-between bg-[#F9F9F9]">
+              {/* <div
                 className={clsx("", {
                   "hidden ": selectedRowsItems?.length === 1,
                   "block ": selectedRowsItems?.length !== 1,
@@ -225,32 +202,24 @@ const PopModal = ({
                 <p className="text-xs font-medium text-[#667085]">
                   Total Remittance
                 </p>
-              </div>
+              </div> */}
               <div
-                className={clsx("flex gap-8", {
+                className={clsx("flex gap-4 ", {
                   "gap-4  ": selectedRowsItems?.length === 1,
                 })}
               >
                 <PrimaryButtons
                   text={`Cancel`}
                   className={clsx(
-                    "bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 py-3 rounded-lg ",
-                    {
-                      "lg:w-50 flex item-center justify-center  ":
-                        selectedRowsItems?.length === 1,
-                    }
+                    "bg-white border border-[#D0D5DD] font-medium text-[#344054] lg:w-42  px-5 py-3 rounded-lg flex item-center justify-center  "
                   )}
                   onClick={cancelRemittanceCreattion}
                 />
                 <PrimaryButtons
                   disabled={!buttonValidation}
-                  text={
-                    buttonValidation
-                      ? `Submit for ${selectedRowsItems?.length} People`
-                      : "Submit Remittance"
-                  }
+                  text={"Add Customer"}
                   className={clsx(
-                    "  px-5 py-3 rounded-lg text-white",
+                    "  px-5 py-3 rounded-lg text-white lg:min-w-56 lg:w-full",
                     {
                       "lg:w-80 flex item-center justify-center  ":
                         selectedRowsItems?.length === 1,
@@ -360,7 +329,6 @@ const PopModal = ({
                               ₦{rawValue[item.id]}
                             </p>
                           </div>
-                  
                         ))}
                     </div>
                   </div>
@@ -435,7 +403,7 @@ const PopModal = ({
         className="fixed top-0 left-0 right-0 bottom-0 w-full z-60 bg-[rgba(0,0,0,0.5)]"
       ></div>
     </>
-     )
-}
+  );
+};
 
-export default PopModal
+export default PopModal;
