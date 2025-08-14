@@ -5,6 +5,7 @@ import { LoanColumns } from "./_components/Columns";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Modal from "./_components/Modal";
+import PopModal from "./_components/PopModal";
 import Image from "next/image";
 
 export interface LoanRowData extends DummyLoanData {
@@ -14,8 +15,12 @@ export interface LoanRowData extends DummyLoanData {
 const Page = () => {
   const pathname = usePathname();
   const [selectedRowsId, setSelectedRowsId] = useState<LoanRowData[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); 
-  const columns = LoanColumns({ setSelectedRowsId, selectedRowsId,  setIsModalOpen });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const columns = LoanColumns({
+    setSelectedRowsId,
+    selectedRowsId,
+    setIsModalOpen,
+  });
 
   const handleModalOpening = () => {
     setIsModalOpen(true);
@@ -25,24 +30,13 @@ const Page = () => {
     <>
       {isModalOpen && (
         <div className=" ">
-          <Modal
+          <PopModal
             setIsModalOpen={setIsModalOpen}
             selectedRowsItems={selectedRowsId}
             setSelectedRowsItems={setSelectedRowsId}
           />
         </div>
       )}
-      {/* {isClickModalOpen && (
-        <>
-          <div className="bg-white w-116 h-96 rounded-2xl">
-
-          </div>
-          <div
-            onClick={() => setIsModalOpen(false)}
-            className="fixed top-0 left-0 right-0 bottom-0 w-full z-60 bg-[rgba(0,0,0,0.5)]"
-          ></div>
-        </>
-      )} */}
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)]">
         <div className="flex justify-between items-center mb-8">
           <div className="">
