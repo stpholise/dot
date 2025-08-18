@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { LoanRowData } from "../../page";
+import { LoanRowData } from ".././page";
 import clsx from "clsx";
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
@@ -23,7 +23,6 @@ const PopModal = ({
   }, []);
 
   const [rawValue, setRawValue] = useState<Record<string, string>>({});
-  const [totalRemittance, setTotalRemittance] = useState("");
   const [buttonValidation, setButtonValidation] = useState<boolean>(false);
   const [currentModal, setCurrentModal] = useState<number>(0);
 
@@ -38,33 +37,6 @@ const PopModal = ({
       [id]: formatAmount,
     }));
   };
-
-  const handleButtonValidation = () => {
-    if (
-      !selectedRowsItems ||
-      selectedRowsItems.length === 0 ||
-      selectedRowsItems?.length !== Object.keys(rawValue).length ||
-      Object.values(rawValue).some((val) => val === "" || val == "0")
-    ) {
-      setButtonValidation(false);
-    } else {
-      setButtonValidation(true);
-    }
-  };
-
-  useEffect(() => {
-    const total = Object.values(rawValue).reduce(
-      (sum, item) => sum + parseInt(item.replace(/,/g, "")),
-      0
-    );
-    console.log(rawValue);
-    setTotalRemittance(
-      total.toLocaleString("en-NG", {
-        minimumFractionDigits: 0,
-      })
-    );
-    handleButtonValidation();
-  }, [rawValue]);
 
   const cancelRemittanceCreattion = () => {
     setSelectedRowsItems([]);
@@ -191,18 +163,8 @@ const PopModal = ({
                 )}
               </div>
             </div>
+            d
             <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA]  px-8 py-6 flex justify-between bg-[#F9F9F9]">
-              {/* <div
-                className={clsx("", {
-                  "hidden ": selectedRowsItems?.length === 1,
-                  "block ": selectedRowsItems?.length !== 1,
-                })}
-              >
-                <h2 className="text-black">₦{totalRemittance}</h2>
-                <p className="text-xs font-medium text-[#667085]">
-                  Total Remittance
-                </p>
-              </div> */}
               <div
                 className={clsx("flex gap-4 ", {
                   "gap-4  ": selectedRowsItems?.length === 1,
@@ -229,171 +191,6 @@ const PopModal = ({
                   onClick={() => setCurrentModal(1)}
                 />
               </div>
-            </div>
-          </div>
-        )}
-        {currentModal === 1 && (
-          <div className="">
-            <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
-              <div className=" flex gap-2 items-center">
-                <button
-                  onClick={() => setCurrentModal(0)}
-                  className=" size-8 rounded-lg bg-white p-2 border border-[#D0D5DD] "
-                >
-                  <Image
-                    src={"/icons/arrow_back.png"}
-                    alt={"prev"}
-                    width={20}
-                    height={16}
-                  />
-                </button>
-                <p className="text-2xl text-black"> Selected Customers </p>
-              </div>
-              <button
-                className="absolute top-4 bottom-4 right-8  px-4 py-2"
-                onClick={() => setIsModalOpen(false)}
-              >
-                <Image
-                  src={"/icons/close.svg"}
-                  alt={"close modal"}
-                  width={24}
-                  height={24}
-                />
-              </button>
-            </div>
-            <div className="h-[calc(100vh-180px)] ">
-              {
-                <div className="rounded-2xl border border-[#EAEAEA] ">
-                  <div className="  bg-[#F9F9F9] px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl">
-                    <div className="text-black text-3xl font-semibold">
-                      <p className="text-sm text-#667085 font-medium">
-                        {" "}
-                        Total Customers
-                      </p>
-                      <div className="">
-                        {selectedRowsItems?.length} Customers
-                      </div>
-                    </div>
-                    <div className="">
-                      <p className="">Total Remittance Amount</p>
-                      <div className="">{totalRemittance}</div>
-                    </div>
-                  </div>
-                  <div className="">
-                    <h4 className="text-xs font-medium flex items-center">
-                      {" "}
-                      <Image
-                        src={"/icons/user.png"}
-                        alt={"customer"}
-                        width={8}
-                        height={10}
-                        className="inline mx-1"
-                      />
-                      CUSTOMER SUMMARY
-                    </h4>
-                    <div className="py-2">
-                      {selectedRowsItems &&
-                        selectedRowsItems.map((item) => (
-                          <div
-                            className="flex gap-4 border-b border-[#EAEAEA] py-4 justify-between items-center last:border-0"
-                            key={item.id}
-                          >
-                            <div className="">
-                              <h5 className=" text-black font-medium my-1">
-                                {item.customerName}
-                              </h5>
-                              <div className="flex gap-2 text-xs">
-                                <span className="">
-                                  <Image
-                                    src={"/icons/offer_hand.png"}
-                                    alt={"instalment"}
-                                    width={10}
-                                    height={10}
-                                    className="inline mx-1"
-                                  />
-                                  Instalment: {item.instalment}
-                                </span>
-                                <span>
-                                  <Image
-                                    src={"/icons/calender.png"}
-                                    alt={"instalment"}
-                                    width={10}
-                                    height={10}
-                                    className="inline mx-1"
-                                  />
-                                  Repayment: {item.repayment}
-                                </span>
-                              </div>
-                            </div>
-                            <p className="text-black text-2xl font-medium">
-                              ₦{rawValue[item.id]}
-                            </p>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              }
-            </div>
-            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between lg:gap-8">
-              <PrimaryButtons
-                text={`Cancel`}
-                className="bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 lg:px-8 py-3 rounded-lg "
-                onClick={cancelRemittanceCreattion}
-              />
-              <PrimaryButtons
-                disabled={!buttonValidation}
-                text={"Confirm Submission"}
-                className={clsx(
-                  " w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
-                  buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
-                )}
-                onClick={() => setCurrentModal(2)}
-              />
-            </div>
-          </div>
-        )}
-        {currentModal === 2 && (
-          <div className="">
-            <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
-              <div className=" flex gap-2 items-center">
-                <button className=" size-8 rounded-lg bg-white p-2 border border-[#D0D5DD] ">
-                  <Image
-                    src={"/icons/arrow_back.png"}
-                    alt={"prev"}
-                    width={20}
-                    height={16}
-                  />
-                </button>
-                <p className="text-2xl text-black"> Selected Customers </p>
-              </div>
-              <button
-                className="absolute top-4 bottom-4 right-8  px-4 py-2"
-                onClick={() => setIsModalOpen(false)}
-              >
-                <Image
-                  src={"/icons/close.svg"}
-                  alt={"close modal"}
-                  width={14}
-                  height={14}
-                />
-              </button>
-            </div>
-            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between lg:gap-8">
-              <PrimaryButtons
-                text={`Cancel`}
-                className="bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 lg:px-8 py-3 rounded-lg "
-                onClick={cancelRemittanceCreattion}
-              />
-              <PrimaryButtons
-                disabled={!buttonValidation}
-                text={"Confirm Submission"}
-                className={clsx(
-                  " w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
-                  buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
-                )}
-                onClick={() => setCurrentModal(0)}
-              />
             </div>
           </div>
         )}

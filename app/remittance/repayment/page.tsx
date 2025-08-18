@@ -4,7 +4,7 @@ import { dummyLoanData, DummyLoanData } from "@/app/_data/RemittanceData";
 import { LoanColumns } from "./_components/Columns";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import Modal from "./_components/Modal";
+// import Modal from "./_components/Modal";
 import PopModal from "./_components/PopModal";
 import Image from "next/image";
 
