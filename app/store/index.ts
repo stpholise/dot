@@ -1,17 +1,32 @@
-"use client"
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import appReducer from "./slices/AppSlice"
-import userAccountReducer from "./slices/UserAccountSlice"
+"use client";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import appReducer from "./slices/AppSlice";
+import userAccountReducer from "./slices/UserAccountSlice";
+import remittanceReducer from "./slices/RemittanceSlice";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
-    app: appReducer,
-    userAccount: userAccountReducer
-})
+  app: appReducer,
+  userAccount: userAccountReducer,
+  remittance: remittanceReducer,
+});
 
+const persistConfig = {
+  key: "root",
+  storage,
+};
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
-    reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-})
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+      },
+    }),
+});
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

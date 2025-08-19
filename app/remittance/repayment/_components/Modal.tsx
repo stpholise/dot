@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { LoanRowData } from "../page";
 import clsx from "clsx";
 import Image from "next/image";
@@ -7,6 +7,8 @@ import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import RemittanceDetail from "./RemittanceDetail";
 import { v4 as uuidv4 } from "uuid";
 import Successfull from "./Successfull";
+import { useDispatch } from "react-redux";
+import { createRemittance } from "@/app/store/slices/RemittanceSlice";
 
 interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
@@ -20,6 +22,11 @@ const Modal = ({
   setSelectedRowsItems,
 }: ModalProp) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const shortIdRef = useRef(
+    uuidv4()
+      .replace(/-|[^0-9]/g, "")
+      .slice(0, 11)
+  );
   useEffect(() => {
     setIsVisible(true);
     setButtonValidation(false);
@@ -29,6 +36,8 @@ const Modal = ({
   const [buttonValidation, setButtonValidation] = useState<boolean>(false);
   const [currentModal, setCurrentModal] = useState<number>(0);
 
+  const dispatch = useDispatch();
+
   const removeItemFromList = (id: string) => {
     if (selectedRowsItems) {
       const newArray = selectedRowsItems.filter((items) => items.id !== id);
@@ -36,9 +45,29 @@ const Modal = ({
     }
   };
 
-  const shortId = uuidv4()
-    .replace(/-|[^0-9]/g, "")
-    .slice(0, 11);
+  const confirmRemittanceCreation = () => {
+    if (!selectedRowsItems || selectedRowsItems.length === 0) return;
+    setCurrentModal(2);
+    const remittanceData = {
+      id: shortIdRef.current,
+      sn: shortIdRef.current,
+      remittanceName: `DLTE-${shortIdRef.current}`,
+      items: selectedRowsItems,
+      remittanceAmount: totalRemittance,
+      remittanceDate: new Date().toLocaleDateString("en-NG", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }),
+      remittanceTime: new Date().toLocaleTimeString("en-NG", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }),
+      remittanceStatus: "Submitted",
+    };
+    dispatch(createRemittance({ ...remittanceData }));
+  };
 
   const handleChange = (id: string, value: string) => {
     const raw = value.replace(/[^0-9]/g, "");
@@ -70,7 +99,6 @@ const Modal = ({
       (sum, item) => sum + parseInt(item.currentPayment!.replace(/,/g, "")),
       0
     );
-    console.log(selectedRowsItems);
     setTotalRemittance(
       total.toLocaleString("en-NG", {
         minimumFractionDigits: 0,
@@ -296,7 +324,7 @@ const Modal = ({
                   " w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
                   buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
                 )}
-                onClick={() => setCurrentModal(2)}
+                onClick={() => confirmRemittanceCreation()}
               />
             </div>
           </div>
@@ -304,7 +332,7 @@ const Modal = ({
         {currentModal === 2 && (
           <div className="bg-white">
             <div className="min-h-[calc(100vh-100px)] overflow-auto flex items-center justify-center ">
-              <Successfull id={shortId} />
+              <Successfull id={shortIdRef.current} />
             </div>
             <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex  lg:gap-8 items-center justify-center">
               <PrimaryButtons

@@ -7,7 +7,7 @@ import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 
 interface LoanRowData extends DummyLoanData {
-  id: string;
+  currentPayment?: string;
 }
 
 export const LoanColumns = ({
@@ -40,19 +40,24 @@ export const LoanColumns = ({
         repayment,
       } = cell.row.original;
       const value = cell.getValue() as string;
-      const rowId = cell.row.id;
-      const rowData = { id: rowId, ...cell.row.original };
+
+      const { id } = cell.row.original;
+
+      const rowData = { ...cell.row.original };
       const settingSelectedRow = () => {
-        const alreadySelected = selectedRowsId.some(
-          (item) => item.id === rowId
-        );
+        const alreadySelected = selectedRowsId.some((item) => item.id === id);
 
         if (alreadySelected) {
-          const newArry = selectedRowsId.filter((row) => row.id !== rowId);
+          const newArry = selectedRowsId.filter((row) => row.id !== id);
           setSelectedRowsId(newArry);
         } else {
           setSelectedRowsId((prev: LoanRowData[]) => [...prev, rowData]);
         }
+      };
+      const handleButtonClick = () => {
+        console.log(id);
+        settingSelectedRow();
+        setIsModalOpen(true);
       };
       return (
         <div className="w-full  ">
@@ -61,11 +66,11 @@ export const LoanColumns = ({
               onClick={() => settingSelectedRow()}
               className={clsx("w-4 h-4  rounded-sm", {
                 "border border-[#D0D5DD]": !selectedRowsId.some(
-                  (item) => item.id === rowId
+                  (item) => item.id === id
                 ),
               })}
             >
-              {selectedRowsId.some((item) => item.id === rowId) && (
+              {selectedRowsId.some((item) => item.id === id) && (
                 <Image
                   src="/icons/table_checked.png"
                   alt="/checked"
@@ -74,9 +79,7 @@ export const LoanColumns = ({
                 />
               )}
             </button>
-            <button onClick={() => setSelectedRowsId([rowData])}>
-              {value}
-            </button>
+            <button onClick={() => handleButtonClick()}>{value}</button>
           </div>
 
           <div className="md:hidden mt-4 flex items-center w-full justify-between">
@@ -84,11 +87,11 @@ export const LoanColumns = ({
               onClick={() => settingSelectedRow()}
               className={clsx("w-4 h-4  rounded-sm", {
                 "border border-[#D0D5DD]": !selectedRowsId.some(
-                  (item) => item.id === rowId
+                  (item) => item.id === id
                 ),
               })}
             >
-              {selectedRowsId.some((item) => item.id === rowId) && (
+              {selectedRowsId.some((item) => item.id === id) && (
                 <Image
                   src="/icons/table_checked.png"
                   alt="/checked"
@@ -100,7 +103,7 @@ export const LoanColumns = ({
             <div
               className={clsx(
                 "w-11/12 rounded-xl  border overflow-hidden",
-                selectedRowsId.some((item) => item.id === rowId)
+                selectedRowsId.some((item) => item.id === id)
                   ? "border-black"
                   : "border-border-[#EAEAEA]"
               )}
@@ -136,6 +139,7 @@ export const LoanColumns = ({
                 <PrimaryButtons
                   text={"Add Customer"}
                   icon="/icons/addDark.png"
+                  onClick={() => handleButtonClick()}
                   className="text-black bg-white border border-[#EAEAEA] rounded-lg py-2 px-4 flex items-center"
                 />
               </div>
@@ -176,9 +180,8 @@ export const LoanColumns = ({
       className: "hidden lg:table-cell",
     },
     cell: (cell) => {
-      const value = cell.getValue() as string;
-      const rowId = cell.row.id;
-      const rowData = { id: rowId, ...cell.row.original };
+      const value = cell.getValue() as string; 
+      const rowData = {...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -209,8 +212,7 @@ export const LoanColumns = ({
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
-      const rowId = cell.row.id;
-      const rowData = { id: rowId, ...cell.row.original };
+      const rowData = {...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -242,8 +244,7 @@ export const LoanColumns = ({
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
-      const rowId = cell.row.id;
-      const rowData = { id: rowId, ...cell.row.original };
+      const rowData = {...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -275,8 +276,7 @@ export const LoanColumns = ({
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
-      const rowId = cell.row.id;
-      const rowData = { id: rowId, ...cell.row.original };
+      const rowData = {...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -309,8 +309,7 @@ export const LoanColumns = ({
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
-      const rowId = cell.row.id;
-      const rowData = { id: rowId, ...cell.row.original };
+      const rowData = {...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -348,8 +347,7 @@ export const LoanColumns = ({
     cell: (cell) => {
       const value = cell.getValue() as string;
       const { overdue } = cell.row.original;
-      const rowId = cell.row.id;
-      const rowData = { id: rowId, ...cell.row.original };
+      const rowData = {...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };

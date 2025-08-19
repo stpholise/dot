@@ -1,17 +1,16 @@
 "use client";
 import { DummyRemittance } from "@/app/_data/RemittanceData";
-import { ColumnDef} from "@tanstack/react-table";
- 
+import { ColumnDef } from "@tanstack/react-table";
+
 import clsx from "clsx";
 
- 
 export const remittanceColumn = ({
   setSelectedRowData,
   setIsModalOpen,
 }: {
   setSelectedRowData: (row: DummyRemittance) => void;
   setIsModalOpen: (isOpen: boolean) => void;
-}): ColumnDef<DummyRemittance >[] => [
+}): ColumnDef<DummyRemittance>[] => [
   {
     accessorKey: "sn",
     id: "sn",
@@ -22,12 +21,10 @@ export const remittanceColumn = ({
       className: "hidden lg:table-cell",
     },
     cell: (cell) => {
-      const value = cell.getValue() as string;
-
       return (
         <div className=" text-[#667085]  hidden lg:table-cell px-4 py-4 ">
           #<span className="sm:hidden"> Number: </span>
-          {value}
+          {cell.row.index + 1}
         </div>
       );
     },
@@ -139,7 +136,6 @@ export const remittanceColumn = ({
     id: "date",
     header: () => (
       <div className="px-4 py-2 text-left font-medium text-gray-600">
-        
         DATE & TIME
       </div>
     ),

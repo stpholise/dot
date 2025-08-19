@@ -7,6 +7,8 @@ import { useState } from "react";
 import Modal from "./_components/Modal";
 import PrimaryButtons from "../_components/ui/units/buttons/PrimaryButtons";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const Page = () => {
   const router = useRouter();
@@ -19,6 +21,11 @@ const Page = () => {
     setSelectedRowData(data);
     setIsModalOpen(true);
   };
+  const singleRemittance = useSelector(
+    (state: RootState) => state.remittance.createdRemittance
+  );
+
+  const tableData: DummyRemittance[]  = singleRemittance ? [...singleRemittance, ...dummyRemittance] : dummyRemittance;
 
   return (
     <div>
@@ -43,7 +50,7 @@ const Page = () => {
         <div className=" rounded-2xl bg-white">
           <TanStackTable
             columns={columns}
-            data={dummyRemittance}
+            data={tableData  }
             onRowClick={handleRowClick}
           />
         </div>
