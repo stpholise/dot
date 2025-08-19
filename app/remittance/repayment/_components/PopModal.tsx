@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { LoanRowData } from ".././page";
 import clsx from "clsx";
 import Image from "next/image";
@@ -19,10 +19,14 @@ const PopModal = ({
   setIsSideModalOpen,
 }: ModalProp) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
+
   useEffect(() => {
     setIsVisible(true);
-    setButtonValidation(false); 
+    setButtonValidation(false);
+    inputRef.current?.focus();
   }, []);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [newArray, setNewArray] = useState<LoanRowData[]>([]);
   const [rawValue, setRawValue] = useState<Record<string, string>>({});
@@ -30,10 +34,10 @@ const PopModal = ({
   const addCustomerToRemittance = () => {
     setIsModalOpen(false);
     setIsSideModalOpen(true);
-    setSelectedRowsItems(newArray); 
+    setSelectedRowsItems(newArray);
   };
 
-  const handleChange = (id: string, value: string, item: LoanRowData) => { 
+  const handleChange = (id: string, value: string, item: LoanRowData) => {
     const raw = value.replace(/[^0-9]/g, "");
 
     const formatAmount = Number(raw).toLocaleString("en-NG", {
@@ -122,7 +126,7 @@ const PopModal = ({
               <div className="lg:py-6  md:px-6 pt-4 pb-12">
                 {selectedRowsItems &&
                   selectedRowsItems?.length !== 0 &&
-                  selectedRowsItems.map((item) => (
+                  selectedRowsItems.map((item, index) => (
                     <div
                       className="bg-[#F9F9F9] h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
                       key={item.id}
@@ -161,6 +165,8 @@ const PopModal = ({
                         >
                           ₦
                           <input
+                            ref={index === 0 ? inputRef : null}
+                            autoFocus={index === 0}
                             maxLength={7}
                             type="text"
                             value={rawValue[item.id]}

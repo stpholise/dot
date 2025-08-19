@@ -5,6 +5,8 @@ import clsx from "clsx";
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import RemittanceDetail from "./RemittanceDetail";
+import { v4 as uuidv4 } from "uuid";
+import Successfull from "./Successfull";
 
 interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
@@ -33,6 +35,10 @@ const Modal = ({
       setSelectedRowsItems(newArray);
     }
   };
+
+  const shortId = uuidv4()
+    .replace(/-|[^0-9]/g, "")
+    .slice(0, 11);
 
   const handleChange = (id: string, value: string) => {
     const raw = value.replace(/[^0-9]/g, "");
@@ -286,14 +292,14 @@ const Modal = ({
               </button>
             </div>
             <div className="min-h-[calc(100vh-180px)] overflow-auto ">
-
               <div className="flex justify-center pt-4 pb-12 overflow-auto">
-
-              {selectedRowsItems && selectedRowsItems?.length !== 0 && (
-                <RemittanceDetail customerSummary={selectedRowsItems} total={totalRemittance} />
-              )}
+                {selectedRowsItems && selectedRowsItems?.length !== 0 && (
+                  <RemittanceDetail
+                    customerSummary={selectedRowsItems}
+                    total={totalRemittance}
+                  />
+                )}
               </div>
-              
             </div>
             <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between lg:gap-8">
               <PrimaryButtons
@@ -314,45 +320,15 @@ const Modal = ({
           </div>
         )}
         {currentModal === 2 && (
-          <div className="">
-            <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
-              <div className=" flex gap-2 items-center">
-                <button className=" size-8 rounded-lg bg-white p-2 border border-[#D0D5DD] ">
-                  <Image
-                    src={"/icons/arrow_back.png"}
-                    alt={"prev"}
-                    width={20}
-                    height={16}
-                  />
-                </button>
-                <p className="text-2xl text-black"> Selected Customers </p>
-              </div>
-              <button
-                className="absolute top-4 bottom-4 right-8  px-4 py-2"
-                onClick={() => setIsModalOpen(false)}
-              >
-                <Image
-                  src={"/icons/close.svg"}
-                  alt={"close modal"}
-                  width={14}
-                  height={14}
-                />
-              </button>
+          <div className="bg-white">
+            <div className="min-h-[calc(100vh-100px)] overflow-auto flex items-center justify-center ">
+              <Successfull id={shortId} />
             </div>
-            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between lg:gap-8">
+            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex  lg:gap-8 items-center justify-center">
               <PrimaryButtons
-                text={`Cancel`}
-                className="bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 lg:px-8 py-3 rounded-lg "
+                text={`Close`}
+                className="bg-white border border-[#D0D5DD] font-medium text-[#344054] w-full flex items-center justify-center px-5 lg:px-8 py-3 rounded-lg "
                 onClick={cancelRemittanceCreattion}
-              />
-              <PrimaryButtons
-                disabled={!buttonValidation}
-                text={"Confirm Submission"}
-                className={clsx(
-                  " w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
-                  buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
-                )}
-                onClick={() => setCurrentModal(0)}
               />
             </div>
           </div>
