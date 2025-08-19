@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { LoanRowData } from "../page";
 import clsx from "clsx";
 import Image from "next/image";
@@ -56,13 +56,13 @@ const Modal = ({
     setSelectedRowsItems(newArray);
   };
 
-  const handleButtonValidation = () => {
+  const handleButtonValidation = useCallback(() => {
     if (!selectedRowsItems || selectedRowsItems.length === 0) {
       setButtonValidation(false);
     } else {
       setButtonValidation(true);
     }
-  };
+  }, [selectedRowsItems]);
 
   useEffect(() => {
     if (!selectedRowsItems) return;
@@ -77,7 +77,7 @@ const Modal = ({
       })
     );
     handleButtonValidation();
-  }, [selectedRowsItems]);
+  }, [handleButtonValidation, selectedRowsItems]);
 
   const cancelRemittanceCreattion = () => {
     setSelectedRowsItems([]);
@@ -94,10 +94,6 @@ const Modal = ({
               isVisible,
             " transition transform translate-x-100 opacity-0 ease-in-out duration-500":
               !isVisible,
-            "h-fit  top-1/2 right-1/2  transition-opacity translate-x-1/2 rounded-3xl  -translate-y-1/2 opacity-100 ease-in-out duration-500":
-              selectedRowsItems?.length === 1,
-            "h-screen min-h-screen":
-              selectedRowsItems?.length !== 1 || !selectedRowsItems,
           }
         )}
       >
@@ -128,13 +124,12 @@ const Modal = ({
             </div>
             <div
               className={clsx("h-[calc(100vh-180px)] overflow-y-auto", {
-                "h-fit ": selectedRowsItems?.length === 1,
-                "h-[calc(100vh-180px)] ": selectedRowsItems?.length !== 1,
+                "h-[calc(100vh-180px)] ": selectedRowsItems?.length,
               })}
             >
               <div className="xl:px-8 xl:py-6 md:px-6 pt-4 pb-12">
                 {selectedRowsItems && selectedRowsItems?.length !== 0 ? (
-                  selectedRowsItems.map((item) => (
+                  selectedRowsItems.map((item, index) => (
                     <div
                       className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
                       key={item.id}
@@ -175,6 +170,7 @@ const Modal = ({
                           <input
                             maxLength={7}
                             type="text"
+                            autoFocus={index === 0}
                             value={item?.currentPayment}
                             onChange={(
                               e: React.ChangeEvent<HTMLInputElement>
@@ -183,12 +179,12 @@ const Modal = ({
                             className="outline-none border-none w-full h-full border-red-400"
                           />
                         </div>
-                        <div
+                        <button
                           className="text-[#F04438] rounded-lg w-40 bg-[#FEF3F2] h-12 flex items-center justify-center"
                           onClick={() => removeItemFromList(item.id)}
                         >
                           - Remove
-                        </div>
+                        </button>
                       </div>
                     </div>
                   ))
@@ -214,30 +210,19 @@ const Modal = ({
               </div>
             </div>
             <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between">
-              <div
-                className={clsx("", {
-                  "hidden ": selectedRowsItems?.length === 1,
-                  "block ": selectedRowsItems?.length !== 1,
-                })}
-              >
-                <h2 className="text-black">₦{totalRemittance}</h2>
+              <div className={clsx("block")}>
+                <h2 className="text-black text-3xl font-medium">
+                  ₦{totalRemittance}
+                </h2>
                 <p className="text-xs font-medium text-[#667085]">
                   Total Remittance
                 </p>
               </div>
-              <div
-                className={clsx("flex gap-8", {
-                  "gap-4  ": selectedRowsItems?.length === 1,
-                })}
-              >
+              <div className={clsx("flex gap-8")}>
                 <PrimaryButtons
                   text={`Cancel`}
                   className={clsx(
-                    "bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 py-3 rounded-lg ",
-                    {
-                      "lg:w-50 flex item-center justify-center  ":
-                        selectedRowsItems?.length === 1,
-                    }
+                    "bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 py-3 rounded-lg "
                   )}
                   onClick={cancelRemittanceCreattion}
                 />
@@ -250,10 +235,7 @@ const Modal = ({
                   }
                   className={clsx(
                     "  px-5 py-3 rounded-lg text-white",
-                    {
-                      "lg:w-80 flex item-center justify-center  ":
-                        selectedRowsItems?.length === 1,
-                    },
+
                     buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
                   )}
                   onClick={() => setCurrentModal(1)}

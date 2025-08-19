@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { LoanRowData } from ".././page";
 import clsx from "clsx";
 import Image from "next/image";
@@ -56,7 +56,7 @@ const PopModal = ({
     }
   };
 
-  const handleButtonValidation = () => {
+  const handleButtonValidation = useCallback(() => {
     if (
       !selectedRowsItems ||
       selectedRowsItems.length === 0 ||
@@ -67,11 +67,11 @@ const PopModal = ({
     } else {
       setButtonValidation(true);
     }
-  };
+  }, [rawValue, selectedRowsItems]);
 
   useEffect(() => {
     handleButtonValidation();
-  }, [rawValue]);
+  }, [handleButtonValidation, rawValue]);
 
   const cancelRemittanceCreattion = () => {
     setSelectedRowsItems([]);
@@ -185,9 +185,7 @@ const PopModal = ({
             d
             <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA]  px-8 py-6 flex justify-between bg-[#F9F9F9]">
               <div
-                className={clsx("flex gap-4 ", {
-                  "gap-4  ": selectedRowsItems?.length === 1,
-                })}
+                className={clsx("flex justify-between gap-4 w-full ", )}
               >
                 <PrimaryButtons
                   text={`Cancel`}
@@ -200,11 +198,8 @@ const PopModal = ({
                   disabled={!buttonValidation}
                   text={"Add Customer"}
                   className={clsx(
-                    "  px-5 py-3 rounded-lg text-white lg:min-w-56 lg:w-full",
-                    {
-                      "lg:w-80 flex item-center justify-center  ":
-                        selectedRowsItems?.length === 1,
-                    },
+                    "  px-5 py-3 rounded-lg text-white flex-items-center justify-center w-[224px]",
+                  
                     buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
                   )}
                   onClick={() => addCustomerToRemittance()}
