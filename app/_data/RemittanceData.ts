@@ -1,14 +1,18 @@
 import { faker } from "@faker-js/faker";
+// import { LoanRowData } from "../remittance/repayment/page";
+// import { DummyLoanData } from "@/app/remittance/repayment/_components/Columns";
 
 export type DummyRemittance = {
+  id: string;
   sn: number;
   remittanceName: string;
   remittanceAmount: string;
   remittanceDate: string;
   remittanceTime: string;
   remittanceStatus: "Submitted" | "Pending";
+  items?: DummyLoanData[];
 };
- const currency = '₦'
+const currency = "₦";
 
 const generateDummyRemittance = (count: number): DummyRemittance[] => {
   const remittance: DummyRemittance[] = [];
@@ -17,17 +21,20 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
       "Submitted",
       "Pending",
     ]);
-    const remittanceAmount = Number(faker.commerce.price({
-      min: 1000,
-      max: 5000,
-      dec: 2,
-    }));
+    const remittanceAmount = Number(
+      faker.commerce.price({
+        min: 1000,
+        max: 5000,
+        dec: 2,
+      })
+    );
     const remittanceDate = faker.date.between({
       from: "2020-01-01T00:00:00.000Z",
       to: new Date(),
     });
 
     remittance.push({
+      id: faker.string.uuid(),
       sn: i,
       remittanceName: " DLTE-" + faker.string.numeric(10),
       remittanceDate: remittanceDate.toLocaleDateString("en-GB", {
@@ -40,7 +47,7 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
         minute: "2-digit",
         hour12: true,
       }),
-      remittanceAmount: `${currency}${remittanceAmount.toLocaleString('en-NG', {
+      remittanceAmount: `${currency}${remittanceAmount.toLocaleString("en-NG", {
         minimumFractionDigits: 2,
       })}`,
       remittanceStatus,
@@ -53,6 +60,7 @@ const generateDummyRemittance = (count: number): DummyRemittance[] => {
 export const dummyRemittance: DummyRemittance[] = generateDummyRemittance(40);
 
 export interface DummyLoanData {
+  id: string;
   customerName: string;
   loanedAmount: string;
   repaidAmount: string;
@@ -90,6 +98,7 @@ const GenerateDummyRepaymentData = (count: number) => {
     const repayment = faker.number.int({ min: 6, max: tenure });
 
     loanData.push({
+      id: faker.string.uuid(),
       customerName: `${faker.person.firstName()} ${faker.person.lastName()}`,
       loanedAmount: `${loanedAmount.toLocaleString("en-NG", {
         minimumFractionDigits: 2,

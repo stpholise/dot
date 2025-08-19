@@ -88,7 +88,7 @@ const PopModal = ({
               isVisible,
             " transition-opacity transform   opacity-0 ease-in-out duration-500":
               !isVisible,
-            "h-fit  top-1/2 right-1/2   transition-opacity translate-x-1/2 rounded-3xl  -translate-y-1/2 opacity-100 ease-in-out duration-500":
+            "h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500":
               selectedRowsItems,
           }
         )}
@@ -118,7 +118,7 @@ const PopModal = ({
               className={clsx(
                 "h-[calc(100vh-180px)] overflow-y-auto bg-white",
                 {
-                  "h-fit ": selectedRowsItems?.length === 1,
+                  "md:h-fit h-[calc(100vh-180px)] ": selectedRowsItems?.length === 1,
                   "h-[calc(100vh-180px)] ": selectedRowsItems?.length !== 1,
                 }
               )}
@@ -184,9 +184,7 @@ const PopModal = ({
             </div>
             d
             <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA]  px-8 py-6 flex justify-between bg-[#F9F9F9]">
-              <div
-                className={clsx("flex justify-between gap-4 w-full ", )}
-              >
+              <div className={clsx("flex justify-between gap-4 w-full ")}>
                 <PrimaryButtons
                   text={`Cancel`}
                   className={clsx(
@@ -199,7 +197,7 @@ const PopModal = ({
                   text={"Add Customer"}
                   className={clsx(
                     "  px-5 py-3 rounded-lg text-white flex-items-center justify-center w-[224px]",
-                  
+
                     buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
                   )}
                   onClick={() => addCustomerToRemittance()}
