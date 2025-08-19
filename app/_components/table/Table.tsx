@@ -22,6 +22,7 @@ type TanStackTableProps<T> = {
   }[];
   selectedRowsId?: T[];
   onRowClick?: (row: T) => void;
+  enableSearch?: boolean;
 };
 
 const TanStackTable = <T,>({
@@ -30,6 +31,7 @@ const TanStackTable = <T,>({
   onRowClick,
   sortByValues,
   selectedRowsId,
+  enableSearch,
 }: TanStackTableProps<T>) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -85,15 +87,17 @@ const TanStackTable = <T,>({
               </select>
             </div>
           )}
-          <div className="w-80 h-10 border border-[#D2D5E1] rounded-lg">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={globalFilter ?? ""}
-              onChange={(e) => setGlobalFilter(e.target.value)}
-              className="mb-4 px-3 py-2   w-full  outline-none"
-            />
-          </div>
+          {enableSearch && (
+            <div className="w-80 h-10 border border-[#D2D5E1] rounded-lg">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={globalFilter ?? ""}
+                onChange={(e) => setGlobalFilter(e.target.value)}
+                className="mb-4 px-3 py-2   w-full  outline-none"
+              />
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full overflow-x-scroll lg:overflow-x-hidden">

@@ -5,17 +5,25 @@ import { LoanColumns } from "./_components/Columns";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Modal from "./_components/Modal";
+import PopModal from "./_components/PopModal";
 import Image from "next/image";
+import clsx from "clsx";
 
 export interface LoanRowData extends DummyLoanData {
+  currentPayment?: string;
   id: string;
 }
 
 const Page = () => {
   const pathname = usePathname();
   const [selectedRowsId, setSelectedRowsId] = useState<LoanRowData[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); 
-  const columns = LoanColumns({ setSelectedRowsId, selectedRowsId,  setIsModalOpen });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isSideModalOpen, setIsSideModalOpen] = useState<boolean>(false);
+  const columns = LoanColumns({
+    setSelectedRowsId,
+    selectedRowsId,
+    setIsModalOpen,
+  });
 
   const handleModalOpening = () => {
     setIsModalOpen(true);
@@ -25,24 +33,23 @@ const Page = () => {
     <>
       {isModalOpen && (
         <div className=" ">
-          <Modal
+          <PopModal
             setIsModalOpen={setIsModalOpen}
+            selectedRowsItems={selectedRowsId}
+            setIsSideModalOpen={setIsSideModalOpen}
+            setSelectedRowsItems={setSelectedRowsId}
+          />
+        </div>
+      )}
+      {isSideModalOpen && (
+        <div className="">
+          <Modal
+            setIsModalOpen={setIsSideModalOpen}
             selectedRowsItems={selectedRowsId}
             setSelectedRowsItems={setSelectedRowsId}
           />
         </div>
       )}
-      {/* {isClickModalOpen && (
-        <>
-          <div className="bg-white w-116 h-96 rounded-2xl">
-
-          </div>
-          <div
-            onClick={() => setIsModalOpen(false)}
-            className="fixed top-0 left-0 right-0 bottom-0 w-full z-60 bg-[rgba(0,0,0,0.5)]"
-          ></div>
-        </>
-      )} */}
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)]">
         <div className="flex justify-between items-center mb-8">
           <div className="">
@@ -73,10 +80,27 @@ const Page = () => {
         </div>
 
         <div className=" py-4 px-4 lg:px-0 rounded-2xl bg-white">
+          <div
+            className={clsx(
+              "px-6 items-center justify-between",
+              selectedRowsId.length > 0 ? "flex" : "hidden"
+            )}
+          >
+            <p className="text-sm text-black capitalize">
+              {selectedRowsId.length} Customers Selected
+            </p>
+            <button
+              onClick={handleModalOpening}
+              className=" rounded-lg bg-white text-black border border-[#D0D5DD] gap-2 flex item-center justify-center px-4 py-2"
+            >
+              Add to Remittance
+            </button>
+          </div>
           <TanStackTable
             data={dummyLoanData}
             columns={columns}
             selectedRowsId={selectedRowsId}
+            enableSearch={selectedRowsId.length > 0 ? false : true}
           />
         </div>
       </div>

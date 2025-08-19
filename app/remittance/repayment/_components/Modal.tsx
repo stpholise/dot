@@ -1,9 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { LoanRowData } from "../page";
 import clsx from "clsx";
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
+import RemittanceDetail from "./RemittanceDetail";
+import { v4 as uuidv4 } from "uuid";
+import Successfull from "./Successfull";
 
 interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
@@ -22,60 +25,59 @@ const Modal = ({
     setButtonValidation(false);
   }, []);
 
-  const [rawValue, setRawValue] = useState<Record<string, string>>({});
   const [totalRemittance, setTotalRemittance] = useState("");
   const [buttonValidation, setButtonValidation] = useState<boolean>(false);
   const [currentModal, setCurrentModal] = useState<number>(0);
+
   const removeItemFromList = (id: string) => {
     if (selectedRowsItems) {
       const newArray = selectedRowsItems.filter((items) => items.id !== id);
       setSelectedRowsItems(newArray);
-      if (Object.keys(rawValue).some((key) => key === id)) {
-        const rawArray = Object.entries(rawValue).filter(([key]) => key !== id);
-
-        setRawValue(Object.fromEntries(rawArray));
-      }
     }
   };
 
+  const shortId = uuidv4()
+    .replace(/-|[^0-9]/g, "")
+    .slice(0, 11);
+
   const handleChange = (id: string, value: string) => {
     const raw = value.replace(/[^0-9]/g, "");
-
     const formatAmount = Number(raw).toLocaleString("en-NG", {
       minimumFractionDigits: 0,
     });
-    setRawValue((prev) => ({
-      ...prev,
-      [id]: formatAmount,
-    }));
+    if (!selectedRowsItems) return;
+    const newObj = {
+      ...selectedRowsItems.find((item) => item.id === id),
+      currentPayment: formatAmount,
+    };
+    const newArray = selectedRowsItems.map((item) =>
+      item.id === id ? newObj : item
+    ) as LoanRowData[];
+    setSelectedRowsItems(newArray);
   };
 
-  const handleButtonValidation = () => {
-    if (
-      !selectedRowsItems ||
-      selectedRowsItems.length === 0 ||
-      selectedRowsItems?.length !== Object.keys(rawValue).length ||
-      Object.values(rawValue).some((val) => val === "" || val == "0")
-    ) {
+  const handleButtonValidation = useCallback(() => {
+    if (!selectedRowsItems || selectedRowsItems.length === 0) {
       setButtonValidation(false);
     } else {
       setButtonValidation(true);
     }
-  };
+  }, [selectedRowsItems]);
 
   useEffect(() => {
-    const total = Object.values(rawValue).reduce(
-      (sum, item) => sum + parseInt(item.replace(/,/g, "")),
+    if (!selectedRowsItems) return;
+    const total = Object.values(selectedRowsItems).reduce(
+      (sum, item) => sum + parseInt(item.currentPayment!.replace(/,/g, "")),
       0
     );
-    console.log(rawValue);
+    console.log(selectedRowsItems);
     setTotalRemittance(
       total.toLocaleString("en-NG", {
         minimumFractionDigits: 0,
       })
     );
     handleButtonValidation();
-  }, [rawValue]);
+  }, [handleButtonValidation, selectedRowsItems]);
 
   const cancelRemittanceCreattion = () => {
     setSelectedRowsItems([]);
@@ -86,15 +88,12 @@ const Modal = ({
     <>
       <div
         className={clsx(
-          "w-full bg-[#F9F9F9] lg:w-[600px]   z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-scroll ",
+          "w-full bg-[#F9F9F9] lg:w-[600px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-auto ",
           {
-            " transition transform translate-x-5 opacity-100 ease-in-out duration-500":
+            " transition-transform transform -translate-x-1 opacity-100 ease-in-out duration-500":
               isVisible,
-            " transition transform -translate-x-100 opacity-0 ease-in-out duration-500":
+            " transition transform translate-x-100 opacity-0 ease-in-out duration-500":
               !isVisible,
-            "h-fit ": selectedRowsItems?.length === 1,
-            "h-screen min-h-screen":
-              selectedRowsItems?.length !== 1 || !selectedRowsItems,
           }
         )}
       >
@@ -123,10 +122,14 @@ const Modal = ({
                 />
               </button>
             </div>
-            <div className="h-[calc(100vh-180px)] overflow-y-auto">
+            <div
+              className={clsx("h-[calc(100vh-180px)] overflow-y-auto", {
+                "h-[calc(100vh-180px)] ": selectedRowsItems?.length,
+              })}
+            >
               <div className="xl:px-8 xl:py-6 md:px-6 pt-4 pb-12">
                 {selectedRowsItems && selectedRowsItems?.length !== 0 ? (
-                  selectedRowsItems.map((item) => (
+                  selectedRowsItems.map((item, index) => (
                     <div
                       className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
                       key={item.id}
@@ -158,12 +161,17 @@ const Modal = ({
                       </div>
 
                       <div className=" flex justify-between gap-8 mt-4">
-                        <div className="border border-[#D2D5E1] w-full px-4 h-12 rounded-lg py-2 text-black flex items-center gap-1">
+                        <div
+                          className={
+                            "border border-[#D2D5E1] w-full px-4 h-12 rounded-lg py-2 text-black flex items-center gap-1"
+                          }
+                        >
                           ₦
                           <input
                             maxLength={7}
                             type="text"
-                            value={rawValue[item.id]}
+                            autoFocus={index === 0}
+                            value={item?.currentPayment}
                             onChange={(
                               e: React.ChangeEvent<HTMLInputElement>
                             ) => handleChange(item.id, e.target.value)}
@@ -171,12 +179,12 @@ const Modal = ({
                             className="outline-none border-none w-full h-full border-red-400"
                           />
                         </div>
-                        <div
+                        <button
                           className="text-[#F04438] rounded-lg w-40 bg-[#FEF3F2] h-12 flex items-center justify-center"
                           onClick={() => removeItemFromList(item.id)}
                         >
                           - Remove
-                        </div>
+                        </button>
                       </div>
                     </div>
                   ))
@@ -202,16 +210,20 @@ const Modal = ({
               </div>
             </div>
             <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between">
-              <div className="">
-                <h2 className="text-black">₦{totalRemittance}</h2>
+              <div className={clsx("block")}>
+                <h2 className="text-black text-3xl font-medium">
+                  ₦{totalRemittance}
+                </h2>
                 <p className="text-xs font-medium text-[#667085]">
                   Total Remittance
                 </p>
               </div>
-              <div className=" flex gap-8 ">
+              <div className={clsx("flex gap-8")}>
                 <PrimaryButtons
                   text={`Cancel`}
-                  className="bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 py-3 rounded-lg "
+                  className={clsx(
+                    "bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 py-3 rounded-lg "
+                  )}
                   onClick={cancelRemittanceCreattion}
                 />
                 <PrimaryButtons
@@ -223,6 +235,7 @@ const Modal = ({
                   }
                   className={clsx(
                     "  px-5 py-3 rounded-lg text-white",
+
                     buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
                   )}
                   onClick={() => setCurrentModal(1)}
@@ -255,10 +268,20 @@ const Modal = ({
                 <Image
                   src={"/icons/close.svg"}
                   alt={"close modal"}
-                  width={14}
-                  height={14}
+                  width={24}
+                  height={24}
                 />
               </button>
+            </div>
+            <div className="min-h-[calc(100vh-180px)] overflow-auto ">
+              <div className="flex justify-center pt-4 pb-12 overflow-auto">
+                {selectedRowsItems && selectedRowsItems?.length !== 0 && (
+                  <RemittanceDetail
+                    customerSummary={selectedRowsItems}
+                    total={totalRemittance}
+                  />
+                )}
+              </div>
             </div>
             <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between lg:gap-8">
               <PrimaryButtons
@@ -279,45 +302,15 @@ const Modal = ({
           </div>
         )}
         {currentModal === 2 && (
-          <div className="">
-            <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
-              <div className=" flex gap-2 items-center">
-                <button className=" size-8 rounded-lg bg-white p-2 border border-[#D0D5DD] ">
-                  <Image
-                    src={"/icons/arrow_back.png"}
-                    alt={"prev"}
-                    width={20}
-                    height={16}
-                  />
-                </button>
-                <p className="text-2xl text-black"> Selected Customers </p>
-              </div>
-              <button
-                className="absolute top-4 bottom-4 right-8  px-4 py-2"
-                onClick={() => setIsModalOpen(false)}
-              >
-                <Image
-                  src={"/icons/close.svg"}
-                  alt={"close modal"}
-                  width={14}
-                  height={14}
-                />
-              </button>
+          <div className="bg-white">
+            <div className="min-h-[calc(100vh-100px)] overflow-auto flex items-center justify-center ">
+              <Successfull id={shortId} />
             </div>
-            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between lg:gap-8">
+            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex  lg:gap-8 items-center justify-center">
               <PrimaryButtons
-                text={`Cancel`}
-                className="bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 lg:px-8 py-3 rounded-lg "
+                text={`Close`}
+                className="bg-white border border-[#D0D5DD] font-medium text-[#344054] w-full flex items-center justify-center px-5 lg:px-8 py-3 rounded-lg "
                 onClick={cancelRemittanceCreattion}
-              />
-              <PrimaryButtons
-                disabled={!buttonValidation}
-                text={"Confirm Submission"}
-                className={clsx(
-                  " w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
-                  buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
-                )}
-                onClick={() => setCurrentModal(0)}
               />
             </div>
           </div>
