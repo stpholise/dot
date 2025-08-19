@@ -4,6 +4,7 @@ import { LoanRowData } from "../page";
 import clsx from "clsx";
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
+import RemittanceDetail from "./RemittanceDetail";
 
 interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
@@ -21,7 +22,6 @@ const Modal = ({
     setIsVisible(true);
     setButtonValidation(false);
   }, []);
- 
 
   const [totalRemittance, setTotalRemittance] = useState("");
   const [buttonValidation, setButtonValidation] = useState<boolean>(false);
@@ -30,29 +30,28 @@ const Modal = ({
   const removeItemFromList = (id: string) => {
     if (selectedRowsItems) {
       const newArray = selectedRowsItems.filter((items) => items.id !== id);
-      setSelectedRowsItems(newArray); 
+      setSelectedRowsItems(newArray);
     }
   };
 
   const handleChange = (id: string, value: string) => {
     const raw = value.replace(/[^0-9]/g, "");
- 
-
     const formatAmount = Number(raw).toLocaleString("en-NG", {
       minimumFractionDigits: 0,
     });
-    if(!selectedRowsItems) return;
-    const newObj = {...selectedRowsItems.find(item => item.id === id), currentPayment: formatAmount};
-    const newArray = selectedRowsItems.map(item => item.id === id ? newObj : item) as LoanRowData[]; 
+    if (!selectedRowsItems) return;
+    const newObj = {
+      ...selectedRowsItems.find((item) => item.id === id),
+      currentPayment: formatAmount,
+    };
+    const newArray = selectedRowsItems.map((item) =>
+      item.id === id ? newObj : item
+    ) as LoanRowData[];
     setSelectedRowsItems(newArray);
-   
   };
 
   const handleButtonValidation = () => {
-    if (
-      !selectedRowsItems ||
-      selectedRowsItems.length === 0  
-    ) {
+    if (!selectedRowsItems || selectedRowsItems.length === 0) {
       setButtonValidation(false);
     } else {
       setButtonValidation(true);
@@ -170,7 +169,7 @@ const Modal = ({
                           <input
                             maxLength={7}
                             type="text"
-                            value={item?.currentPayment }
+                            value={item?.currentPayment}
                             onChange={(
                               e: React.ChangeEvent<HTMLInputElement>
                             ) => handleChange(item.id, e.target.value)}
@@ -286,79 +285,15 @@ const Modal = ({
                 />
               </button>
             </div>
-            <div className="h-[calc(100vh-180px)] ">
-              {
-                <div className="rounded-2xl border border-[#EAEAEA] ">
-                  <div className="  bg-[#F9F9F9] px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl">
-                    <div className="text-black text-3xl font-semibold">
-                      <p className="text-sm text-#667085 font-medium">
-                        {" "}
-                        Total Customers
-                      </p>
-                      <div className="">
-                        {selectedRowsItems?.length} Customers
-                      </div>
-                    </div>
-                    <div className="">
-                      <p className="">Total Remittance Amount</p>
-                      <div className="">{totalRemittance}</div>
-                    </div>
-                  </div>
-                  <div className="">
-                    <h4 className="text-xs font-medium flex items-center">
-                      {" "}
-                      <Image
-                        src={"/icons/user.png"}
-                        alt={"customer"}
-                        width={8}
-                        height={10}
-                        className="inline mx-1"
-                      />
-                      CUSTOMER SUMMARY
-                    </h4>
-                    <div className="py-2">
-                      {selectedRowsItems &&
-                        selectedRowsItems.map((item) => (
-                          <div
-                            className="flex gap-4 border-b border-[#EAEAEA] py-4 justify-between items-center last:border-0"
-                            key={item.id}
-                          >
-                            <div className="">
-                              <h5 className=" text-black font-medium my-1">
-                                {item.customerName}
-                              </h5>
-                              <div className="flex gap-2 text-xs">
-                                <span className="">
-                                  <Image
-                                    src={"/icons/offer_hand.png"}
-                                    alt={"instalment"}
-                                    width={10}
-                                    height={10}
-                                    className="inline mx-1"
-                                  />
-                                  Instalment: {item.instalment}
-                                </span>
-                                <span>
-                                  <Image
-                                    src={"/icons/calender.png"}
-                                    alt={"instalment"}
-                                    width={10}
-                                    height={10}
-                                    className="inline mx-1"
-                                  />
-                                  Repayment: {item.repayment}
-                                </span>
-                              </div>
-                            </div>
-                            <p className="text-black text-2xl font-medium">
-                              ₦{item.currentPayment}
-                            </p>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              }
+            <div className="min-h-[calc(100vh-180px)] overflow-auto ">
+
+              <div className="flex justify-center pt-4 pb-12 overflow-auto">
+
+              {selectedRowsItems && selectedRowsItems?.length !== 0 && (
+                <RemittanceDetail customerSummary={selectedRowsItems} total={totalRemittance} />
+              )}
+              </div>
+              
             </div>
             <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between lg:gap-8">
               <PrimaryButtons
