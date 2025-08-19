@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import React from "react";
 import clsx from "clsx";
 import Image from "next/image";
+import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 
 interface LoanRowData extends DummyLoanData {
   id: string;
@@ -26,7 +27,18 @@ export const LoanColumns = ({
         Customer Name
       </div>
     ),
+    meta: {
+      className: "hidden lg:table-cell",
+    },
     cell: (cell) => {
+      const {
+        customerName,
+        loanedAmount,
+        repaidAmount,
+        tenure,
+        instalment,
+        repayment,
+      } = cell.row.original;
       const value = cell.getValue() as string;
       const rowId = cell.row.id;
       const rowData = { id: rowId, ...cell.row.original };
@@ -43,25 +55,111 @@ export const LoanColumns = ({
         }
       };
       return (
-        <div className="flex xl:px-6 py-4 gap-4 items-center font-medium text-base text-black cursor-pointer  ">
-          <button
-            onClick={() => settingSelectedRow()}
-            className={clsx("w-4 h-4  rounded-sm", {
-              "border border-[#D0D5DD]": !selectedRowsId.some(
-                (item) => item.id === rowId
-              ),
-            })}
-          >
-            {selectedRowsId.some((item) => item.id === rowId) && (
-              <Image
-                src="/icons/table_checked.png"
-                alt="/checked"
-                width={16}
-                height={16}
-              />
-            )}
-          </button>
-          <button onClick={() => setSelectedRowsId([rowData])}>{value}</button>
+        <div className="w-full  ">
+          <div className="md:flex  hidden md:px-3 xl:px-6 md:py-2 xl:py-4 gap-4  items-center font-medium text-base text-black cursor-pointer  ">
+            <button
+              onClick={() => settingSelectedRow()}
+              className={clsx("w-4 h-4  rounded-sm", {
+                "border border-[#D0D5DD]": !selectedRowsId.some(
+                  (item) => item.id === rowId
+                ),
+              })}
+            >
+              {selectedRowsId.some((item) => item.id === rowId) && (
+                <Image
+                  src="/icons/table_checked.png"
+                  alt="/checked"
+                  width={16}
+                  height={16}
+                />
+              )}
+            </button>
+            <button onClick={() => setSelectedRowsId([rowData])}>
+              {value}
+            </button>
+          </div>
+
+          <div className="md:hidden mt-4 flex items-center w-full justify-between">
+            <button
+              onClick={() => settingSelectedRow()}
+              className={clsx("w-4 h-4  rounded-sm", {
+                "border border-[#D0D5DD]": !selectedRowsId.some(
+                  (item) => item.id === rowId
+                ),
+              })}
+            >
+              {selectedRowsId.some((item) => item.id === rowId) && (
+                <Image
+                  src="/icons/table_checked.png"
+                  alt="/checked"
+                  width={16}
+                  height={16}
+                />
+              )}
+            </button>
+            <div
+              className={clsx(
+                "w-11/12 rounded-xl  border overflow-hidden",
+                selectedRowsId.some((item) => item.id === rowId)
+                  ? "border-black"
+                  : "border-border-[#EAEAEA]"
+              )}
+            >
+              <div className=" top bg-[#f9f9f9] flex justify-between gap-4 xs:gap-8 xs:px-8 xs:py-7 px-4 py-4">
+                <div className="">
+                  <h5 className=" text-black text-base font-medium mb-1">
+                    {customerName}
+                  </h5>
+                  <div className="flex gap-2 text-xs text-[#667085]">
+                    <span className="">
+                      <Image
+                        src={"/icons/offer_hand.png"}
+                        alt={"instalment"}
+                        width={10}
+                        height={10}
+                        className="inline mx-1"
+                      />
+                      Instalment: {instalment}
+                    </span>
+                    <span>
+                      <Image
+                        src={"/icons/calender.png"}
+                        alt={"instalment"}
+                        width={10}
+                        height={10}
+                        className="inline mx-1"
+                      />
+                      Repayment: {repayment}
+                    </span>
+                  </div>
+                </div>
+                <PrimaryButtons
+                  text={"Add Customer"}
+                  icon="/icons/addDark.png"
+                  className="text-black bg-white border border-[#EAEAEA] rounded-lg py-2 px-4 flex items-center"
+                />
+              </div>
+              <div className="bg-white flex justify-between xs:px-8 xs:py-7 px-4 py-4 font-medium">
+                <div className="">
+                  <h5 className="text-[#667085] text-xs font-medium">
+                    Amount Loaned
+                  </h5>
+                  <p className="text-[#454547] text-sm">{loanedAmount}</p>
+                </div>
+                <div className="">
+                  <h5 className="text-[#667085] text-xs font-medium">Repaid</h5>
+                  <p className="text-[#454547] text-sm">{repaidAmount}</p>
+                </div>
+                <div className="">
+                  <h5 className="text-[#667085] text-xs font-medium">
+                    {" "}
+                    Tenure
+                  </h5>
+                  <p className="text-[#454547] text-sm">{tenure}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       );
     },
@@ -74,6 +172,9 @@ export const LoanColumns = ({
         Amount
       </div>
     ),
+    meta: {
+      className: "hidden lg:table-cell",
+    },
     cell: (cell) => {
       const value = cell.getValue() as string;
       const rowId = cell.row.id;
@@ -88,7 +189,7 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className="xl:px-6 py-4 text-[#667085] font-medium text-base"
+          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell text-[#667085] font-medium text-base"
         >
           {value}
         </button>
@@ -103,6 +204,9 @@ export const LoanColumns = ({
         REPAID
       </div>
     ),
+    meta: {
+      className: "hidden lg:table-cell",
+    },
     cell: (cell) => {
       const value = cell.getValue() as string;
       const rowId = cell.row.id;
@@ -117,7 +221,7 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className="xl:px-6 py-4 text-[#667085] font-normal text-base"
+          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell text-[#667085] font-normal text-base"
         >
           {value}
         </button>
@@ -133,6 +237,9 @@ export const LoanColumns = ({
         Tenure
       </div>
     ),
+    meta: {
+      className: "hidden lg:table-cell",
+    },
     cell: (cell) => {
       const value = cell.getValue() as string;
       const rowId = cell.row.id;
@@ -147,7 +254,7 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className="xl:px-6 py-4 text-[#667085] font-normal text-base"
+          className="xl:px-6 xl:py-4 md:px-3  md:py-2 hidden md:table-cell text-[#667085] font-normal text-base"
         >
           {" "}
           {value}
@@ -163,6 +270,9 @@ export const LoanColumns = ({
         Instalment
       </div>
     ),
+    meta: {
+      className: "hidden lg:table-cell",
+    },
     cell: (cell) => {
       const value = cell.getValue() as string;
       const rowId = cell.row.id;
@@ -177,7 +287,7 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className="xl:px-6 py-4 text-[#667085] font-normal text-base"
+          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell text-[#667085] font-normal text-base"
         >
           {" "}
           {value}{" "}
@@ -194,6 +304,9 @@ export const LoanColumns = ({
         Overdue
       </div>
     ),
+    meta: {
+      className: "hidden lg:table-cell",
+    },
     cell: (cell) => {
       const value = cell.getValue() as string;
       const rowId = cell.row.id;
@@ -208,10 +321,13 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className={clsx("xl:px-6 py-4  font-normal text-base", {
-            "text-[#667085]": value === "N/A",
-            "text-red-400": value.trim() !== "N/A",
-          })}
+          className={clsx(
+            "xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell font-normal text-base",
+            {
+              "text-[#667085]": value === "N/A",
+              "text-red-400": value.trim() !== "N/A",
+            }
+          )}
         >
           {value}
         </button>
@@ -226,6 +342,9 @@ export const LoanColumns = ({
         Repayment
       </div>
     ),
+    meta: {
+      className: "hidden lg:table-cell",
+    },
     cell: (cell) => {
       const value = cell.getValue() as string;
       const { overdue } = cell.row.original;
@@ -241,9 +360,12 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className={clsx("xl:px-6 py-4 text-[#667085] font-normal text-base", {
-            "text-red-400": overdue !== "N/A",
-          })}
+          className={clsx(
+            "xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell text-[#667085] font-normal text-base",
+            {
+              "text-red-400": overdue !== "N/A",
+            }
+          )}
         >
           {" "}
           {value}{" "}
@@ -255,10 +377,13 @@ export const LoanColumns = ({
     accessorKey: "more",
     id: "more",
     header: () => <div className=""></div>,
+    meta: {
+      className: "hidden lg:table-cell",
+    },
     cell: () => {
       return (
-        <div className="text-[#667085] hidden lg:table-cell px-4 py-6 ">
-          ...
+        <div className="text-[#667085] relative hidden md:px-4 xl:py-6 md:py-2 lg:flex flex-col gap-0 ">
+          <button className="rotate-90">...</button>
         </div>
       );
     },

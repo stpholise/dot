@@ -139,7 +139,7 @@ export const remittanceColumn = ({
     id: "date",
     header: () => (
       <div className="px-4 py-2 text-left font-medium text-gray-600">
-        {" "}
+        
         DATE & TIME
       </div>
     ),
@@ -201,7 +201,7 @@ export const remittanceColumn = ({
     },
     cell: () => {
       return (
-        <div className="text-[#667085] hidden lg:table-cell px-4 py-6 ">
+        <div className="text-[#667085] rotate-90 hidden lg:table-cell px-4 py-6 ">
           ...
         </div>
       );

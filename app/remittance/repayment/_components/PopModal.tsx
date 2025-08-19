@@ -82,13 +82,13 @@ const PopModal = ({
     <>
       <div
         className={clsx(
-          "w-full bg-[#F9F9F9] lg:w-[468px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-auto ",
+          "w-full bg-[#F9F9F9] lg:w-[468px] md:w-[440px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-auto ",
           {
             " transition-opacity transform  opacity-100 ease-in-out duration-500":
               isVisible,
             " transition-opacity transform   opacity-0 ease-in-out duration-500":
               !isVisible,
-            "h-fit  top-1/2 right-1/2  transition-opacity translate-x-1/2 rounded-3xl  -translate-y-1/2 opacity-100 ease-in-out duration-500":
+            "h-fit  top-1/2 right-1/2   transition-opacity translate-x-1/2 rounded-3xl  -translate-y-1/2 opacity-100 ease-in-out duration-500":
               selectedRowsItems,
           }
         )}
