@@ -21,41 +21,37 @@ const Modal = ({
     setIsVisible(true);
     setButtonValidation(false);
   }, []);
+ 
 
-  const [rawValue, setRawValue] = useState<Record<string, string>>({});
   const [totalRemittance, setTotalRemittance] = useState("");
   const [buttonValidation, setButtonValidation] = useState<boolean>(false);
   const [currentModal, setCurrentModal] = useState<number>(0);
+
   const removeItemFromList = (id: string) => {
     if (selectedRowsItems) {
       const newArray = selectedRowsItems.filter((items) => items.id !== id);
-      setSelectedRowsItems(newArray);
-      if (Object.keys(rawValue).some((key) => key === id)) {
-        const rawArray = Object.entries(rawValue).filter(([key]) => key !== id);
-
-        setRawValue(Object.fromEntries(rawArray));
-      }
+      setSelectedRowsItems(newArray); 
     }
   };
 
   const handleChange = (id: string, value: string) => {
     const raw = value.replace(/[^0-9]/g, "");
+ 
 
     const formatAmount = Number(raw).toLocaleString("en-NG", {
       minimumFractionDigits: 0,
     });
-    setRawValue((prev) => ({
-      ...prev,
-      [id]: formatAmount,
-    }));
+    if(!selectedRowsItems) return;
+    const newObj = {...selectedRowsItems.find(item => item.id === id), currentPayment: formatAmount};
+    const newArray = selectedRowsItems.map(item => item.id === id ? newObj : item) as LoanRowData[]; 
+    setSelectedRowsItems(newArray);
+   
   };
 
   const handleButtonValidation = () => {
     if (
       !selectedRowsItems ||
-      selectedRowsItems.length === 0 ||
-      selectedRowsItems?.length !== Object.keys(rawValue).length ||
-      Object.values(rawValue).some((val) => val === "" || val == "0")
+      selectedRowsItems.length === 0  
     ) {
       setButtonValidation(false);
     } else {
@@ -64,18 +60,19 @@ const Modal = ({
   };
 
   useEffect(() => {
-    const total = Object.values(rawValue).reduce(
-      (sum, item) => sum + parseInt(item.replace(/,/g, "")),
+    if (!selectedRowsItems) return;
+    const total = Object.values(selectedRowsItems).reduce(
+      (sum, item) => sum + parseInt(item.currentPayment!.replace(/,/g, "")),
       0
     );
-    console.log(rawValue);
+    console.log(selectedRowsItems);
     setTotalRemittance(
       total.toLocaleString("en-NG", {
         minimumFractionDigits: 0,
       })
     );
     handleButtonValidation();
-  }, [rawValue]);
+  }, [selectedRowsItems]);
 
   const cancelRemittanceCreattion = () => {
     setSelectedRowsItems([]);
@@ -173,7 +170,7 @@ const Modal = ({
                           <input
                             maxLength={7}
                             type="text"
-                            value={rawValue[item.id]}
+                            value={item?.currentPayment }
                             onChange={(
                               e: React.ChangeEvent<HTMLInputElement>
                             ) => handleChange(item.id, e.target.value)}
@@ -354,42 +351,9 @@ const Modal = ({
                               </div>
                             </div>
                             <p className="text-black text-2xl font-medium">
-                              ₦{rawValue[item.id]}
+                              ₦{item.currentPayment}
                             </p>
                           </div>
-                          // <div
-                          //   className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
-                          //   key={item.id}
-                          // >
-                          //   <p className="text-black text-2xl font-medium">
-                          //     {item.customerName}
-                          //   </p>
-                          //   <div className="flex gap-2 mt-1 text-xs text-[#667085]">
-                          //     <span className="">
-                          //       <Image
-                          //         src={"/icons/offer_hand.png"}
-                          //         alt={"instalment"}
-                          //         width={10}
-                          //         height={10}
-                          //         className="inline mx-1"
-                          //       />
-                          //       Instalment: {item.instalment}
-                          //     </span>
-                          //     <span>
-                          //       <Image
-                          //         src={"/icons/calender.png"}
-                          //         alt={"instalment"}
-                          //         width={10}
-                          //         height={10}
-                          //         className="inline mx-1"
-                          //       />
-                          //       Repayment: {item.repayment}
-                          //     </span>
-                          //   </div>
-                          //   <div className=" flex justify-between gap-8 mt-4">
-                          //     <div>₦{rawValue[item.id]}</div>
-                          //   </div>
-                          // </div>
                         ))}
                     </div>
                   </div>

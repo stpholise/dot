@@ -9,24 +9,31 @@ interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
   selectedRowsItems?: LoanRowData[];
   setSelectedRowsItems: React.Dispatch<React.SetStateAction<LoanRowData[]>>;
+  setIsSideModalOpen: (state: boolean) => void;
 }
 
 const PopModal = ({
   setIsModalOpen,
   selectedRowsItems,
   setSelectedRowsItems,
+  setIsSideModalOpen,
 }: ModalProp) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   useEffect(() => {
     setIsVisible(true);
-    setButtonValidation(false);
+    setButtonValidation(false); 
   }, []);
 
+  const [newArray, setNewArray] = useState<LoanRowData[]>([]);
   const [rawValue, setRawValue] = useState<Record<string, string>>({});
   const [buttonValidation, setButtonValidation] = useState<boolean>(false);
-  const [currentModal, setCurrentModal] = useState<number>(0);
+  const addCustomerToRemittance = () => {
+    setIsModalOpen(false);
+    setIsSideModalOpen(true);
+    setSelectedRowsItems(newArray); 
+  };
 
-  const handleChange = (id: string, value: string) => {
+  const handleChange = (id: string, value: string, item: LoanRowData) => { 
     const raw = value.replace(/[^0-9]/g, "");
 
     const formatAmount = Number(raw).toLocaleString("en-NG", {
@@ -36,7 +43,31 @@ const PopModal = ({
       ...prev,
       [id]: formatAmount,
     }));
+    const newObj = { ...item, currentPayment: formatAmount };
+    if (newArray.some((item) => item.id == id)) {
+      const indexToReplace = newArray.findIndex((obj) => obj.id === id);
+      newArray[indexToReplace] = newObj;
+    } else {
+      setNewArray((prev) => [...prev, newObj]);
+    }
   };
+
+  const handleButtonValidation = () => {
+    if (
+      !selectedRowsItems ||
+      selectedRowsItems.length === 0 ||
+      selectedRowsItems?.length !== Object.keys(rawValue).length ||
+      Object.values(rawValue).some((val) => val === "" || val == "0")
+    ) {
+      setButtonValidation(false);
+    } else {
+      setButtonValidation(true);
+    }
+  };
+
+  useEffect(() => {
+    handleButtonValidation();
+  }, [rawValue]);
 
   const cancelRemittanceCreattion = () => {
     setSelectedRowsItems([]);
@@ -58,7 +89,7 @@ const PopModal = ({
           }
         )}
       >
-        {currentModal === 0 && (
+        {
           <div className="">
             <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
               <div className=" flex gap-2 items-center">
@@ -89,7 +120,8 @@ const PopModal = ({
               )}
             >
               <div className="lg:py-6  md:px-6 pt-4 pb-12">
-                {selectedRowsItems && selectedRowsItems?.length !== 0 ? (
+                {selectedRowsItems &&
+                  selectedRowsItems?.length !== 0 &&
                   selectedRowsItems.map((item) => (
                     <div
                       className="bg-[#F9F9F9] h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
@@ -134,33 +166,14 @@ const PopModal = ({
                             value={rawValue[item.id]}
                             onChange={(
                               e: React.ChangeEvent<HTMLInputElement>
-                            ) => handleChange(item.id, e.target.value)}
+                            ) => handleChange(item.id, e.target.value, item)}
                             inputMode="numeric"
                             className="outline-none border-none w-full h-full border-red-400"
                           />
                         </div>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className=" flex flex-col text-center items-center justify-center h-full lg:mt-12 xl:px-8 xl:py-6 md:px-6 py-4 ">
-                    <Image
-                      src="/image/Frame 48.png"
-                      alt="frame"
-                      width={80}
-                      height={80}
-                      className="rounded-xl mb-6"
-                    />
-
-                    <h3 className="font-medium text-2xl text-black mb-2">
-                      No Customer Added
-                    </h3>
-                    <p className="max-w-86 text-base font-medium text-[#667085]">
-                      Click on the more &quot;i&quot; icon to add a customer to
-                      the remittance
-                    </p>
-                  </div>
-                )}
+                  ))}
               </div>
             </div>
             d
@@ -188,12 +201,12 @@ const PopModal = ({
                     },
                     buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
                   )}
-                  onClick={() => setCurrentModal(1)}
+                  onClick={() => addCustomerToRemittance()}
                 />
               </div>
             </div>
           </div>
-        )}
+        }
       </div>
       <div
         onClick={() => setIsModalOpen(false)}
