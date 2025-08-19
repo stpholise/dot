@@ -8,6 +8,7 @@ const RemittanceDetail = ({
   customerSummary: LoanRowData[];
   total: string;
 }) => {
+  console.log("customerSummary", customerSummary);
   return (
     <div className="rounded-3xl border max-w-[529px] rounded-t-3xl overflow-hidden">
       <div className="bg-[#F9F9F9] px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl ">

@@ -8,6 +8,7 @@ import Modal from "./_components/Modal";
 import PopModal from "./_components/PopModal";
 import Image from "next/image";
 import clsx from "clsx"; 
+import { useRouter } from "next/navigation";
 
 export interface LoanRowData extends DummyLoanData {
   currentPayment?: string; 
@@ -24,6 +25,7 @@ const Page = () => {
     setIsModalOpen,
   });
  
+  const router = useRouter();
 
   const handleModalOpening = () => {
     setIsModalOpen(true);
@@ -57,7 +59,8 @@ const Page = () => {
               {pathname.replace("/", " ")}
             </p>
             <div className="text-black text-3xl font-medium flex gap-2">
-              <div className=" size-9 rounded-lg bg-white p-2 border border-[#D0D5DD] ">
+              <div className=" size-9 rounded-lg bg-white p-2 border border-[#D0D5DD] "
+              onClick={() => router.back()}>
                 <Image
                   src={"/icons/arrow_back.png"}
                   alt={"prev"}

@@ -11,6 +11,7 @@ export type DummyRemittance = {
   remittanceTime: string;
   remittanceStatus: "Submitted" | "Pending";
   items?: DummyLoanData[];
+  totalRemittance?: string;
 };
 const currency = "₦";
 
