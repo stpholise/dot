@@ -100,7 +100,7 @@ const TanStackTable = <T,>({
           )}
         </div>
       </div>
-      <div className="w-full overflow-x-scroll lg:overflow-x-hidden">
+      <div className="w-full overflow-x-auto lg:overflow-x-hidden">
         <table className="min-w-full  text-sm ">
           <thead className="bg-[#FAFAFA] border-y border-[#EAEAEA]">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -127,7 +127,7 @@ const TanStackTable = <T,>({
               <React.Fragment key={row.id}>
                 <tr
                   className={clsx("table-row lg:border-b border-[#eaeaea] ", {
-                    "bg-[rgba(0,0,0,0.05)]": selectedRowsId?.some(
+                    "md:bg-[rgba(0,0,0,0.05)]": selectedRowsId?.some(
                       (item) => (item as { id: string }).id === row.id
                     ),
                     "bg-transparent": !selectedRowsId?.some(
