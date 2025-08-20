@@ -85,7 +85,7 @@ export const LoanColumns = ({
           <div className="md:hidden mt-4 flex items-center w-full justify-between">
             <button
               onClick={() => settingSelectedRow()}
-              className={clsx("w-4 h-4  rounded-sm", {
+              className={clsx("w-4 h-4  rounded-sm hidden xs:block", {
                 "border border-[#D0D5DD]": !selectedRowsId.some(
                   (item) => item.id === id
                 ),

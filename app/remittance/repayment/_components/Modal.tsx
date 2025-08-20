@@ -39,6 +39,7 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
   useEffect(() => {
     setIsVisible(true);
     setButtonValidation(false);
+    document.body.style.overflow = "hidden";
   }, []);
 
   const removeItemFromList = (id: string) => {

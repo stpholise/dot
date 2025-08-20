@@ -78,7 +78,7 @@ const Page = () => {
             <div className="text-black text-3xl font-medium flex gap-2">
               <div
                 className=" size-9 rounded-lg bg-white p-2 border border-[#D0D5DD] "
-                onClick={() => router.back()}
+                onClick={() => router.push("/remittance")}
               >
                 <Image
                   src={"/icons/arrow_back.png"}

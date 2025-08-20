@@ -26,6 +26,11 @@ const PopModal = ({
     setIsVisible(true);
     setButtonValidation(false);
     inputRef.current?.focus();
+    document.body.style.overflowY = "hidden";
+
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
   }, []);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -86,13 +91,13 @@ const PopModal = ({
     <>
       <div
         className={clsx(
-          "w-full bg-[#F9F9F9] lg:w-[468px] md:w-[440px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-auto ",
+          "w-full bg-[#F9F9F9] lg:w-[468px] md:w-[440px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red  overflow-y-hidden",
           {
             " transition-opacity transform  opacity-100 ease-in-out duration-500":
               isVisible,
             " transition-opacity transform   opacity-0 ease-in-out duration-500":
               !isVisible,
-            "h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500":
+            " max-h-[600px] h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500":
               selectedRowsItems,
           }
         )}
@@ -122,7 +127,8 @@ const PopModal = ({
               className={clsx(
                 "h-[calc(100vh-180px)] overflow-y-auto bg-white",
                 {
-                  "md:h-fit h-[calc(100vh-180px)] ": selectedRowsItems?.length === 1,
+                  "md:h-fit h-[calc(100vh-180px)] ":
+                    selectedRowsItems?.length === 1,
                   "h-[calc(100vh-180px)] ": selectedRowsItems?.length !== 1,
                 }
               )}
@@ -198,7 +204,11 @@ const PopModal = ({
                 />
                 <PrimaryButtons
                   disabled={!buttonValidation}
-                  text={"Add Customer"}
+                  text={` Add  ${
+                    (selectedRowsItems?.length ?? 0) > 1
+                      ? ` ${selectedRowsItems!.length} Customers`
+                      : "Customer"
+                  }  `}
                   className={clsx(
                     "  px-5 py-3 rounded-lg text-white flex-items-center justify-center w-[224px]",
 
