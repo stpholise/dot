@@ -23,12 +23,12 @@ export const LoanColumns = ({
     accessorKey: "customerName",
     id: "customerName",
     header: () => (
-      <div className="uppercase text-xs font-medium text-[#667085] lg:px-6 lg:py-3 xl:text-left  ">
+      <div className="uppercase text-xs font-medium text-[#667085] lg:px-6 md:py-2 lg:py-3 xl:text-left  ">
         Customer Name
       </div>
     ),
     meta: {
-      className: "hidden lg:table-cell",
+      className: "hidden md:table-cell",
     },
     cell: (cell) => {
       const {
@@ -61,7 +61,7 @@ export const LoanColumns = ({
       };
       return (
         <div className="w-full  ">
-          <div className="md:flex  hidden md:px-3 xl:px-6 md:py-2 xl:py-4 gap-4  items-center font-medium text-base text-black cursor-pointer  ">
+          <div className="md:flex  hidden md:px-3 xl:px-6 md:py-2 xl:py-4 gap-4 text-left items-center font-medium text-base text-black cursor-pointer  ">
             <button
               onClick={() => settingSelectedRow()}
               className={clsx("w-4 h-4  rounded-sm", {
@@ -140,9 +140,8 @@ export const LoanColumns = ({
                   text={"Add Customer"}
                   icon="/icons/addDark.png"
                   onClick={() => handleButtonClick()}
-                  className="text-black bg-white border border-[#EAEAEA] rounded-lg xs:py-2 xs:px-4   flex items-center justify-center gap-4"
+                  className="text-black bg-white border border-[#EAEAEA] rounded-lg xs:py-2 xs:px-4 max-h-12  flex items-center justify-center gap-4"
                 />
-               
               </div>
               <div className="bg-white flex justify-between xs:px-8 xs:py-7 px-4 py-4 font-medium">
                 <div className="">
@@ -178,7 +177,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden lg:table-cell",
+      className: "hidden md:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -209,7 +208,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden lg:table-cell",
+      className: "hidden md:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -241,7 +240,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden lg:table-cell",
+      className: "hidden md:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -273,7 +272,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden lg:table-cell",
+      className: "hidden md:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -306,7 +305,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden lg:table-cell",
+      className: "hidden md:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -343,7 +342,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden lg:table-cell",
+      className: "hidden md:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -377,7 +376,7 @@ export const LoanColumns = ({
     id: "more",
     header: () => <div className=""></div>,
     meta: {
-      className: "hidden lg:table-cell",
+      className: "hidden md:table-cell",
     },
     cell: () => {
       return (

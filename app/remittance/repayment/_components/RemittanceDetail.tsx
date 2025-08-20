@@ -8,13 +8,12 @@ const RemittanceDetail = ({
   customerSummary: LoanRowData[];
   total: string;
 }) => {
-  console.log("customerSummary", customerSummary);
   return (
-    <div className="rounded-3xl border max-w-[529px] rounded-t-3xl overflow-hidden">
-      <div className="bg-[#F9F9F9] px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl ">
+    <div className="rounded-3xl border max-w-[529px] rounded-t-3xl overflow-hidden mx-auto ">
+      <div className="bg-[#F9F9F9] px-4 sm:px-8 py-3 sm:py-6 flex  sm:flex-row  gap-8 justify-between rounded-t-3xl ">
         <div className="">
           <h4 className="text-sm text-#667085 font-medium">Total Customers</h4>
-          <p className="text-black text-3xl font-semibold">
+          <p className="text-black text-xl  sm:text-3xl font-semibold">
             {customerSummary.length} Customers
           </p>
         </div>
@@ -22,11 +21,13 @@ const RemittanceDetail = ({
           <h4 className="text-sm text-#667085 font-medium">
             Total Remittance Amount
           </h4>
-          <p className="text-black text-3xl font-semibold">₦{total}</p>
+          <p className="text-black text-xl   sm:text-3xl font-semibold">
+            ₦{total}
+          </p>
         </div>
       </div>
-      <div className="px-8 py-4 bg-white">
-        <h4 className="text-xs font-medium flex items-center"> 
+      <div className=" px-4 sm:px-8  py-3 sm:py-4 bg-white">
+        <h4 className="text-xs font-medium flex items-center">
           <Image
             src={"/icons/user.png"}
             alt={"customer"}
@@ -39,7 +40,7 @@ const RemittanceDetail = ({
         <div className="py-2">
           {customerSummary.map((item) => (
             <div
-              className="flex gap-4 border-b py-4 border-[#EAEAEA]  justify-between items-center last:border-0"
+              className="flex gap-4 border-b py-2 sm:py-4 border-[#EAEAEA]  justify-between items-center last:border-0"
               key={item.id}
             >
               <div className="">
@@ -69,7 +70,7 @@ const RemittanceDetail = ({
                   </span>
                 </div>
               </div>
-              <p className="text-black text-2xl font-medium">
+              <p className="text-black text-lg sm:text-2xl font-medium">
                 ₦{item.currentPayment}
               </p>
             </div>
