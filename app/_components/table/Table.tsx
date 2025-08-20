@@ -88,13 +88,13 @@ const TanStackTable = <T,>({
             </div>
           )}
           {enableSearch && (
-            <div className="w-80 h-10 border border-[#D2D5E1] rounded-lg">
+            <div className="xs:w-80 w-full h-10 border border-[#D2D5E1] rounded-lg">
               <input
                 type="text"
                 placeholder="Search..."
                 value={globalFilter ?? ""}
                 onChange={(e) => setGlobalFilter(e.target.value)}
-                className="mb-4 px-3 py-2   w-full  outline-none"
+                className="mb-4 px-3 py-2   w-full  outline-none text-black"
               />
             </div>
           )}

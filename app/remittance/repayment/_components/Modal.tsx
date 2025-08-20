@@ -20,46 +20,41 @@ interface ModalProp {
   setSelectedRowsItems: React.Dispatch<React.SetStateAction<LoanRowData[]>>;
 }
 
-const Modal = ({
-  setIsModalOpen,
-  selectedRowsItems,
-  setSelectedRowsItems,
-}: ModalProp) => {
+const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const shortIdRef = useRef(
-    uuidv4()
-      .replace(/-|[^0-9]/g, "")
-      .slice(0, 11)
-  );
-  useEffect(() => {
-    setIsVisible(true);
-    setButtonValidation(false);
-  }, []);
-
   const [totalRemittance, setTotalRemittance] = useState("");
   const [buttonValidation, setButtonValidation] = useState<boolean>(false);
   const [currentModal, setCurrentModal] = useState<number>(0);
 
   const dispatch = useDispatch();
+  const shortIdRef = useRef(
+    uuidv4()
+      .replace(/-|[^0-9]/g, "")
+      .slice(0, 11)
+  );
   const selectedCustomer = useSelector(
     (state: RootState) => state.remittance.selectedCustomer
   );
 
+  useEffect(() => {
+    setIsVisible(true);
+    setButtonValidation(false);
+  }, []);
+
   const removeItemFromList = (id: string) => {
-    if (selectedRowsItems) {
+    if (selectedCustomer) {
       const newArray = selectedCustomer.filter((items) => items.id !== id);
       dispatch(setSelectedCustomer(newArray));
     }
   };
 
   const confirmRemittanceCreation = () => {
-    if (!selectedRowsItems || selectedRowsItems.length === 0) return;
-    setCurrentModal(2);
+    console.log("testing");
     const remittanceData = {
       id: shortIdRef.current,
       sn: shortIdRef.current,
       remittanceName: `DLTE-${shortIdRef.current}`,
-      items: selectedRowsItems,
+      items: selectedCustomer,
       remittanceAmount: totalRemittance,
       remittanceDate: new Date().toLocaleDateString("en-NG", {
         day: "2-digit",
@@ -75,6 +70,8 @@ const Modal = ({
       totalRemittance: totalRemittance,
     };
     dispatch(createRemittance({ ...remittanceData }));
+    dispatch(setSelectedCustomer([]));
+    setCurrentModal(2);
   };
 
   const handleChange = (id: string, value: string) => {
@@ -91,7 +88,6 @@ const Modal = ({
       item.id === id ? newObj : item
     ) as LoanRowData[];
     dispatch(setSelectedCustomer(newArray));
-    // setSelectedRowsItems(newArray);
   };
 
   const handleButtonValidation = useCallback(() => {
@@ -101,6 +97,11 @@ const Modal = ({
       setButtonValidation(true);
     }
   }, [selectedCustomer]);
+
+  const cancelRemittanceCreattion = () => {
+    setSelectedRowsItems([]);
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     if (!selectedCustomer) return;
@@ -115,11 +116,6 @@ const Modal = ({
     );
     handleButtonValidation();
   }, [handleButtonValidation, selectedCustomer]);
-
-  const cancelRemittanceCreattion = () => {
-    setSelectedRowsItems([]);
-    setIsModalOpen(false); 
-  };
 
   return (
     <>
@@ -136,7 +132,7 @@ const Modal = ({
       >
         {currentModal === 0 && (
           <div className="">
-            <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
+            <div className="relative border border-[#EAEAEA] bg-white sm:px-8 px-6 py-6">
               <div className=" flex gap-2 items-center">
                 <Image
                   src="/icons/table_checked.png"
@@ -148,7 +144,7 @@ const Modal = ({
                 <p className="text-2xl text-black"> Selected Customers </p>
               </div>
               <button
-                className="absolute top-4 bottom-4 right-8  px-4 py-2"
+                className="absolute top-4 bottom-4 sm:right-8 right-2  px-4 py-2"
                 onClick={() => setIsModalOpen(false)}
               >
                 <Image
@@ -160,11 +156,11 @@ const Modal = ({
               </button>
             </div>
             <div className={clsx("h-[calc(100vh-180px)] overflow-y-auto")}>
-              <div className="xl:px-8 xl:py-6 md:px-6 pt-4 pb-12">
+              <div className="xl:px-8 xl:py-6 md:px-6 px-4 pt-4 pb-12">
                 {selectedCustomer && selectedCustomer?.length !== 0 ? (
                   selectedCustomer.map((item, index) => (
                     <div
-                      className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
+                      className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl flex flex-col justify-center sm:block"
                       key={item.id}
                     >
                       <p className="text-black text-2xl font-medium">
@@ -242,7 +238,7 @@ const Modal = ({
                 )}
               </div>
             </div>
-            <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex xs:flex-row flex-col gap-4 justify-between">
+            <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-4 sm:px-8 py-6 flex sm:flex-row flex-col gap-4 justify-between">
               <div className={clsx("block")}>
                 <h2 className="text-black text-3xl font-medium">
                   ₦{totalRemittance}
@@ -251,11 +247,11 @@ const Modal = ({
                   Total Remittance
                 </p>
               </div>
-              <div className={clsx("flex gap-8")}>
+              <div className={clsx("flex gap-4 xs:gap-8")}>
                 <PrimaryButtons
                   text={`Cancel`}
                   className={clsx(
-                    "bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 py-3 rounded-lg "
+                    "bg-white border border-[#D0D5DD] font-medium text-[#344054] xs:w-1/2 sm:w-fit flex justify-center   sm:px-5 py-3 rounded-lg "
                   )}
                   onClick={cancelRemittanceCreattion}
                 />
@@ -263,7 +259,7 @@ const Modal = ({
                   disabled={!buttonValidation}
                   text={
                     buttonValidation
-                      ? `Submit for ${selectedRowsItems?.length} People`
+                      ? `Submit for ${selectedCustomer?.length} People`
                       : "Submit Remittance"
                   }
                   className={clsx(
@@ -279,7 +275,7 @@ const Modal = ({
         )}
         {currentModal === 1 && (
           <div className="">
-            <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
+            <div className="relative border border-[#EAEAEA] bg-white sm:px-8 px-6 py-6">
               <div className=" flex gap-2 items-center">
                 <button
                   onClick={() => setCurrentModal(0)}
@@ -295,7 +291,7 @@ const Modal = ({
                 <p className="text-2xl text-black"> Selected Customers </p>
               </div>
               <button
-                className="absolute top-4 bottom-4 right-8  px-4 py-2"
+                className="absolute top-4 bottom-4 sm:right-8 right-2 px-4 py-2"
                 onClick={() => setIsModalOpen(false)}
               >
                 <Image
@@ -307,7 +303,7 @@ const Modal = ({
               </button>
             </div>
             <div className="min-h-[calc(100vh-180px)] overflow-auto ">
-              <div className="flex justify-center pt-4 pb-12 overflow-auto">
+              <div className="flex justify-center pt-4 pb-12 overflow-auto px-2 mt-2">
                 {selectedCustomer && selectedCustomer?.length !== 0 && (
                   <RemittanceDetail
                     customerSummary={selectedCustomer}
@@ -316,17 +312,17 @@ const Modal = ({
                 )}
               </div>
             </div>
-            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between lg:gap-8">
+            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex gap-4 justify-between lg:gap-8">
               <PrimaryButtons
                 text={`Cancel`}
-                className="bg-white border border-[#D0D5DD] font-medium text-[#344054]  px-5 lg:px-8 py-3 rounded-lg "
+                className="bg-white border border-[#D0D5DD] font-medium text-[#344054] w-2/3 xs:w-1/2 lg:w-fit flex justify-center  px-5 lg:px-8 py-3 rounded-lg "
                 onClick={cancelRemittanceCreattion}
               />
               <PrimaryButtons
                 disabled={!buttonValidation}
                 text={"Confirm Submission"}
                 className={clsx(
-                  " w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
+                  " w-1/2 sm:w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
                   buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
                 )}
                 onClick={() => confirmRemittanceCreation()}
