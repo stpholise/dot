@@ -12,6 +12,7 @@ import {
 import { getPaginationRange } from "./PaginationRange";
 import React, { useMemo, useState } from "react";
 import clsx from "clsx";
+import Image from "next/image";
 
 type TanStackTableProps<T> = {
   data: T[];
@@ -160,7 +161,8 @@ const TanStackTable = <T,>({
         <button
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className="sm:px-3 px-2 py-1 cursor-pointer border rounded disabled:opacity-50"
+          className={clsx("px-3 cursor-pointer py-1 border border-[#D0D5DD] rounded-lg  flex items-center justify-center gap-1 text-sm disabled:opacity-50 outline-none text-[#344054]", {
+          })}
         >
           Previous
         </button>
@@ -189,9 +191,16 @@ const TanStackTable = <T,>({
         <button
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className="px-3 cursor-pointer py-1 border border-gray-600 rounded disabled:opacity-50 outline-none"
+          className="px-3 cursor-pointer py-1 border border-[#D0D5DD] rounded-lg  flex items-center justify-center gap-1 text-sm disabled:opacity-50 outline-none text-[#344054]"
         >
           Next
+          <Image
+            src={"/icons/arrow-right.png"}
+            alt={"next"}
+            width={16}
+            height={16}
+            className="inline-block ml-1"
+          />
         </button>
       </div>
     </div>

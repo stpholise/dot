@@ -97,14 +97,14 @@ const PopModal = ({
               isVisible,
             " transition-opacity transform   opacity-0 ease-in-out duration-500":
               !isVisible,
-            " max-h-[600px] h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500":
+            "  lg:max-h-[600px] h-screen md:h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500":
               selectedRowsItems,
           }
         )}
       >
         {
           <div className="">
-            <div className="relative border border-[#EAEAEA] bg-white px-8 py-6">
+            <div className="relative border border-[#EAEAEA] bg-white px-4 xs:px-6 sm:px-8 py-6">
               <div className=" flex gap-2 items-center">
                 <p className="text-lg text-black">
                   {" "}
@@ -112,7 +112,7 @@ const PopModal = ({
                 </p>
               </div>
               <button
-                className="absolute top-4 bottom-4 right-4  px-4 py-2"
+                className="absolute top-4 bottom-4 right-2 xs:right-4 px-4 py-2"
                 onClick={() => setIsModalOpen(false)}
               >
                 <Image
@@ -193,7 +193,7 @@ const PopModal = ({
               </div>
             </div>
             d
-            <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA]  px-8 py-6 flex justify-between bg-[#F9F9F9]">
+            <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA] px-4 py-3 xs:px-8 xs:py-6 flex justify-between bg-[#F9F9F9]">
               <div className={clsx("flex justify-between gap-4 w-full ")}>
                 <PrimaryButtons
                   text={`Cancel`}

@@ -54,6 +54,7 @@ const Page = () => {
             columns={columns}
             data={tableData}
             onRowClick={handleRowClick}
+            enableSearch={true}
           />
         </div>
       </div>

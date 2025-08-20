@@ -13,6 +13,7 @@ import {
   setSelectedCustomer,
 } from "@/app/store/slices/RemittanceSlice";
 import { RootState } from "@/app/store";
+import { useRouter } from "next/navigation";
 
 interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
@@ -27,6 +28,7 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
   const [currentModal, setCurrentModal] = useState<number>(0);
 
   const dispatch = useDispatch();
+  const router = useRouter();
   const shortIdRef = useRef(
     uuidv4()
       .replace(/-|[^0-9]/g, "")
@@ -39,7 +41,10 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
   useEffect(() => {
     setIsVisible(true);
     setButtonValidation(false);
-    document.body.style.overflow = "hidden";
+    document.body.style.overflowY = "hidden";
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
   }, []);
 
   const removeItemFromList = (id: string) => {
@@ -91,6 +96,12 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
     dispatch(setSelectedCustomer(newArray));
   };
 
+  const completeRemittanceCreation = () => {
+    setSelectedRowsItems([]);
+    setIsModalOpen(false);
+    router.push("/remittance/");
+  };
+
   const handleButtonValidation = useCallback(() => {
     if (!selectedCustomer || selectedCustomer.length === 0) {
       setButtonValidation(false);
@@ -122,7 +133,7 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
     <>
       <div
         className={clsx(
-          "w-full bg-[#F9F9F9] lg:w-[600px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-auto ",
+          "w-full bg-[#F9F9F9] lg:w-[600px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red overflow-y-hidden ",
           {
             " transition-transform transform -translate-x-1 opacity-100 ease-in-out duration-500":
               isVisible,
@@ -142,7 +153,7 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
                   height={32}
                   className="w-8 h-8"
                 />
-                <p className="text-2xl text-black"> Selected Customers </p>
+                <p className="xs:text-2xl text-xl text-black"> Selected Customers </p>
               </div>
               <button
                 className="absolute top-4 bottom-4 sm:right-8 right-2  px-4 py-2"
@@ -190,7 +201,7 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
                         </span>
                       </div>
 
-                      <div className=" flex justify-between gap-8 mt-4">
+                      <div className=" flex  justify-between  gap-4 2xs:gap-6 sm:gap-8 mt-4">
                         <div
                           className={
                             "border border-[#D2D5E1] w-full px-4 h-12 rounded-lg py-2 text-black flex items-center gap-1"
@@ -210,7 +221,7 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
                           />
                         </div>
                         <button
-                          className="text-[#F04438] rounded-lg w-40 bg-[#FEF3F2] h-12 flex items-center justify-center"
+                          className="text-[#F04438] rounded-lg  w-40 bg-[#FEF3F2] h-12 flex items-center justify-center"
                           onClick={() => removeItemFromList(item.id)}
                         >
                           - Remove
@@ -248,34 +259,35 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
                   Total Remittance
                 </p>
               </div>
-              <div className={clsx("flex gap-4 xs:gap-8")}>
+              <div className={clsx("flex gap-4  ")}>
                 <PrimaryButtons
                   text={`Cancel`}
                   className={clsx(
-                    "bg-white border border-[#D0D5DD] font-medium text-[#344054] xs:w-1/2 sm:w-fit flex justify-center   sm:px-5 py-3 rounded-lg "
+                    "bg-white border border-[#D0D5DD] font-medium text-[#344054] w-22 xs:w-1/2  flex justify-center   sm:px-5 py-3 rounded-lg "
                   )}
                   onClick={cancelRemittanceCreattion}
                 />
-                <PrimaryButtons
+                <button
                   disabled={!buttonValidation}
-                  text={
-                    buttonValidation
-                      ? `Submit for ${selectedCustomer?.length} People`
-                      : "Submit Remittance"
-                  }
                   className={clsx(
-                    "  px-5 py-3 rounded-lg text-white",
+                    "   whitespace-nowrap w-fit 2xs:w-auto 2xs:px-5 py-3 flex justify-center rounded-lg text-white",
 
-                    buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
+                    buttonValidation ? "bg-black" : "bg-[#9A9A9A]",
+                    selectedCustomer?.length > 1 ? 'px-2' : 'px-3'
+
                   )}
                   onClick={() => setCurrentModal(1)}
-                />
+                >
+                  {selectedCustomer?.length > 1
+                    ? `Submit for ${selectedCustomer?.length} People`
+                    : "Submit Remittance"}
+                </button>
               </div>
             </div>
           </div>
         )}
         {currentModal === 1 && (
-          <div className="">
+          <div className=" ">
             <div className="relative border border-[#EAEAEA] bg-white sm:px-8 px-6 py-6">
               <div className=" flex gap-2 items-center">
                 <button
@@ -289,7 +301,10 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
                     height={16}
                   />
                 </button>
-                <p className="text-2xl text-black"> Selected Customers </p>
+                <p className="xs:text-2xl text-lg text-black">
+                  {" "}
+                  Selected Customers{" "}
+                </p>
               </div>
               <button
                 className="absolute top-4 bottom-4 sm:right-8 right-2 px-4 py-2"
@@ -303,7 +318,7 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
                 />
               </button>
             </div>
-            <div className="min-h-[calc(100vh-180px)] overflow-auto ">
+            <div className="max-h-[calc(100vh-180px)] min-h-[calc(100vh-180px)] overflow-auto ">
               <div className="flex justify-center pt-4 pb-12 overflow-auto px-2 mt-2">
                 {selectedCustomer && selectedCustomer?.length !== 0 && (
                   <RemittanceDetail
@@ -313,17 +328,19 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
                 )}
               </div>
             </div>
-            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex gap-4 justify-between lg:gap-8">
+            <div className="relative mt-auto bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-4 xs:px-5 sm:px-8 py-6 flex gap-4 justify-between lg:gap-8">
               <PrimaryButtons
                 text={`Cancel`}
-                className="bg-white border border-[#D0D5DD] font-medium text-[#344054] w-2/3 xs:w-1/2 lg:w-fit flex justify-center  px-5 lg:px-8 py-3 rounded-lg "
+                className="bg-white border border-[#D0D5DD] font-medium text-[#344054] w-1/2 lg:w-fit flex justify-center  px-5 lg:px-8 py-3 rounded-lg "
                 onClick={cancelRemittanceCreattion}
               />
               <PrimaryButtons
                 disabled={!buttonValidation}
-                text={"Confirm Submission"}
+                text={`Confirm ${
+                  window.screen.width > 360 ? "Submission" : ""
+                }`}
                 className={clsx(
-                  " w-1/2 sm:w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
+                  " w-1/2 lg:w-10/12 px-5 py-3 rounded-lg text-white flex items-center justify-center",
                   buttonValidation ? "bg-black" : "bg-[#9A9A9A]"
                 )}
                 onClick={() => confirmRemittanceCreation()}
@@ -340,7 +357,7 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
               <PrimaryButtons
                 text={`Close`}
                 className="bg-white border border-[#D0D5DD] font-medium text-[#344054] w-full flex items-center justify-center px-5 lg:px-8 py-3 rounded-lg "
-                onClick={cancelRemittanceCreattion}
+                onClick={() => completeRemittanceCreation()}
               />
             </div>
           </div>

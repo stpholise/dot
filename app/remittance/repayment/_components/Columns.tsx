@@ -28,7 +28,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     cell: (cell) => {
       const {
@@ -55,13 +55,17 @@ export const LoanColumns = ({
         }
       };
       const handleButtonClick = () => {
-        console.log(id);
         settingSelectedRow();
         setIsModalOpen(true);
       };
+
+      const selectSingleRow = () => {
+        setSelectedRowsId([rowData]);
+        setIsModalOpen(true);
+      };
       return (
-        <div className="w-full  ">
-          <div className="md:flex  hidden md:px-3 xl:px-6 md:py-2 xl:py-4 gap-4 text-left items-center font-medium text-base text-black cursor-pointer  ">
+        <div className="w-full">
+          <div className="lg:flex  hidden md:px-3 xl:px-6 md:py-2 xl:py-4 gap-4 text-left items-center font-medium text-base text-black cursor-pointer  ">
             <button
               onClick={() => settingSelectedRow()}
               className={clsx("w-4 h-4  rounded-sm", {
@@ -82,7 +86,7 @@ export const LoanColumns = ({
             <button onClick={() => handleButtonClick()}>{value}</button>
           </div>
 
-          <div className="md:hidden mt-4 flex items-center w-full justify-between">
+          <div className="lg:hidden mt-4 flex items-center w-full gap-4 justify-center">
             <button
               onClick={() => settingSelectedRow()}
               className={clsx("w-4 h-4  rounded-sm hidden xs:block", {
@@ -102,13 +106,33 @@ export const LoanColumns = ({
             </button>
             <div
               className={clsx(
-                "w-11/12 rounded-xl  border overflow-hidden",
+                " rounded-xl  border overflow-hidden w-full xs:w-11/12 ",
                 selectedRowsId.some((item) => item.id === id)
                   ? "border-black"
                   : "border-border-[#EAEAEA]"
               )}
             >
-              <div className=" top bg-[#f9f9f9] flex  flex-col-reverse xs:flex-row  justify-between gap-4 xs:gap-8 xs:px-8 xs:py-7 px-4 py-4">
+              <div className="   top bg-[#f9f9f9] flex  xs:flex-row relative justify-between gap-4 xs:gap-8 xs:px-8 xs:py-7 px-4 py-4">
+                <button
+                  onClick={() => settingSelectedRow()}
+                  className={clsx(
+                    "w-4 h-4 absolute top-4 right-4 rounded-sm  xs:hidden",
+                    {
+                      "border border-[#D0D5DD]": !selectedRowsId.some(
+                        (item) => item.id === id
+                      ),
+                    }
+                  )}
+                >
+                  {selectedRowsId.some((item) => item.id === id) && (
+                    <Image
+                      src="/icons/table_checked.png"
+                      alt="/checked"
+                      width={16}
+                      height={16}
+                    />
+                  )}
+                </button>
                 <div className="">
                   <h5 className=" text-black text-base font-medium mb-1">
                     {customerName}
@@ -140,10 +164,10 @@ export const LoanColumns = ({
                   text={"Add Customer"}
                   icon="/icons/addDark.png"
                   onClick={() => handleButtonClick()}
-                  className="text-black bg-white border border-[#EAEAEA] rounded-lg xs:py-2 xs:px-4 max-h-12  flex items-center justify-center gap-4"
+                  className="text-black bg-white border border-[#EAEAEA] rounded-lg xs:py-2 xs:px-4 max-h-12  hidden xs:flex items-center justify-center gap-4"
                 />
               </div>
-              <div className="bg-white flex justify-between xs:px-8 xs:py-7 px-4 py-4 font-medium">
+              <div className="bg-white flex  flex-row flex-wrap gap-4 justify-between xs:px-8 xs:py-7 px-4 py-4 font-medium">
                 <div className="">
                   <h5 className="text-[#667085] text-xs font-medium">
                     Amount Loaned
@@ -162,6 +186,14 @@ export const LoanColumns = ({
                   <p className="text-[#454547] text-sm">{tenure}</p>
                 </div>
               </div>
+              <div className="flex xs:hidden justify-center items-center px-4 py-3">
+                <PrimaryButtons
+                  text={"Add Customer"}
+                  icon="/icons/addDark.png"
+                  onClick={() => selectSingleRow()}
+                  className="text-black bg-white border border-[#EAEAEA] rounded-lg xs:py-2 xs:px-4 max-h-12  w-full  flex items-center justify-center gap-4"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -177,7 +209,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -192,7 +224,7 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell text-[#667085] font-medium text-base"
+          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden lg:table-cell text-[#667085] font-medium text-base"
         >
           {value}
         </button>
@@ -208,7 +240,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -223,7 +255,7 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell text-[#667085] font-normal text-base"
+          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden lg:table-cell text-[#667085] font-normal text-base"
         >
           {value}
         </button>
@@ -240,7 +272,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -255,7 +287,7 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className="xl:px-6 xl:py-4 md:px-3  md:py-2 hidden md:table-cell text-[#667085] font-normal text-base"
+          className="xl:px-6 xl:py-4 md:px-3  md:py-2 hidden lg:table-cell text-[#667085] font-normal text-base"
         >
           {" "}
           {value}
@@ -272,7 +304,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -287,7 +319,7 @@ export const LoanColumns = ({
       return (
         <button
           onClick={handleButtonClick}
-          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell text-[#667085] font-normal text-base"
+          className="xl:px-6 xl:py-4 md:px-3 md:py-2 hidden lg:table-cell text-[#667085] font-normal text-base"
         >
           {" "}
           {value}{" "}
@@ -305,7 +337,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -321,7 +353,7 @@ export const LoanColumns = ({
         <button
           onClick={handleButtonClick}
           className={clsx(
-            "xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell font-normal text-base",
+            "xl:px-6 xl:py-4 md:px-3 md:py-2 hidden lg:table-cell font-normal text-base",
             {
               "text-[#667085]": value === "N/A",
               "text-red-400": value.trim() !== "N/A",
@@ -342,7 +374,7 @@ export const LoanColumns = ({
       </div>
     ),
     meta: {
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
@@ -359,7 +391,7 @@ export const LoanColumns = ({
         <button
           onClick={handleButtonClick}
           className={clsx(
-            "xl:px-6 xl:py-4 md:px-3 md:py-2 hidden md:table-cell text-[#667085] font-normal text-base",
+            "xl:px-6 xl:py-4 md:px-3 md:py-2 hidden lg:table-cell text-[#667085] font-normal text-base",
             {
               "text-red-400": overdue !== "N/A",
             }
@@ -376,11 +408,11 @@ export const LoanColumns = ({
     id: "more",
     header: () => <div className=""></div>,
     meta: {
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     cell: () => {
       return (
-        <div className="text-[#667085] relative hidden md:px-4 xl:py-6 md:py-2 lg:flex flex-col gap-0 ">
+        <div className="text-[#667085] relative hidden  md:px-4 xl:py-6 md:py-2 lg:table-cell gap-0 ">
           <button className="rotate-90">...</button>
         </div>
       );
