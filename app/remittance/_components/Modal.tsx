@@ -18,7 +18,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
       console.log(err);
     }
   };
-  
+
   console.log("selectedRowData", selectedRowData);
   console.log("items", selectedRowData?.items);
   return (
@@ -50,7 +50,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
             />
           </button>
         </div>
-        <div className="px-8 py-4 flex items-center gap-8 justify-between ">
+        <div className="px-8 py-4 flex flex-col xs:flex-row items-center gap-8 justify-between ">
           <div>
             <h4 className="text-black">
               <Image
