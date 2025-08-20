@@ -33,7 +33,7 @@ const Page = () => {
         <div className=" ">
           <Modal
             setIsModalOpen={setIsModalOpen}
-            selectedRowData={selectedRowData}
+            selectedRowData={selectedRowData} 
           />
         </div>
       )}

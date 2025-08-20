@@ -65,6 +65,7 @@ const Modal = ({
         hour12: true,
       }),
       remittanceStatus: "Submitted",
+      totalRemittance: totalRemittance,
     };
     dispatch(createRemittance({ ...remittanceData }));
   };
