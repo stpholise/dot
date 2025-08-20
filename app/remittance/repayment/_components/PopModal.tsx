@@ -97,7 +97,7 @@ const PopModal = ({
               isVisible,
             " transition-opacity transform   opacity-0 ease-in-out duration-500":
               !isVisible,
-            " max-h-[600px] h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500":
+            "  lg:max-h-[600px] h-screen md:h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500":
               selectedRowsItems,
           }
         )}
