@@ -54,12 +54,12 @@ export const remittanceColumn = ({
           ? "bg-[#ECFDF3] text-[#027A48]  "
           : "text-[#AF9401] bg-[#FEFBEB]";
       return (
-        <div className="w-full">
+        <div className="w-full    ">
           <div className="text-black hidden lg:table-cell sm:text-[#667085]   lg:w-full px-4 py-6 ">
             <p className=" text-base"> {value}</p>
           </div>
-          <div className="text-gray-900 lg:hidden  w-11/12 mx-auto my-2">
-            <div className="bg-[#f9f9f9] border border-[#EAEAEA] w-full rounded-t-2xl px-6 py-4 flex justify-between">
+          <div className="text-gray-900 lg:hidden  w-full mx-auto my-2 ">
+            <div className="bg-[#f9f9f9] border border-[#EAEAEA] w-full rounded-t-2xl xs:px-6 py-4 px-3  flex justify-between">
               <div className="">
                 <p className="text-lg font-semibold text-black">{value}</p>
                 <div className="text-[#667085] text-xs"># Number: {sn}</div>
@@ -170,7 +170,7 @@ export const remittanceColumn = ({
           ? "bg-[#ECFDF3] text-[#027A48]  "
           : "text-[#AF9401] bg-[#FEFBEB]";
       return (
-        <div className="px-4 py-6">
+        <div className="px-4 py-6 hidden lg:flex">
           <div
             className={`  font-medium text-sm hidden lg:flex items-center justify-center gap-2 w-fit rounded-xl px-3 py-1 ${color}`}
           >

@@ -25,7 +25,9 @@ const Page = () => {
     (state: RootState) => state.remittance.createdRemittance
   );
 
-  const tableData: DummyRemittance[]  = singleRemittance ? [...singleRemittance, ...dummyRemittance] : dummyRemittance;
+  const tableData: DummyRemittance[] = singleRemittance
+    ? [...singleRemittance, ...dummyRemittance]
+    : dummyRemittance;
 
   return (
     <div>
@@ -33,12 +35,12 @@ const Page = () => {
         <div className=" ">
           <Modal
             setIsModalOpen={setIsModalOpen}
-            selectedRowData={selectedRowData} 
+            selectedRowData={selectedRowData}
           />
         </div>
       )}
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)] py-4 px-4 lg:px-0">
-        <div className="flex justify-between mb-4 items-center py-4">
+        <div className="flex flex-col xs:flex-row gap-4 justify-between mb-4 items-center py-4">
           <h1 className="text-black text-3xl font-medium">Remittance</h1>
           <PrimaryButtons
             text="Create Remittance"
@@ -50,7 +52,7 @@ const Page = () => {
         <div className=" rounded-2xl bg-white">
           <TanStackTable
             columns={columns}
-            data={tableData  }
+            data={tableData}
             onRowClick={handleRowClick}
           />
         </div>

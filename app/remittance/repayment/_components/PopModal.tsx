@@ -4,6 +4,8 @@ import { LoanRowData } from ".././page";
 import clsx from "clsx";
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
+import { useDispatch } from "react-redux";
+import { addSelectedCustomer } from "@/app/store/slices/RemittanceSlice";
 
 interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
@@ -27,14 +29,16 @@ const PopModal = ({
   }, []);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
 
   const [newArray, setNewArray] = useState<LoanRowData[]>([]);
   const [rawValue, setRawValue] = useState<Record<string, string>>({});
   const [buttonValidation, setButtonValidation] = useState<boolean>(false);
   const addCustomerToRemittance = () => {
     setIsModalOpen(false);
-    setIsSideModalOpen(true);
-    setSelectedRowsItems(newArray);
+    setIsSideModalOpen(false);
+    setSelectedRowsItems([]);
+    dispatch(addSelectedCustomer(newArray));
   };
 
   const handleChange = (id: string, value: string, item: LoanRowData) => {

@@ -108,7 +108,7 @@ export const LoanColumns = ({
                   : "border-border-[#EAEAEA]"
               )}
             >
-              <div className=" top bg-[#f9f9f9] flex justify-between gap-4 xs:gap-8 xs:px-8 xs:py-7 px-4 py-4">
+              <div className=" top bg-[#f9f9f9] flex  flex-col-reverse xs:flex-row  justify-between gap-4 xs:gap-8 xs:px-8 xs:py-7 px-4 py-4">
                 <div className="">
                   <h5 className=" text-black text-base font-medium mb-1">
                     {customerName}
@@ -140,8 +140,9 @@ export const LoanColumns = ({
                   text={"Add Customer"}
                   icon="/icons/addDark.png"
                   onClick={() => handleButtonClick()}
-                  className="text-black bg-white border border-[#EAEAEA] rounded-lg py-2 px-4 flex items-center"
+                  className="text-black bg-white border border-[#EAEAEA] rounded-lg xs:py-2 xs:px-4   flex items-center justify-center gap-4"
                 />
+               
               </div>
               <div className="bg-white flex justify-between xs:px-8 xs:py-7 px-4 py-4 font-medium">
                 <div className="">
@@ -180,8 +181,8 @@ export const LoanColumns = ({
       className: "hidden lg:table-cell",
     },
     cell: (cell) => {
-      const value = cell.getValue() as string; 
-      const rowData = {...cell.row.original };
+      const value = cell.getValue() as string;
+      const rowData = { ...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -212,7 +213,7 @@ export const LoanColumns = ({
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
-      const rowData = {...cell.row.original };
+      const rowData = { ...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -244,7 +245,7 @@ export const LoanColumns = ({
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
-      const rowData = {...cell.row.original };
+      const rowData = { ...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -276,7 +277,7 @@ export const LoanColumns = ({
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
-      const rowData = {...cell.row.original };
+      const rowData = { ...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -309,7 +310,7 @@ export const LoanColumns = ({
     },
     cell: (cell) => {
       const value = cell.getValue() as string;
-      const rowData = {...cell.row.original };
+      const rowData = { ...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };
@@ -347,7 +348,7 @@ export const LoanColumns = ({
     cell: (cell) => {
       const value = cell.getValue() as string;
       const { overdue } = cell.row.original;
-      const rowData = {...cell.row.original };
+      const rowData = { ...cell.row.original };
       const settingSelectedRow = () => {
         setSelectedRowsId([rowData]);
       };

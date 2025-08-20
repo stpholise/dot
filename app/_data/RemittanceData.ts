@@ -69,6 +69,7 @@ export interface DummyLoanData {
   instalment: string;
   overdue: string;
   repayment: string;
+  currentPayment?: string;
 }
 
 const GenerateDummyRepaymentData = (count: number) => {

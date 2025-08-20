@@ -4,7 +4,7 @@ import appReducer from "./slices/AppSlice";
 import userAccountReducer from "./slices/UserAccountSlice";
 import remittanceReducer from "./slices/RemittanceSlice";
 import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import storage from "redux-persist/lib/storage/session";
 
 const rootReducer = combineReducers({
   app: appReducer,
