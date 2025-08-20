@@ -18,9 +18,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
       console.log(err);
     }
   };
-
-  console.log("selectedRowData", selectedRowData);
-  console.log("items", selectedRowData?.items);
+ 
   return (
     <>
       <div className="w-full  lg:w-[600px] min-h-96 h-full z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-white overflow-y-scroll pb-6">
@@ -50,7 +48,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
             />
           </button>
         </div>
-        <div className="px-8 py-4 flex flex-col xs:flex-row items-center gap-8 justify-between ">
+        <div className="px-8 py-4 flex flex-col xs:flex-row items-start xs:items-center gap-3 xs:gap-8 justify-between ">
           <div>
             <h4 className="text-black">
               <Image
@@ -63,8 +61,8 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
               Remittance Code:
             </h4>
           </div>
-          <div className="bg-[#f9f9f9] rounded-lg px-2 py-2 flex flex-col sm:flex-row items-end  lg:items-center justify-between w-80">
-            <p className="font-medium  text-black px-2">
+          <div className="bg-[#f9f9f9] rounded-lg px-2 py-2 flex  xs:flex-row items-center flex-nowrap whitespace-nowrap lg:items-center justify-between w-80">
+            <p className="font-medium  text-black text-sm xs:text-base px-2">
               {selectedRowData?.remittanceName}
             </p>
             <button
@@ -84,7 +82,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
             </button>
           </div>
         </div>
-        <div className="px-8 py-4 ">
+        <div className="xs:px-6 px-4 sm:px-8 py-4 ">
           <h3 className="text-black font-medium text-lg my-4">
             Remittance Details
           </h3>
@@ -96,9 +94,10 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
               />
             )}
           </div>
+          
           {!selectedRowData?.items && (
             <div className="rounded-3xl border">
-              <div className="bg-[#F9F9F9] px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl">
+              <div className="bg-[#F9F9F9] xs:px-6 px-4 sm:px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl">
                 <div className="">
                   <h4 className="text-sm text-#667085 font-medium">
                     Total Customers

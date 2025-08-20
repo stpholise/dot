@@ -116,7 +116,7 @@ export const LoanColumns = ({
                 <button
                   onClick={() => settingSelectedRow()}
                   className={clsx(
-                    "w-4 h-4 absolute top-4 right-4 rounded-sm  xs:hdden",
+                    "w-4 h-4 absolute top-4 right-4 rounded-sm  xs:hidden",
                     {
                       "border border-[#D0D5DD]": !selectedRowsId.some(
                         (item) => item.id === id
