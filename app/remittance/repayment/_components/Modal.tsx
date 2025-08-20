@@ -7,8 +7,12 @@ import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import RemittanceDetail from "./RemittanceDetail";
 import { v4 as uuidv4 } from "uuid";
 import Successfull from "./Successfull";
-import { useDispatch } from "react-redux";
-import { createRemittance } from "@/app/store/slices/RemittanceSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createRemittance,
+  setSelectedCustomer,
+} from "@/app/store/slices/RemittanceSlice";
+import { RootState } from "@/app/store";
 
 interface ModalProp {
   setIsModalOpen: (state: boolean) => void;
@@ -37,11 +41,14 @@ const Modal = ({
   const [currentModal, setCurrentModal] = useState<number>(0);
 
   const dispatch = useDispatch();
+  const selectedCustomer = useSelector(
+    (state: RootState) => state.remittance.selectedCustomer
+  );
 
   const removeItemFromList = (id: string) => {
     if (selectedRowsItems) {
-      const newArray = selectedRowsItems.filter((items) => items.id !== id);
-      setSelectedRowsItems(newArray);
+      const newArray = selectedCustomer.filter((items) => items.id !== id);
+      dispatch(setSelectedCustomer(newArray));
     }
   };
 
@@ -75,28 +82,29 @@ const Modal = ({
     const formatAmount = Number(raw).toLocaleString("en-NG", {
       minimumFractionDigits: 0,
     });
-    if (!selectedRowsItems) return;
+    if (!selectedCustomer) return;
     const newObj = {
-      ...selectedRowsItems.find((item) => item.id === id),
+      ...selectedCustomer.find((item) => item.id === id),
       currentPayment: formatAmount,
     };
-    const newArray = selectedRowsItems.map((item) =>
+    const newArray = selectedCustomer.map((item) =>
       item.id === id ? newObj : item
     ) as LoanRowData[];
-    setSelectedRowsItems(newArray);
+    dispatch(setSelectedCustomer(newArray));
+    // setSelectedRowsItems(newArray);
   };
 
   const handleButtonValidation = useCallback(() => {
-    if (!selectedRowsItems || selectedRowsItems.length === 0) {
+    if (!selectedCustomer || selectedCustomer.length === 0) {
       setButtonValidation(false);
     } else {
       setButtonValidation(true);
     }
-  }, [selectedRowsItems]);
+  }, [selectedCustomer]);
 
   useEffect(() => {
-    if (!selectedRowsItems) return;
-    const total = Object.values(selectedRowsItems).reduce(
+    if (!selectedCustomer) return;
+    const total = Object.values(selectedCustomer).reduce(
       (sum, item) => sum + parseInt(item.currentPayment!.replace(/,/g, "")),
       0
     );
@@ -106,11 +114,11 @@ const Modal = ({
       })
     );
     handleButtonValidation();
-  }, [handleButtonValidation, selectedRowsItems]);
+  }, [handleButtonValidation, selectedCustomer]);
 
   const cancelRemittanceCreattion = () => {
     setSelectedRowsItems([]);
-    setIsModalOpen(false);
+    setIsModalOpen(false); 
   };
 
   return (
@@ -151,14 +159,10 @@ const Modal = ({
                 />
               </button>
             </div>
-            <div
-              className={clsx("h-[calc(100vh-180px)] overflow-y-auto", {
-                "h-[calc(100vh-180px)] ": selectedRowsItems?.length,
-              })}
-            >
+            <div className={clsx("h-[calc(100vh-180px)] overflow-y-auto")}>
               <div className="xl:px-8 xl:py-6 md:px-6 pt-4 pb-12">
-                {selectedRowsItems && selectedRowsItems?.length !== 0 ? (
-                  selectedRowsItems.map((item, index) => (
+                {selectedCustomer && selectedCustomer?.length !== 0 ? (
+                  selectedCustomer.map((item, index) => (
                     <div
                       className="bg-white h-40  w-full lg:min-96 xl:px-8 px-4 sm:py-3 xl:py-6 mb-4 rounded-2xl"
                       key={item.id}
@@ -238,7 +242,7 @@ const Modal = ({
                 )}
               </div>
             </div>
-            <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex justify-between">
+            <div className="sticky bottom-0 right-0 left-0 border border-[#EAEAEA] bg-white px-8 py-6 flex xs:flex-row flex-col gap-4 justify-between">
               <div className={clsx("block")}>
                 <h2 className="text-black text-3xl font-medium">
                   ₦{totalRemittance}
@@ -304,9 +308,9 @@ const Modal = ({
             </div>
             <div className="min-h-[calc(100vh-180px)] overflow-auto ">
               <div className="flex justify-center pt-4 pb-12 overflow-auto">
-                {selectedRowsItems && selectedRowsItems?.length !== 0 && (
+                {selectedCustomer && selectedCustomer?.length !== 0 && (
                   <RemittanceDetail
-                    customerSummary={selectedRowsItems}
+                    customerSummary={selectedCustomer}
                     total={totalRemittance}
                   />
                 )}

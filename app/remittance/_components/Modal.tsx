@@ -18,6 +18,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
       console.log(err);
     }
   };
+  
   console.log("selectedRowData", selectedRowData);
   console.log("items", selectedRowData?.items);
   return (
