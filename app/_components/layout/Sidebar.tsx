@@ -7,7 +7,6 @@ import { menuState, toggleMenu } from "@/app/store/slices/AppSlice";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { useClerk } from "@clerk/nextjs";
-import { useCallback, useEffect } from "react";
 
 const Sidebar = () => {
   const { isSignedIn, signOut } = useClerk();
@@ -43,21 +42,6 @@ const Sidebar = () => {
     dispatch(menuState(false));
   };
 
-  const verifyPath = useCallback(
-    (link: string) => {
-      if (!pathname) return false;
-      if (pathname !== link) return false;
-      return (
-        pathname === link ||
-        (link === "/" && pathname === "/" && pathname.startsWith(link))
-      );
-    },
-    [pathname]
-  );
-
-  useEffect(() => {
-    verifyPath(pathname);
-  }, [verifyPath, pathname]);
 
   return (
     <div
@@ -89,28 +73,30 @@ const Sidebar = () => {
               role="list"
               className="flex flex-col gap-2 w-full 2xs:w-11/12 sm:w-11/12"
             >
-              {navItems.map((item) => (
-                <button
-                  onClick={() => handleNavigation(item)}
-                  className={clsx(
-                    "flex transition duration-300 ease lg:px-6 xs:px-6 px-4  lg:text-base font-medium py-2 justify-start items-center gap-4   whitespace-nowrap rounded-r-md group",
-                    {
-                      "text-[#363739]": !verifyPath(item.link),
-                      " bg-black text-white": verifyPath(item.link),
-                    }
-                  )}
-                  key={item.title}
-                >
-                  <Image
-                    className="group-hover:stroke-white"
-                    alt={item.title}
-                    src={item.icon}
-                    height="17"
-                    width="16"
-                  />
-                  {item.title}{" "}
-                </button>
-              ))}
+              {navItems.map((item) => {
+                const isActive =
+                  pathname === item.link ||
+                  (pathname.includes(item.link) && item.link !== "/");
+                return (
+                  <button
+                    onClick={() => handleNavigation(item)}
+                    className={clsx(
+                      "flex transition duration-300 ease lg:px-6 xs:px-6 px-4  lg:text-base font-medium py-2 justify-start items-center gap-4   whitespace-nowrap rounded-r-md group",
+                      isActive ? " bg-black text-white" : "text-[#363739]"
+                    )}
+                    key={item.title}
+                  >
+                    <Image
+                      className="group-hover:stroke-white"
+                      alt={item.title}
+                      src={item.icon}
+                      height="17"
+                      width="16"
+                    />
+                    {item.title}{" "}
+                  </button>
+                );
+              })}
             </div>
           </div>
           <div
