@@ -42,7 +42,7 @@ const Sidebar = () => {
     dispatch(menuState(false));
   };
 
-console.log("testedrty");
+  console.log("testedrty", pathname);
 
   return (
     <div
