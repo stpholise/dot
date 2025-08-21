@@ -42,6 +42,7 @@ const Sidebar = () => {
     dispatch(menuState(false));
   };
 
+console.log("testedrty");
 
   return (
     <div
