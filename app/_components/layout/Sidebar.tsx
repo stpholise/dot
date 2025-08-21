@@ -41,7 +41,6 @@ const Sidebar = () => {
     }
     dispatch(menuState(false));
   };
- 
 
   return (
     <div
@@ -74,9 +73,11 @@ const Sidebar = () => {
               className="flex flex-col gap-2 w-full 2xs:w-11/12 sm:w-11/12"
             >
               {navItems.map((item) => {
-                const isActive = pathname === '/' && item.link === '/' ||
-                  pathname === item.link ||
-                  (pathname.includes(item.link) && item.link !== "/");
+                const isActive =
+                  !pathname && item.link === "/"
+                    ? true
+                    : pathname === item.link ||
+                      (pathname.includes(item.link) && item.link !== "/");
                 return (
                   <button
                     onClick={() => handleNavigation(item)}

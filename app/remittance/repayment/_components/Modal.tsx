@@ -62,12 +62,12 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
       remittanceName: `DLTE-${shortIdRef.current}`,
       items: selectedCustomer,
       remittanceAmount: totalRemittance,
-      remittanceDate: new Date().toLocaleDateString("en-NG", {
+      remittanceDate: new Date().toLocaleDateString("en-GB", {
         day: "2-digit",
-        month: "2-digit",
+        month: "short",
         year: "numeric",
       }),
-      remittanceTime: new Date().toLocaleTimeString("en-NG", {
+      remittanceTime: new Date().toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
         hour12: true,
