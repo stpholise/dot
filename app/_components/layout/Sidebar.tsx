@@ -47,7 +47,10 @@ const Sidebar = () => {
     (link: string) => {
       if (!pathname) return false;
       if (pathname !== link) return false;
-      return pathname === link || (link !== "/" && pathname.startsWith(link));
+      return (
+        pathname === link ||
+        (link === "/" && pathname === "/" && pathname.startsWith(link))
+      );
     },
     [pathname]
   );
