@@ -58,7 +58,7 @@ export const remittanceColumn = ({
           <div className="text-black hidden lg:table-cell sm:text-[#667085]   lg:w-full px-4 py-6 ">
             <p className=" text-base"> {value}</p>
           </div>
-          <div className="text-gray-900 lg:hidden  w-full mx-auto my-2 ">
+          <div className="text-gray-900 lg:hidden h-fit overflow-hidden relative  border border-[#EAEAEA] rounded-2xl w-full mx-auto my-2 ">
             <div className="bg-[#f9f9f9] border border-[#EAEAEA] w-full rounded-t-2xl xs:px-6 py-4 px-3  flex justify-between">
               <div className="">
                 <p className="text-lg font-semibold text-black">{value}</p>
@@ -69,12 +69,13 @@ export const remittanceColumn = ({
                   setIsModalOpen(true);
                   setSelectedRowData(cell.row.original);
                 }}
-                className="w-40 h-12 rounded-lg bg-white border border-[#eaeaea] font-medium text-[#344054] text-base"
+                className="w-40 py-3 max-h-12 hidden xs:inline-block rounded-lg bg-white border border-[#eaeaea] font-medium text-[#344054] text-base"
               >
                 View Details
               </button>
             </div>
-            <div className="w-full h-24 flex items-center px-6 py-6 border-[#eaeaea] border rounded-b-lg">
+
+            <div className="w-full h-fit flex items-center px-4 py-4 xs:px-6 xs:py-6 flex-wrap gap-3    rounded-b-lg">
               <div className="flex-1">
                 <p className="text-[#667085] text-xs leading-8">
                   Remittance Amount
@@ -88,11 +89,11 @@ export const remittanceColumn = ({
                   {remittanceDate + " " + remittanceTime}
                 </p>
               </div>
-              <div className="flex-1 text-right ">
+              <div className="flex-1 text-left xs:text-right ">
                 <p className="text-[#667085] text-xs px-3 leading-8">Status</p>
 
                 <div
-                  className={`ml-auto flex items-center justify-end gap-2 w-fit rounded-2xl px-3 py-1 text-[#454547] text-sm ${color} `}
+                  className={`xs:ml-auto flex items-center justify-start xs:justify-end gap-2 w-fit rounded-2xl px-3 py-1 text-[#454547] text-sm ${color} `}
                 >
                   <div
                     className={clsx(
@@ -102,9 +103,20 @@ export const remittanceColumn = ({
                         : "bg-[#AF9401]"
                     )}
                   ></div>
-                  <p>{remittanceStatus}</p>
+                  <p className="text-sm">{remittanceStatus}</p>
                 </div>
               </div>
+            </div>
+            <div className="px-4 py-3 xs:hidden ">
+              <button
+                onClick={() => {
+                  setIsModalOpen(true);
+                  setSelectedRowData(cell.row.original);
+                }}
+                className=" max-h-12 rounded-lg bg-white w-full   border border-[#eaeaea] font-medium text-[#344054] text-xs py-2"
+              >
+                View Details
+              </button>
             </div>
           </div>
         </div>

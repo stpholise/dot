@@ -18,13 +18,13 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
       console.log(err);
     }
   };
- 
+
   return (
     <>
       <div className="w-full  lg:w-[600px] min-h-96 h-full z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-white overflow-y-scroll pb-6">
         <div className="px-8 py-8  border-b font-medium text-2xl border-b-[#EAEAEA] flex justify-between text-black">
-          <div className="flex items-center justify-start gap-3">
-            <div className=" size-9 rounded-lg bg-black flex items-center justify-center">
+          <div className="flex items-center justify-start gap-3 text-xl xs:text-2xl">
+            <div className=" size-6 xs:size-9 rounded-lg bg-black flex items-center justify-center">
               <Image
                 src={"/icons/remitance.svg"}
                 alt={"customer"}
@@ -48,7 +48,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
             />
           </button>
         </div>
-        <div className="px-8 py-4 flex flex-col xs:flex-row items-start xs:items-center gap-3 xs:gap-8 justify-between ">
+        <div className="sm:px-8 xs:px-6 px-4 py-2 xs:py-4 flex flex-col xs:flex-row items-start xs:items-center gap-3 xs:gap-8 justify-between ">
           <div>
             <h4 className="text-black">
               <Image
@@ -82,7 +82,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
             </button>
           </div>
         </div>
-        <div className="xs:px-6 px-4 sm:px-8 py-4 ">
+        <div className="xs:px-6 px-4 sm:px-8 py-2 xs:py-4 ">
           <h3 className="text-black font-medium text-lg my-4">
             Remittance Details
           </h3>
@@ -94,7 +94,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
               />
             )}
           </div>
-          
+
           {!selectedRowData?.items && (
             <div className="rounded-3xl border">
               <div className="bg-[#F9F9F9] xs:px-6 px-4 sm:px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl">
