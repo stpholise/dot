@@ -7,6 +7,7 @@ import { menuState, toggleMenu } from "@/app/store/slices/AppSlice";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { useClerk } from "@clerk/nextjs";
+import { useCallback, useEffect } from "react";
 
 const Sidebar = () => {
   const { isSignedIn, signOut } = useClerk();
@@ -26,7 +27,10 @@ const Sidebar = () => {
       icon: "/icons/logout.svg",
       title: "Logout",
       link: "/login",
-      onClick: () => signOut,
+      onClick: () => {
+        signOut();
+        handleNavigation("/");
+      },
     },
   ];
 
@@ -38,6 +42,19 @@ const Sidebar = () => {
     }
     dispatch(menuState(false));
   };
+
+  const verifyPath = useCallback(
+    (link: string) => {
+      if (!pathname) return false;
+      if (pathname !== link) return false;
+      return pathname === link || (link !== "/" && pathname.startsWith(link));
+    },
+    [pathname]
+  );
+
+  useEffect(() => {
+    verifyPath(pathname);
+  }, [verifyPath, pathname]);
 
   return (
     <div
@@ -75,10 +92,8 @@ const Sidebar = () => {
                   className={clsx(
                     "flex transition duration-300 ease lg:px-6 xs:px-6 px-4  lg:text-base font-medium py-2 justify-start items-center gap-4   whitespace-nowrap rounded-r-md group",
                     {
-                      "text-[#363739]": pathname !== item.link,
-                      " bg-black text-white":
-                        pathname == item.link ||
-                        (item.link !== "/" && pathname.startsWith(item.link)),
+                      "text-[#363739]": !verifyPath(item.link),
+                      " bg-black text-white": verifyPath(item.link),
                     }
                   )}
                   key={item.title}
@@ -102,7 +117,13 @@ const Sidebar = () => {
             {isSignedIn &&
               secondaryNavItems.map((item) => (
                 <button
-                  onClick={() => handleNavigation(item)}
+                  onClick={() => {
+                    if (item.onClick) {
+                      item.onClick();
+                    } else {
+                      handleNavigation(item);
+                    }
+                  }}
                   className="flex  transition duration-300 ease lg:px-6 xs:px-6 px-4 lg:text-black lg:text-base font-medium py-2 justify-start items-center gap-4 text-[#363739]  whitespace-nowrap  group"
                   key={item.title}
                 >

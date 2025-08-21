@@ -263,17 +263,17 @@ const Modal = ({ setIsModalOpen, setSelectedRowsItems }: ModalProp) => {
                 <PrimaryButtons
                   text={`Cancel`}
                   className={clsx(
-                    "bg-white border border-[#D0D5DD] font-medium text-[#344054] w-22 xs:w-1/2  flex justify-center   sm:px-5 py-3 rounded-lg "
+                    "bg-white border border-[#D0D5DD] font-medium text-[#344054] w-22 2xs:w-1/2  flex justify-center   sm:px-5 py-3 rounded-lg "
                   )}
                   onClick={cancelRemittanceCreattion}
                 />
                 <button
                   disabled={!buttonValidation}
                   className={clsx(
-                    "   whitespace-nowrap w-fit 2xs:w-auto 2xs:px-5 py-3 flex justify-center rounded-lg text-white",
+                    "   whitespace-nowrap w-fit xs:w-full 2xs:w-1/2 2xs:px-5 py-3 flex justify-center rounded-lg text-white",
 
                     buttonValidation ? "bg-black" : "bg-[#9A9A9A]",
-                    selectedCustomer?.length > 1 ? 'px-2' : 'px-3'
+                    selectedCustomer?.length > 1 ? 'px-2' : 'px-3 xs:px-4 xs:w-1/2'
 
                   )}
                   onClick={() => setCurrentModal(1)}

@@ -36,8 +36,9 @@ const Page = () => {
     <div className="bg-[#FAF9F9] text-black min-h-screen w-screen">
       <div className="lg:ml-68 mt-10 lg:w-[calc(100%-320px)] py-4 px-4 lg:px-1">
         <div className="flex flex-col gap-8">
-          <div className="flex flex-col sm:flex-row w-full justify-between px-2 items-center gap-4 md:gap-12">
+          <div className="flex flex-col sm:flex-row w-full justify-between px-2 items-start xs:items-center gap-4 md:gap-12">
             <PageTitle MainTitle={"Dot MFB Account Opening"} />
+
             <LongButton
               icon={"/icons/add.svg"}
               text={"Open Dot MFB Account"}

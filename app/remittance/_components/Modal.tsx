@@ -97,24 +97,24 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
 
           {!selectedRowData?.items && (
             <div className="rounded-3xl border">
-              <div className="bg-[#F9F9F9] xs:px-6 px-4 sm:px-8 py-6 flex flex-col sm:flex-row  gap-8 justify-between rounded-t-3xl">
+              <div className="bg-[#F9F9F9] xs:px-6 px-4 sm:px-8 py-6 flex  sm:flex-row  gap-8 justify-between rounded-t-3xl">
                 <div className="">
-                  <h4 className="text-sm text-#667085 font-medium">
+                  <h4 className="text-sm text-[#667085] font-medium">
                     Total Customers
                   </h4>
-                  <p className="text-black text-3xl font-semibold">
+                  <p className="text-black text-lg xs:text-xl sm:text-3xl font-semibold">
                     4 Customers
                   </p>
                 </div>
                 <div className="">
-                  <h4 className="text-sm text-#667085 font-medium">
+                  <h4 className="text-sm text-[#667085] font-medium">
                     Total Remittance Amount
                   </h4>
-                  <p className="text-black text-3xl font-semibold">₦24,500</p>
+                  <p className="text-black text-lg xs:text-xl sm:text-3xl font-semibold">₦24,500</p>
                 </div>
               </div>
               <div className="px-8 py-4">
-                <h4 className="text-xs font-medium flex items-center">
+                <h4 className="text-xs text-[#667085] font-medium flex items-center">
                   {" "}
                   <Image
                     src={"/icons/user.png"}
@@ -136,7 +136,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
                           {item.name}
                         </h5>
                         <div className="flex gap-2 text-xs">
-                          <span className="">
+                          <span className="text-[#667085]">
                             <Image
                               src={"/icons/offer_hand.png"}
                               alt={"instalment"}
@@ -146,7 +146,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
                             />
                             Instalment: {item.instalment}
                           </span>
-                          <span>
+                          <span className="text-[#667085]">
                             <Image
                               src={"/icons/calender.png"}
                               alt={"instalment"}
@@ -158,7 +158,7 @@ const Modal = ({ setIsModalOpen, selectedRowData }: ModalProp) => {
                           </span>
                         </div>
                       </div>
-                      <p className="text-black text-2xl font-medium">
+                      <p className="text-black text-lg xs:text-2xl font-medium">
                         {item.remittanceAmount}
                       </p>
                     </div>
