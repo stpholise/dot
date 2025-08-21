@@ -41,8 +41,7 @@ const Sidebar = () => {
     }
     dispatch(menuState(false));
   };
-
-  console.log("testedrty", pathname);
+ 
 
   return (
     <div
@@ -75,7 +74,7 @@ const Sidebar = () => {
               className="flex flex-col gap-2 w-full 2xs:w-11/12 sm:w-11/12"
             >
               {navItems.map((item) => {
-                const isActive =
+                const isActive = pathname === '/' && item.link === '/' ||
                   pathname === item.link ||
                   (pathname.includes(item.link) && item.link !== "/");
                 return (
