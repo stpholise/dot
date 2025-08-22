@@ -163,6 +163,11 @@ const navItems: NavItems[] = [
     title: "Remittance",
     link: "/remittance",
   },
+  {
+    icon: "/icons/remitance.svg",
+    title: "HMO",
+    link: "/hmo",
+  },
 ];
 
 export default Sidebar;
