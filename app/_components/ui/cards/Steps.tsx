@@ -1,6 +1,5 @@
 import Image from "next/image";
-
-import clsx from "clsx";
+import clsx from "clsx";       
 interface Step {
   id: number;
   title: string;
@@ -11,17 +10,17 @@ interface Step {
 interface StepsProps {
   steps: Step[];
   currentStep: number;
-  setCurrentStep: (step: number) => void;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Steps = ({ currentStep, steps }: StepsProps) => {
+const Steps = ({ currentStep, steps, setCurrentStep }: StepsProps) => {
   return (
     <div className={" flex lg:gap-8  gap-5 lg:justify-between justify-center"}>
       <div
         className={clsx(
           "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden flex-col items-center gap-4 ",
           {
-            hidden: currentStep >= 4,
+            hidden: currentStep >= steps.length - 1,
             "lg:flex": currentStep < 4,
           }
         )}
@@ -29,7 +28,10 @@ const Steps = ({ currentStep, steps }: StepsProps) => {
         <div className="grid gap-2 grid-cols-5 lg:gap-4 justify-stretch  ">
           {steps.map((step, index) => (
             <div
-              onClick={() => setCurrentStep(index)}
+              onClick={() => {
+                console.log(index);
+                setCurrentStep(index);
+              }}
               key={index}
               className={clsx(
                 "w-12 lg:w-16 h-1 rounded-sm hover:cursor-pointer ",
