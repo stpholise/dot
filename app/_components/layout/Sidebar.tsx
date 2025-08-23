@@ -166,7 +166,7 @@ const navItems: NavItems[] = [
   {
     icon: "/icons/remitance.svg",
     title: "HMO",
-    link: "/hmo",
+    link: "/hmo/buy-hmo",
   },
 ];
 
