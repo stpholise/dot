@@ -5,10 +5,11 @@ import Image from "next/image";
 import { FormikHelpers } from "formik";
 import { IdentificationProps } from "../account/create-account/_components/Identification";
 import { CustomerAddress } from "../account/create-account/_components/Address";
+import { PersonalDetailsType } from "../hmo/buy-hmo/_components/PersonalDetailsForm";
 
 interface ImageDropzoneProps {
   setFieldValue: FormikHelpers<
-    IdentificationProps | CustomerAddress
+    IdentificationProps | CustomerAddress | PersonalDetailsType
   >["setFieldValue"];
   setFile?: (state: File | undefined) => void;
   fieldName: string;
@@ -40,7 +41,6 @@ const ImageDropzone = ({
   const maxFileSize = 3 * 1024 * 1024;
 
   const onDropItem = useCallback((acceptedFiles: File[]) => {
-    
     if (acceptedFiles.length > 0) {
       setError(null);
       setIsFile(true);
@@ -90,15 +90,17 @@ const ImageDropzone = ({
     setItemFiles([]);
     setIsFile(false);
     setFieldValue(fieldName, undefined);
-  
-if (setFile) {
-  setFile(undefined);
-}  };
+
+    if (setFile) {
+      setFile(undefined);
+    }
+  };
 
   return (
     <div
       className={clsx(" bg-[#F7F7F7] flex rounded-3xl relative ", {
-        "sm:w-[520px] lg:w-[339px] xl:w-[520px] sm:h-[130px] px-6 py-6 justify-center ": !isFile,
+        "sm:w-[520px] lg:w-[339px] xl:w-[520px] sm:h-[130px] px-6 py-6 justify-center ":
+          !isFile,
         "px-4 py-4  justify-start": isFile,
       })}
     >
