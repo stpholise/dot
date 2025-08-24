@@ -2,18 +2,18 @@
 import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
+
+import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState";
 import {
-  setCurrentStep,
-  setCustomerAddress,
-} from "@/app/store/slices/UserAccountSlice";
-import { useFetchLGA } from "./useFetchState";
-import { useDispatch, useSelector } from "react-redux";
+  //useDispatch,
+  useSelector,
+} from "react-redux";
 import * as Yup from "yup";
 import clsx from "clsx";
 import { RootState } from "@/app/store";
-import ImageDropzone from "@/app/_components/ImageDropzone";
 import { useEffect } from "react";
 import { scrollToTop } from "@/app/_utils/ScrollToTop";
+import FormHeader from "@/app/_components/ui/units/FormHeader";
 
 export interface CustomerAddress {
   state: string;
@@ -29,8 +29,7 @@ interface AddressProps {
   error?: string;
   selectedState: string;
   setSelectedState: (state: string) => void;
-  setUtilityBill?: (state: File | undefined) => void;
-  utilityBill?: File | undefined;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Address = ({
@@ -39,10 +38,9 @@ const Address = ({
   error,
   selectedState,
   setSelectedState,
-  setUtilityBill,
-  utilityBill,
+  setCurrentStep,
 }: AddressProps) => {
-  const dispatch = useDispatch();
+  //   const dispatch = useDispatch();
   useEffect(() => {
     scrollToTop();
   }, []);
@@ -53,21 +51,24 @@ const Address = ({
     errorFetchinLga: string | null;
   };
 
-  const currentStep = useSelector(
-    (state: RootState) => state.userAccount.initialStepState.currentStep
-  );
+  //   const currentStep = useSelector(
+  //     (state: RootState) => state.userAccount.initialStepState.currentStep
+  //   );
 
   const customerAddress = useSelector(
     (state: RootState) =>
       state.userAccount.userAccountInitialState.customerAddress
   );
   const decrementStep = () => {
-    const newStep = currentStep - 1;
-    dispatch(setCurrentStep(newStep));
+    // const newStep = currentStep - 1;
+    // dispatch(setCurrentStep(newStep));
+    setCurrentStep(0);
   };
   const incrementStep = () => {
-    const newStep = currentStep + 1;
-    dispatch(setCurrentStep(newStep));
+    setCurrentStep(2);
+    // const newStep = currentStep + 1;
+    // dispatch(setCurrentStep(newStep));
+    setCurrentStep(2);
   };
 
   const initialState: CustomerAddress = {
@@ -75,7 +76,6 @@ const Address = ({
     city: customerAddress?.city || "",
     address: customerAddress?.address || "",
     lga: customerAddress?.lga || "",
-    utilityBillImage: undefined,
   };
 
   const validationSchema = Yup.object().shape({
@@ -92,22 +92,21 @@ const Address = ({
       .trim()
       .required("Required"),
     address: Yup.string().min(3).required("Requried"),
-    utilityBillImage: Yup.mixed().notRequired(),
   });
 
   const onSubmit = (
     value: CustomerAddress,
     actions: FormikHelpers<CustomerAddress>
   ) => {
-    dispatch(
-      setCustomerAddress({
-        state: value.state,
-        city: value.city,
-        address: value.address,
-        lga: value.lga,
-        utilityBillImage: value.utilityBillImage,
-      })
-    );
+    // dispatch(
+    //   setCustomerAddress({
+    //     state: value.state,
+    //     city: value.city,
+    //     address: value.address,
+    //     lga: value.lga,
+    //     utilityBillImage: value.utilityBillImage,
+    //   })
+    // );
     actions.resetForm();
     incrementStep();
   };
@@ -131,19 +130,14 @@ const Address = ({
           </h3>
         </div>
       </div>
-      <div className=" hidden lg:flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
-        <Image
-          alt="user"
-          src="/icons/security.png"
-          height={14}
-          width={14}
-          className=""
-        />
-        <p className="">
-          <span className="text-black">Customer Address</span>
-          <span className="text-gray-400">- Landmarks are usually helpful</span>
-        </p>
-      </div>
+      <FormHeader
+        icon={{
+          src: "/icons/security.png",
+          alt: "user",
+        }}
+        primaryText="Origin & Address"
+        secondaryText=" - Landmarks are usually helpful"
+      />
       <Formik
         initialValues={initialState}
         validationSchema={validationSchema}
@@ -152,6 +146,39 @@ const Address = ({
         {({ isValid, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="px-4 sm:px-8 py-8 flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="city" className="text-sm text-[#454547]">
+                  Place of Birth *
+                </label>
+                <Field
+                  type="text"
+                  name="city"
+                  className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                  placeholder="Select a place of birth"
+                />
+                <ErrorMessage
+                  name="city"
+                  component="div"
+                  className="text-xs text-red-500"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="address" className="text-sm text-[#454547]">
+                  Address *
+                </label>
+                <Field
+                  type="text"
+                  name="address"
+                  className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                  placeholder="House number, street name (land mark)"
+                />
+                <ErrorMessage
+                  name="address"
+                  component="div"
+                  className="text-xs text-red-500"
+                />
+              </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor="fname" className="text-sm text-[#454547]">
                   State *
@@ -247,50 +274,6 @@ const Address = ({
                 </div>
               }
 
-              <div className="flex flex-col gap-2">
-                <label htmlFor="city" className="text-sm text-[#454547]">
-                  City *
-                </label>
-                <Field
-                  type="text"
-                  name="city"
-                  className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                  placeholder="Enter your city"
-                />
-                <ErrorMessage
-                  name="city"
-                  component="div"
-                  className="text-xs text-red-500"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label htmlFor="address" className="text-sm text-[#454547]">
-                  Street Address *
-                </label>
-                <Field
-                  type="text"
-                  name="address"
-                  className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                  placeholder="Enter your id number"
-                />
-                <ErrorMessage
-                  name="address"
-                  component="div"
-                  className="text-xs text-red-500"
-                />
-              </div>
-              {setUtilityBill && (
-                <div className="">
-                  <ImageDropzone
-                    setFieldValue={setFieldValue}
-                    fieldName="utilityBillImage"
-                    text={"Upload Utility Bill (Optional)"}
-                    setFile={setUtilityBill}
-                    file={utilityBill}
-                  />
-                </div>
-              )}
               <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">
                 <Image
                   src="/icons/setting.svg"
@@ -314,7 +297,7 @@ const Address = ({
                 onClick={decrementStep}
               />
               <PrimaryButtons
-                text={"Proceed - Confirm Details"}
+                text={"Proceed - Plan & Validity"}
                 type={"submit"}
                 disabled={!isValid || isSubmitting}
                 className={clsx(
