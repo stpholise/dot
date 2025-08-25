@@ -6,6 +6,9 @@ import Image from "next/image";
 import clsx from "clsx";
 import PrimaryButtons from "../../_components/ui/units/buttons/PrimaryButtons";
 import PersonalDetailsForm from "./_components/PersonalDetailsForm";
+import { useFetchState } from "@/app/account/create-account/_components/useFetchState";
+import Address from "./_components/OriginandAddress";
+import PlanValidity from "./_components/Plan&Validity";
 
 interface Step {
   id: number;
@@ -16,8 +19,17 @@ interface Step {
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const { states, isLoading, error } = useFetchState() as {
+    states: string[];
+    isLoading: boolean;
+    error: string;
+  };
 
-  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(undefined)
+  const [selectedState, setSelectedState] = useState<string>("");
+
+  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
+    undefined
+  );
   const cancelRegistration = () => {
     setCurrentStep(0);
   };
@@ -79,11 +91,24 @@ const Page = () => {
             }
           )}
         >
-          {
-            currentStep === 0 && (
-              <PersonalDetailsForm setCurrentStep={setCurrentStep} customerPhoto={customerPhoto} setCustomerPhoto={setCustomerPhoto} />
-            ) 
-          } 
+          {currentStep === 0 && (
+            <PersonalDetailsForm
+              setCurrentStep={setCurrentStep}
+              customerPhoto={customerPhoto}
+              setCustomerPhoto={setCustomerPhoto}
+            />
+          )}
+          {currentStep === 1 && (
+            <Address
+              states={states}
+              selectedState={selectedState}
+              setSelectedState={setSelectedState}
+              isLoading={isLoading}
+              error={error}
+              setCurrentStep={setCurrentStep}
+            />
+          )}
+          {currentStep === 2 && <PlanValidity />}
         </div>
       </div>
     </div>

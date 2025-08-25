@@ -1,48 +1,51 @@
 "use client";
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
-import FormHeader from "@/app/_components/ui/units/FormHeader";
-import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-import * as Yup from "yup";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import clsx from "clsx";
+import FormHeader from "@/app/_components/ui/units/FormHeader";
+import Image from "next/image";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import ImageDropzone from "@/app/_components/ImageDropzone";
+import * as Yup from "yup";
+import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 
 export interface PersonalDetailsType {
   fName: string;
   mName: string;
   lName: string;
   dob: string;
-  phone: string;
-  maritalStatus: string;
-  occupation: string;
+  phone?: string; 
+  relationship?: string;
   gender: string;
-  photo: File | undefined;
-  identity: File | undefined;
+  photo?: File | undefined;
 }
 
-interface PersonalDetailsFormProps {
-  setCurrentStep?: React.Dispatch<React.SetStateAction<number>>;
-  setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
-  customerPhoto: File | undefined;
-}
-
-const PersonalDetailsForm = ({
-  setCurrentStep,
+const DependantPopupModal = ({
   customerPhoto,
   setCustomerPhoto,
-}: PersonalDetailsFormProps) => {
-  const router = useRouter();
+  setIsDependantModalOpen,
+}: {
+  customerPhoto: File | undefined;
+  setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
+  setIsDependantModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  console.log(customerPhoto, setCustomerPhoto);
+
+  useEffect(() => {
+    window.document.body.style.overflowY = "hidden";
+    return () => {
+      window.document.body.style.overflowY = "auto";
+    };
+  }, []);
+ 
+
   const initialValues: PersonalDetailsType = {
     fName: "",
     mName: "",
     lName: "",
     dob: "",
-    phone: "",
-    maritalStatus: "",
-    occupation: "",
+    relationship: "",
     gender: "",
     photo: undefined,
-    identity: undefined,
   };
 
   const validationSchima = Yup.object({
@@ -50,50 +53,58 @@ const PersonalDetailsForm = ({
     mName: Yup.string(),
     lName: Yup.string().required(),
     dob: Yup.string().required(),
-    phone: Yup.string().required(),
-    maritalStatus: Yup.string().oneOf(
+    relationship: Yup.string().oneOf(
       ["single", "married", "devorced", "widowed"],
       "Invalid marital status"
     ),
-    occupation: Yup.string().required(),
     gender: Yup.string().oneOf(
       ["male", "feamle"],
       "they are only two genders "
     ),
   });
 
-  const handleFormSubmission = (
+  const addDependant = (
     values: PersonalDetailsType,
     formik: FormikHelpers<PersonalDetailsType>
   ) => {
-    setCurrentStep?.(1);
-    formik.resetForm();
-  };
-  const storedCustomerDetailsCheck = () => {
-    setCurrentStep?.(1);
-    return true;
+    console.log(values);
+    console.log(formik);
   };
 
   return (
-    <div>
-      <FormHeader
-        icon={{
-          src: "/icons/security.png",
-          alt: "user",
-        }}
-        primaryText="Personal Details"
-        secondaryText="- Ensure name matches identity document"
-      />
-
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleFormSubmission}
-        validationSchema={validationSchima}
+    <div className="">
+      <div
+        className={clsx(
+          "w-full bg-white lg:w-[468px] md:w-[440px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red lg:max-h-[600px] h-screen md:h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500 overflow-hidden  transform   ",
+        )}
       >
-        {({ isSubmitting, isValid, dirty, setFieldValue, values }) => (
-          <Form>
-            <div className="lg:px-8">
-              <div className="py-6 flex flex-col gap-4">
+        <FormHeader
+          icon={{
+            src: "/icons/security.png",
+            alt: "user",
+          }}
+          primaryText="Add a Dependant"
+        />
+        <button
+          className="absolute top-6 right-6"
+          onClick={() => setIsDependantModalOpen(false)}
+        >
+          <Image
+            src={"/icons/close.svg"}
+            alt={"close"}
+            width={16}
+            height={16}
+            className="min-w-4 min-h-4"
+          />
+        </button>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={addDependant}
+          validationSchema={validationSchima}
+        >
+          {({ values, isValid, dirty, isSubmitting, setFieldValue }) => (
+            <Form className="">
+              <div className="py-6 px-8 overflow-y-auto h-[400px] gap-4 flex flex-col">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="fName" className="text-sm text-[#454547]">
                     First Name *
@@ -163,40 +174,18 @@ const PersonalDetailsForm = ({
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="lname" className="text-sm text-[#454547]">
-                    Phone *
-                  </label>
-                  <Field
-                    type="text"
-                    name="phone"
-                    value={values.phone}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      const numericValue = e.target.value.replace(/\D/g, "");
-                      setFieldValue("phone", numericValue);
-                    }}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter registered phone number"
-                    maxLength={11}
-                  />
-                  <ErrorMessage
-                    name="phone"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="lname" className="text-sm text-[#454547]">
-                    Marital Status *
+                    Relationship *
                   </label>
                   <Field
                     type="select"
                     as="select"
                     name="maritalStatus"
-                    value={values.maritalStatus}
+                    value={values.relationship}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Choose a marital status"
                   >
                     <option className="text-gray-400 " disabled value="">
-                      Select marital status
+                      Select relationship
                     </option>
                     <option value="single" className="text-black">
                       Single
@@ -213,26 +202,6 @@ const PersonalDetailsForm = ({
                   </Field>
                   <ErrorMessage
                     name="maritalStatus"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="occupation"
-                    className="text-sm text-[#454547]"
-                  >
-                    Occupation *
-                  </label>
-                  <Field
-                    type="text"
-                    name="occupation"
-                    value={values.occupation}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter occupation"
-                  />
-                  <ErrorMessage
-                    name="occupation"
                     component="div"
                     className="text-xs text-red-500"
                   />
@@ -275,52 +244,48 @@ const PersonalDetailsForm = ({
                     </label>
                   </div>
                 </div>
+                <div className="py-6 flex gap-6">
+                  <ImageDropzone
+                    fieldName="photo"
+                    text="customer photo"
+                    setFieldValue={setFieldValue}
+                    setFile={setCustomerPhoto}
+                    file={customerPhoto}
+                  />
+                </div>
               </div>
-              <div className="py-6 flex gap-6">
-                <ImageDropzone
-                  fieldName="photo"
-                  text="customer photo"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+              <footer className=" bg-[#eaeaea] flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
+                <PrimaryButtons
+                  text={"Cancel"}
+                  type="button"
+                  className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
+                  // onClick={() => router.push("/hmo/buy-hmo")}
                 />
-                <ImageDropzone
-                  fieldName="photo"
-                  text="customer photo"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+                <PrimaryButtons
+                  text={"Add Dependant"}
+                  type="submit"
+                  className={clsx(
+                    " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
+                    {
+                      "bg-black text-white":
+                        (isValid && !isSubmitting && dirty) ||
+                        (isValid && !dirty),
+                      "bg-[#9A9A9A] text-white":
+                        !isValid || !dirty || isSubmitting,
+                    }
+                  )}
                 />
-              </div>
-            </div>
-            <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
-              <PrimaryButtons
-                text={"Cancel"}
-                type="button"
-                className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-                onClick={() => router.push("/hmo/buy-hmo")}
-              />
-              <PrimaryButtons
-                text={"Proceed - Address Details"}
-                type="submit"
-                className={clsx(
-                  " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
-                  {
-                    "bg-black text-white":
-                      (isValid && !isSubmitting && dirty) ||
-                      (storedCustomerDetailsCheck() && isValid && !dirty),
-                    "bg-[#9A9A9A] text-white":
-                      !isValid || !dirty || isSubmitting,
-                  }
-                )}
-              />
-            </footer>
-          </Form>
-        )}
-      </Formik>
-      
+              </footer>
+            </Form>
+          )}
+        </Formik>
+      </div>
+      <div
+        onClick={() => setIsDependantModalOpen(false)}
+        className="fixed top-0 left-0 right-0 bottom-0 w-full z-60 bg-[rgba(0,0,0,0.5)]"
+      ></div>
     </div>
   );
 };
 
-export default PersonalDetailsForm;
+export default DependantPopupModal;

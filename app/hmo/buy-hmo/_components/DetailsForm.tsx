@@ -1,10 +1,10 @@
 "use client";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
-import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
+// import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
-import { useRouter } from "next/navigation";
-import clsx from "clsx";
+// import { useRouter } from "next/navigation";
+// import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 
 export interface PersonalDetailsType {
@@ -26,12 +26,12 @@ interface PersonalDetailsFormProps {
   customerPhoto: File | undefined;
 }
 
-const PersonalDetailsForm = ({
+const DetailsForm = ({
   setCurrentStep,
   customerPhoto,
   setCustomerPhoto,
 }: PersonalDetailsFormProps) => {
-  const router = useRouter();
+//   const router = useRouter();
   const initialValues: PersonalDetailsType = {
     fName: "",
     mName: "",
@@ -69,10 +69,10 @@ const PersonalDetailsForm = ({
     setCurrentStep?.(1);
     formik.resetForm();
   };
-  const storedCustomerDetailsCheck = () => {
-    setCurrentStep?.(1);
-    return true;
-  };
+//   const storedCustomerDetailsCheck = () => {
+//     setCurrentStep?.(1);
+//     return true;
+//   };
 
   return (
     <div>
@@ -293,7 +293,7 @@ const PersonalDetailsForm = ({
                 />
               </div>
             </div>
-            <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
+            {/* <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
                 text={"Cancel"}
                 type="button"
@@ -314,13 +314,12 @@ const PersonalDetailsForm = ({
                   }
                 )}
               />
-            </footer>
+            </footer> */}
           </Form>
         )}
       </Formik>
-      
     </div>
   );
 };
 
-export default PersonalDetailsForm;
+export default DetailsForm;
