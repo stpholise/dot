@@ -8,6 +8,7 @@ import PrimaryButtons from "../../_components/ui/units/buttons/PrimaryButtons";
 import PersonalDetailsForm from "./_components/PersonalDetailsForm";
 import { useFetchState } from "@/app/account/create-account/_components/useFetchState";
 import Address from "./_components/OriginandAddress";
+import PlanValidity from "./_components/Plan&Validity";
 
 interface Step {
   id: number;
@@ -103,11 +104,11 @@ const Page = () => {
               selectedState={selectedState}
               setSelectedState={setSelectedState}
               isLoading={isLoading}
-              error={error} 
+              error={error}
               setCurrentStep={setCurrentStep}
             />
           )}
-                    
+          {currentStep === 2 && <PlanValidity />}
         </div>
       </div>
     </div>
