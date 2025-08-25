@@ -9,6 +9,7 @@ import PersonalDetailsForm from "./_components/PersonalDetailsForm";
 import { useFetchState } from "@/app/account/create-account/_components/useFetchState";
 import Address from "./_components/OriginandAddress";
 import PlanValidity from "./_components/Plan&Validity";
+import ReviewHMO from "./_components/ReviewHMO";
 
 interface Step {
   id: number;
@@ -37,8 +38,8 @@ const Page = () => {
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
       <div
         className={clsx(" items-center justify-between mb-4 px-4 xs:px-0", {
-          hidden: currentStep == 5,
-          flex: currentStep !== 5,
+          hidden: currentStep == steps.length,
+          flex: currentStep !== steps.length,
         })}
       >
         <div className="">
@@ -75,7 +76,9 @@ const Page = () => {
         </p>
       </div>
       <div
-        className={" flex lg:gap-8  gap-5 lg:justify-between justify-center"}
+        className={
+          " flex   gap-5  justify-center w-full"
+        }
       >
         <Steps
           steps={steps}
@@ -84,10 +87,10 @@ const Page = () => {
         />
         <div
           className={clsx(
-            "xl:w-[600px] max-w-[600px] w-full lg:w-[400px]   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-3xl  ",
+            "  mx-auto xl:w-full max-w-[600px] w-full lg:w-[400px]   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-3xl ",
             {
               "lg:mx-auto lg:w-[750px]  xl:w-[600px]":
-                currentStep >= steps.length - 1,
+                currentStep >= steps.length - 2,
             }
           )}
         >
@@ -109,6 +112,7 @@ const Page = () => {
             />
           )}
           {currentStep === 2 && <PlanValidity />}
+          {currentStep === 3 && <ReviewHMO />}
         </div>
       </div>
     </div>
@@ -144,7 +148,7 @@ const steps: Step[] = [
   },
   {
     id: 4,
-    title: "Who is this account being created for?",
+    title: "How can we locate the customer?",
     image: "/image/step_4.png",
     style: "",
   },

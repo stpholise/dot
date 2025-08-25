@@ -9,11 +9,12 @@ import * as Yup from "yup";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 
 export interface PersonalDetailsType {
+  id: string;
   fName: string;
   mName: string;
   lName: string;
   dob: string;
-  phone?: string; 
+  phone?: string;
   relationship?: string;
   gender: string;
   photo?: File | undefined;
@@ -23,10 +24,12 @@ const DependantPopupModal = ({
   customerPhoto,
   setCustomerPhoto,
   setIsDependantModalOpen,
+  setDependant,
 }: {
   customerPhoto: File | undefined;
   setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
   setIsDependantModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDependant: React.Dispatch<React.SetStateAction<PersonalDetailsType[]>>;
 }) => {
   console.log(customerPhoto, setCustomerPhoto);
 
@@ -36,9 +39,9 @@ const DependantPopupModal = ({
       window.document.body.style.overflowY = "auto";
     };
   }, []);
- 
 
   const initialValues: PersonalDetailsType = {
+    id: "",
     fName: "",
     mName: "",
     lName: "",
@@ -75,7 +78,7 @@ const DependantPopupModal = ({
     <div className="">
       <div
         className={clsx(
-          "w-full bg-white lg:w-[468px] md:w-[440px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red lg:max-h-[600px] h-screen md:h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500 overflow-hidden  transform   ",
+          "w-full bg-white lg:w-[468px] md:w-[440px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red lg:max-h-[600px] h-screen md:h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500 overflow-hidden  transform   "
         )}
       >
         <FormHeader

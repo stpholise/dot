@@ -168,7 +168,7 @@ const Page = () => {
         </div>
         <div
           className={clsx(
-            "xl:w-[600px] max-w-[600px] w-full lg:w-[400px]   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-3xl  ",
+            " xl:w-[600px] max-w-[600px] w-full lg:w-[400px]   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-3xl  ",
             {
               "lg:mx-auto lg:w-[750px]  xl:w-[600px]": currentStep >= 4,
             }
