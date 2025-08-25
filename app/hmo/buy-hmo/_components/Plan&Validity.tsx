@@ -6,6 +6,8 @@ import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
 import clsx from "clsx";
 import * as Yup from "yup";
+import DependantPopupModal from "./DependantPopupModal";
+import { useState } from "react";
 
 interface PlanValidityTypes {
   planType: string;
@@ -15,6 +17,12 @@ interface PlanValidityTypes {
 }
 
 const PlanValidity = () => {
+  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
+    undefined
+  );
+  const [isDependantModalOpen, setIsDependantModalOpen] =
+    useState<boolean>(true);
+
   const initialValues: PlanValidityTypes = {
     planType: "",
     validityPeriod: "",
@@ -52,7 +60,7 @@ const PlanValidity = () => {
         onSubmit={handleFormSubmission}
         validationSchema={validationSchema}
       >
-        {({ values, isSubmitting,  isValid }) => {
+        {({ values, isSubmitting, isValid }) => {
           return (
             <Form>
               <div className="py-6 px-8 flex flex-col gap-4">
@@ -126,7 +134,17 @@ const PlanValidity = () => {
                 </div>
               </div>
               <div className="px-8">
-                <button className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg flex items-center justify-between  my-6">
+                {isDependantModalOpen && (
+                  <DependantPopupModal
+                    customerPhoto={customerPhoto}
+                    setCustomerPhoto={setCustomerPhoto}
+                    setIsDependantModalOpen={setIsDependantModalOpen}
+                  />
+                )}{" "}
+                <button
+                  onClick={() => setIsDependantModalOpen(true)}
+                  className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg flex items-center justify-between  my-6"
+                >
                   <div className=" flex items-center ">
                     <Image
                       src={"/icons/user.png"}
@@ -196,6 +214,8 @@ const PlanValidity = () => {
                     }
                   )}
                 />
+
+                
               </footer>
             </Form>
           );
