@@ -110,7 +110,7 @@ const Page = () => {
           )}
           {currentStep === 2 && <PlanValidity setCurrentStep={setCurrentStep} />}
           {currentStep === 3 && <ReviewHMO setCurrentSep={setCurrentStep} />}
-          {currentStep === 4 && <SuccessfulHMOPurchase />}
+          {currentStep === 4 && <SuccessfulHMOPurchase setCurrentStep={setCurrentStep} />}
         </div>
       </div>
     </div>
