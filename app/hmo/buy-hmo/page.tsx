@@ -10,6 +10,7 @@ import { useFetchState } from "@/app/account/create-account/_components/useFetch
 import Address from "./_components/OriginandAddress";
 import PlanValidity from "./_components/Plan&Validity";
 import ReviewHMO from "./_components/ReviewHMO";
+import SuccessfulHMOPurchase from "./_components/SuccessfulHMOPurchase";
 
 interface Step {
   id: number;
@@ -25,7 +26,7 @@ const Page = () => {
     isLoading: boolean;
     error: string;
   };
-
+ 
   const [selectedState, setSelectedState] = useState<string>("");
 
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
@@ -38,8 +39,8 @@ const Page = () => {
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
       <div
         className={clsx(" items-center justify-between mb-4 px-4 xs:px-0", {
-          hidden: currentStep == steps.length,
-          flex: currentStep !== steps.length,
+          'hidden': currentStep == steps.length,
+          'flex': currentStep !== steps.length,
         })}
       >
         <div className="">
@@ -54,12 +55,12 @@ const Page = () => {
           className="mt-4 text-black hidden lg:flex bg-white border border-gray-300 hover:bg-gray-100 h-[48px] items-center justify-center"
           text="Cancel Registration"
           icon="/icons/close.svg"
-          disabled={currentStep === 1}
+          // disabled={currentStep === 1}
           onClick={cancelRegistration}
         />
         <button
           className=" text-black flex md:hidden bg-white border border-gray-300 hover:bg-gray-100 h-[40px] w-[40px] items-center justify-center rounded-lg"
-          disabled={currentStep === 1}
+          // disabled={currentStep === 1}
           onClick={cancelRegistration}
         >
           {" "}
@@ -75,11 +76,7 @@ const Page = () => {
           step {currentStep + 1} of {steps.length}
         </p>
       </div>
-      <div
-        className={
-          " flex   gap-5  justify-center w-full"
-        }
-      >
+      <div className={" flex   gap-5  justify-center w-full"}>
         <Steps
           steps={steps}
           currentStep={currentStep}
@@ -111,8 +108,9 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
             />
           )}
-          {currentStep === 2 && <PlanValidity />}
-          {currentStep === 3 && <ReviewHMO />}
+          {currentStep === 2 && <PlanValidity setCurrentStep={setCurrentStep} />}
+          {currentStep === 3 && <ReviewHMO setCurrentSep={setCurrentStep} />}
+          {currentStep === 4 && <SuccessfulHMOPurchase />}
         </div>
       </div>
     </div>

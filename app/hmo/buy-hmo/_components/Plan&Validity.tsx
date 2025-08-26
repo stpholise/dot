@@ -2,8 +2,7 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import Image from "next/image";
-import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-import { setCurrentStep } from "@/app/store/slices/UserAccountSlice";
+import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons"; 
 import clsx from "clsx";
 import * as Yup from "yup";
 import DependantPopupModal from "./DependantPopupModal";
@@ -29,7 +28,11 @@ export interface PersonalDetailsType {
   photo?: File | undefined;
 }
 
-const PlanValidity = () => {
+const PlanValidity = ({
+  setCurrentStep,
+}: {
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
     undefined
   );
