@@ -21,7 +21,7 @@ export interface PersonalDetailsType {
 }
 
 interface PersonalDetailsFormProps {
-  setCurrentStep?: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
   customerPhoto: File | undefined;
 }
@@ -66,11 +66,11 @@ const PersonalDetailsForm = ({
     values: PersonalDetailsType,
     formik: FormikHelpers<PersonalDetailsType>
   ) => {
-    setCurrentStep?.(1);
+    setCurrentStep(1);
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
-    setCurrentStep?.(1);
+    setCurrentStep(0);
     return true;
   };
 
@@ -318,7 +318,6 @@ const PersonalDetailsForm = ({
           </Form>
         )}
       </Formik>
-      
     </div>
   );
 };

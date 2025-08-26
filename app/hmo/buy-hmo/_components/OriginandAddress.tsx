@@ -39,8 +39,7 @@ const Address = ({
   selectedState,
   setSelectedState,
   setCurrentStep,
-}: AddressProps) => {
-  //   const dispatch = useDispatch();
+}: AddressProps) => { 
   useEffect(() => {
     scrollToTop();
   }, []);

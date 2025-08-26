@@ -1,5 +1,5 @@
 import Image from "next/image";
-import clsx from "clsx";       
+import clsx from "clsx";
 interface Step {
   id: number;
   title: string;
@@ -15,26 +15,27 @@ interface StepsProps {
 
 const Steps = ({ currentStep, steps, setCurrentStep }: StepsProps) => {
   return (
-    <div className={" flex lg:gap-8  gap-5 lg:justify-between justify-center"}>
+    <div // className={" flex lg:gap-8  gap-5 lg:justify-between justify-center"}
+    >
       <div
         className={clsx(
-          "sticky md:top-24 xl:w-[473px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden flex-col items-center gap-4 ",
+          "sticky  md:top-24 md:left-56 xl:w-[460px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden flex-col items-center gap-4 ",
           {
-            hidden: currentStep >= steps.length - 1,
-            "lg:flex": currentStep < 4,
+            "hidden  ": currentStep >= steps.length - 2,
+            "lg:flex  ": currentStep < steps.length - 2,
           }
         )}
       >
-        <div className="grid gap-2 grid-cols-5 lg:gap-4 justify-stretch  ">
+        <div className=" gap-2 flex lg:gap-4  w-full ">
           {steps.map((step, index) => (
             <div
               onClick={() => {
-                console.log(index);
+                console.log({ "index ": currentStep, length: steps.length });
                 setCurrentStep(index);
               }}
               key={index}
               className={clsx(
-                "w-12 lg:w-16 h-1 rounded-sm hover:cursor-pointer ",
+                " flex-1    h-1 rounded-sm hover:cursor-pointer ",
                 {
                   "bg-gray-300": currentStep !== index,
                   "bg-gray-400": currentStep >= index,
@@ -49,7 +50,7 @@ const Steps = ({ currentStep, steps, setCurrentStep }: StepsProps) => {
             className={clsx(
               "flex flex-col items-start gap-2 mt-4 lg:gap-8",
 
-              currentStep === index ? " flex" : "hidden"
+              currentStep === index ? " flex  " : "hidden  "
             )}
           >
             <div className=" flex flex-col gap-3 items-start justify-start  xl:w-10/12 w-10/12 lg:w-full">
