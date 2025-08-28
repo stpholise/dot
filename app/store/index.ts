@@ -4,11 +4,13 @@ import appReducer from "./slices/AppSlice";
 import userAccountReducer from "./slices/UserAccountSlice";
 import remittanceReducer from "./slices/RemittanceSlice";
 import { persistStore, persistReducer } from "redux-persist";
+import HmoReducer from "./slices/HMOPurchaseSlice";
 import storage from "redux-persist/lib/storage/session";
 
 const rootReducer = combineReducers({
   app: appReducer,
   userAccount: userAccountReducer,
+  hmo: HmoReducer,
   remittance: remittanceReducer,
 });
 

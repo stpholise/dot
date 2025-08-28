@@ -6,6 +6,9 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
+import { useSelector, useDispatch } from "react-redux";
+import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
+import { RootState } from "@/app/store";
 
 export interface PersonalDetailsType {
   fName: string;
@@ -32,15 +35,20 @@ const PersonalDetailsForm = ({
   setCustomerPhoto,
 }: PersonalDetailsFormProps) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const storedPersonalDetails = useSelector(
+    (state: RootState) => state.hmo.personalDetail
+  );
+
   const initialValues: PersonalDetailsType = {
-    fName: "",
-    mName: "",
-    lName: "",
-    dob: "",
-    phone: "",
-    maritalStatus: "",
-    occupation: "",
-    gender: "",
+    fName: storedPersonalDetails.fName || "",
+    mName: storedPersonalDetails.mName || "",
+    lName: storedPersonalDetails.lName || "",
+    dob: storedPersonalDetails.dob || "",
+    phone: storedPersonalDetails.phone || "",
+    maritalStatus: storedPersonalDetails.maritalStatus || "",
+    occupation: storedPersonalDetails.occupation || "",
+    gender: storedPersonalDetails.gender || "",
     photo: undefined,
     identity: undefined,
   };
@@ -67,6 +75,21 @@ const PersonalDetailsForm = ({
     formik: FormikHelpers<PersonalDetailsType>
   ) => {
     setCurrentStep(1);
+    console.log("values", values);
+    dispatch(
+      setPersonalDetail({
+        fName: values.fName,
+        mName: values.mName,
+        lName: values.lName,
+        dob: values.dob,
+        phone: values.phone,
+        maritalStatus: values.maritalStatus,
+        occupation: values.occupation,
+        gender: values.gender,
+        photo: undefined,
+        identity: undefined,
+      })
+    );
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
@@ -303,6 +326,7 @@ const PersonalDetailsForm = ({
               <PrimaryButtons
                 text={"Proceed - Address Details"}
                 type="submit"
+                disabled={!isValid || !dirty || isSubmitting}
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
