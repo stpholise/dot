@@ -13,7 +13,7 @@ const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   return (
-    <div>
+    <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
       <div className="">
         <Steps
           steps={steps}
@@ -56,6 +56,19 @@ const steps: Step[] = [
     image: "/image/step_4.png",
     style: "",
   },
+  {
+    id: 5,
+    title: "How can we locate the customer?",
+    image: "/image/step_4.png",
+    style: "",
+  },
+  {
+    id: 6,
+    title: "How can we locate the customer?",
+    image: "/image/step_4.png",
+    style: "",
+  },
+   
 ];
 
 export default Page;

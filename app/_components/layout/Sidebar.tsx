@@ -168,6 +168,11 @@ const navItems: NavItems[] = [
     title: "HMO",
     link: "/hmo/buy-hmo",
   },
+  {
+    icon: "/icons/remitance.svg",
+    title: "Loans",
+    link: "/hmo/loans",
+  },
 ];
 
 export default Sidebar;
