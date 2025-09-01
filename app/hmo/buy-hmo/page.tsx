@@ -26,7 +26,7 @@ const Page = () => {
     isLoading: boolean;
     error: string;
   };
- 
+
   const [selectedState, setSelectedState] = useState<string>("");
 
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
@@ -39,8 +39,8 @@ const Page = () => {
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
       <div
         className={clsx(" items-center justify-between mb-4 px-4 xs:px-0", {
-          'hidden': currentStep == steps.length,
-          'flex': currentStep !== steps.length,
+          hidden: currentStep == steps.length - 1,
+          flex: currentStep !== steps.length,
         })}
       >
         <div className="">
@@ -108,9 +108,13 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
             />
           )}
-          {currentStep === 2 && <PlanValidity setCurrentStep={setCurrentStep} />}
+          {currentStep === 2 && (
+            <PlanValidity setCurrentStep={setCurrentStep} />
+          )}
           {currentStep === 3 && <ReviewHMO setCurrentSep={setCurrentStep} />}
-          {currentStep === 4 && <SuccessfulHMOPurchase setCurrentStep={setCurrentStep} />}
+          {currentStep === 4 && (
+            <SuccessfulHMOPurchase setCurrentStep={setCurrentStep} />
+          )}
         </div>
       </div>
     </div>
