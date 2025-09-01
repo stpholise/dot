@@ -4,6 +4,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import PrimaryButtons from "../_components/ui/units/buttons/PrimaryButtons";
+import PersonalDetailsForm from "./_components/PersonalDetailsForm";
 
 interface Step {
   id: number;
@@ -14,6 +15,9 @@ interface Step {
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
+    undefined
+  );
   const cancelRegistration = () => {
     setCurrentStep(0);
     console.log("cancelRegistration");
@@ -74,7 +78,15 @@ const Page = () => {
                 currentStep >= steps.length - 2,
             }
           )}
-        ></div>
+        >
+          {currentStep === 0 && (
+            <PersonalDetailsForm
+              setCurrentStep={setCurrentStep}
+              customerPhoto={customerPhoto}
+              setCustomerPhoto={setCustomerPhoto}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
