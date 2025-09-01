@@ -171,7 +171,7 @@ const navItems: NavItems[] = [
   {
     icon: "/icons/remitance.svg",
     title: "Loans",
-    link: "/hmo/loans",
+    link: "/loans",
   },
 ];
 
