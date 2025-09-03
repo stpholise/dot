@@ -15,6 +15,7 @@ interface ImageDropzoneProps {
   fieldName: string;
   text: string;
   file?: File | undefined;
+  className?: string;
 }
 
 const ImageDropzone = ({
@@ -23,6 +24,7 @@ const ImageDropzone = ({
   text,
   file,
   setFile,
+  className,
 }: ImageDropzoneProps) => {
   const [itemFiles, setItemFiles] = useState<File[]>([]);
   const [isFile, setIsFile] = useState<boolean>(false);
@@ -98,87 +100,78 @@ const ImageDropzone = ({
 
   return (
     <div
-      className={clsx(" bg-[#F7F7F7] flex rounded-3xl relative ", {
-        "sm:w-[520px] lg:w-[339px] xl:w-[520px] sm:h-[130px] px-6 py-6 justify-center ":
-          !isFile,
-        "px-4 py-4  justify-start": isFile,
-      })}
+      {...getRootProps()}
+      className={clsx(
+        " bg-[#F7F7F7]  flex rounded-3xl relative cursor-pointer sm:h-[130px] items-center   w-full h-full gap-4 py-6 px-4",
+        {
+          "sm:w-[520px] lg:w-[339px] xl:w-[520px]   justify-center ": !isFile,
+          "  justify-start": isFile,
+        },
+        className
+      )}
     >
-      {
-        <div className={clsx("flex items-center justify-between w-full", {})}>
-          <div
-            {...getRootProps()}
-            className={clsx(
-              "flex cursor-pointer  w-full h-full items-center  gap-6",
-              {
-                "justify-center": !isFile,
-
-                "justify-start ": isFile,
-              }
-            )}
-          >
-            <input
-              className="cursor-pointer hidden w-full h-full"
-              type="file"
-              {...getInputProps()}
+      <input
+        className="cursor-pointer hidden w-full h-full"
+        type="file"
+        {...getInputProps()}
+      />
+      <div
+        className={clsx(
+          " max-w-14 max-h-14 min-h-14 min-w-14 size-14 flex items-center justify-center   ",
+          {
+            "rounded-full bg-white": !isFile,
+            "rounded-sm": isFile,
+          }
+        )}
+      >
+        {isFile ? (
+          <Image
+            src={"/icons/document.png"}
+            alt={"gallery icon"}
+            width={40}
+            height={40}
+            className="w-full h-full size-10"
+          />
+        ) : (
+          <Image
+            src={"/icons/gallery.png"}
+            alt={"gallery icon"}
+            width={40}
+            height={40}
+            className="size-10 max-w-10 max-h-10 "
+          />
+        )}
+      </div>
+      <div className="">
+        <p className="text-black font-medium  whitespace-nowrap ">
+          {text}
+          {isFile && (
+            <Image
+              src={"/icons/good.png"}
+              alt="good"
+              width={20}
+              height={20}
+              className="max-w-5  max-h-5 size-4 rounded-full inline ml-2"
             />
-            <div
-              className={clsx("  h-14 w-14 flex items-center justify-center ", {
-                "rounded-full bg-white": !isFile,
-                "rounded-sm": isFile,
-              })}
-            >
-              {isFile ? (
-                <Image
-                  src={"/icons/document.png"}
-                  alt={"gallery icon"}
-                  width={40}
-                  height={40}
-                  className="w-full h-full "
-                />
-              ) : (
-                <Image
-                  src={"/icons/gallery.png"}
-                  alt={"gallery icon"}
-                  width={40}
-                  height={40}
-                  className=""
-                />
-              )}
-            </div>
-            <div className=" ">
-              <p className="text-black font-medium flex gap-2 ">
-                {text}
-                {isFile && (
-                  <Image
-                    src={"/icons/good.png"}
-                    alt="good"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 rounded-full"
-                  />
-                )}
-              </p>
-              <p className="text-gray-400 text-sm">
-                {itemFiles.length > 0
-                  ? itemFiles[0].name
-                  : "JPEG or PNG format only, 3mb max"}
-              </p>
-            </div>
-          </div>
-          {itemFiles.length > 0 && (
-            <button onClick={resetFiles}>
-              <Image
-                src={"/icons/remove_red.png"}
-                alt={"remove"}
-                width={20}
-                height={20}
-                className=""
-              />
-            </button>
           )}
-        </div>
-      }
+        </p>
+        <p className="text-gray-400 text-xs">
+          {itemFiles.length > 0
+            ? itemFiles[0].name
+            : "JPEG or PNG format only, 3mb max"}
+        </p>
+      </div>
+      {itemFiles.length > 0 && (
+        <button onClick={resetFiles}>
+          <Image
+            src={"/icons/remove_red.png"}
+            alt={"remove"}
+            width={20}
+            height={20}
+            className="absolute top-4 right-4"
+          />
+        </button>
+      )}
 
       {error && (
         <div className="text-xs text-red-400 absolute bottom-1 text-center">

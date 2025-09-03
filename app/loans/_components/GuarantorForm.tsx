@@ -91,7 +91,7 @@ const GuarantorForm = ({
     );
     formik.resetForm();
   };
-  const storedCustomerDetailsCheck = () => { 
+  const storedCustomerDetailsCheck = () => {
     return true;
   };
 
@@ -115,23 +115,7 @@ const GuarantorForm = ({
           <Form>
             <div className="lg:px-8">
               <div className="py-6 flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
-                    Dot Account *
-                  </label>
-                  <Field
-                    type="text"
-                    name="fName"
-                    value={values.fName}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer first name"
-                  />
-                  <ErrorMessage
-                    name="fName"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
+                
                 <div className="flex flex-col gap-2">
                   <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
                     First Name *
@@ -149,7 +133,7 @@ const GuarantorForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-               
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="mName" className="text-sm text-[#454547]">
                     Middele Name
@@ -298,34 +282,38 @@ const GuarantorForm = ({
                   </div>
                 </div>
               </div>
-              <div className="py-6 grid grid-cols-2 overflow-hidden gap-6">
+              <div className="py-6 grid grid-cols-2 overflow-hidden gap-6 w-full">
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload or Take a photo"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className=" flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload Identity Card"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload Employment Letter"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload Signature"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
               </div>
             </div>

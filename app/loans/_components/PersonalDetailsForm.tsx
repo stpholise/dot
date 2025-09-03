@@ -150,7 +150,7 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-               
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="mName" className="text-sm text-[#454547]">
                     Middele Name
@@ -302,17 +302,19 @@ const PersonalDetailsForm = ({
               <div className="py-6 flex gap-6">
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload or Take a photo"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload Identity Card"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
               </div>
             </div>
