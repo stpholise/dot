@@ -7,6 +7,7 @@ import PrimaryButtons from "../_components/ui/units/buttons/PrimaryButtons";
 import PersonalDetailsForm from "./_components/PersonalDetailsForm";
 import GuarantorForm from "./_components/GuarantorForm";
 import NextOfKinDetailsForm from "./_components/NextOfKinDetailsForm";
+import CheckCreditForm from "./_components/CheckCreditForm";
 
 interface Step {
   id: number;
@@ -98,6 +99,11 @@ const Page = () => {
           {currentStep === 3 && (
             <NextOfKinDetailsForm setCurrentStep={setCurrentStep} />
           )}
+          {
+            currentStep === 4 && (
+              <CheckCreditForm />
+            )
+          }
         </div>
       </div>
     </div>
