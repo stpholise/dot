@@ -4,8 +4,7 @@ import FormHeader from "@/app/_components/ui/units/FormHeader";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
-import clsx from "clsx";
-import ImageDropzone from "@/app/_components/ImageDropzone";
+import clsx from "clsx"; 
 import { useSelector, useDispatch } from "react-redux";
 import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
 import { RootState } from "@/app/store";
@@ -19,21 +18,15 @@ export interface PersonalDetailsType {
   businessExp: string;
   occupation: string;
   gender: string;
-  photo: File | undefined;
+
   identity: File | undefined;
 }
 
 interface PersonalDetailsFormProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
-  customerPhoto: File | undefined;
 }
 
-const GuarantorForm = ({
-  setCurrentStep,
-  customerPhoto,
-  setCustomerPhoto,
-}: PersonalDetailsFormProps) => {
+const NextOfKinDetailsForm = ({ setCurrentStep }: PersonalDetailsFormProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const storedPersonalDetails = useSelector(
@@ -49,7 +42,6 @@ const GuarantorForm = ({
     businessExp: "",
     occupation: storedPersonalDetails.occupation || "",
     gender: storedPersonalDetails.gender || "",
-    photo: undefined,
     identity: undefined,
   };
 
@@ -102,8 +94,8 @@ const GuarantorForm = ({
           src: "/icons/security.png",
           alt: "user",
         }}
-        primaryText="Guarantor Details"
-        secondaryText="- Guarantor can’t be a family relative"
+        primaryText="Next of Kin Details"
+        secondaryText="- Verify next of kin identity"
       />
 
       <Formik
@@ -211,40 +203,6 @@ const GuarantorForm = ({
                   <ErrorMessage name="businessExp" />
                 </div>
               </div>
-              <div className="py-6 grid grid-cols-2 overflow-hidden gap-6 w-full">
-                <ImageDropzone
-                  fieldName="photo"
-                  text="Upload or Take a photo"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
-                  className=" flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
-                <ImageDropzone
-                  fieldName="photo"
-                  text="Upload Identity Card"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
-                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
-                <ImageDropzone
-                  fieldName="photo"
-                  text="Upload Employment Letter"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
-                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
-                <ImageDropzone
-                  fieldName="photo"
-                  text="Upload Signature"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
-                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
-              </div>
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
@@ -276,4 +234,4 @@ const GuarantorForm = ({
   );
 };
 
-export default GuarantorForm;
+export default NextOfKinDetailsForm;

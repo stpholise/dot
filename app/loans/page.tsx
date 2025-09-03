@@ -6,6 +6,7 @@ import Image from "next/image";
 import PrimaryButtons from "../_components/ui/units/buttons/PrimaryButtons";
 import PersonalDetailsForm from "./_components/PersonalDetailsForm";
 import GuarantorForm from "./_components/GuarantorForm";
+import NextOfKinDetailsForm from "./_components/NextOfKinDetailsForm";
 
 interface Step {
   id: number;
@@ -93,6 +94,9 @@ const Page = () => {
               customerPhoto={customerPhoto}
               setCustomerPhoto={setCustomerPhoto}
             />
+          )}
+          {currentStep === 3 && (
+            <NextOfKinDetailsForm setCurrentStep={setCurrentStep} />
           )}
         </div>
       </div>
