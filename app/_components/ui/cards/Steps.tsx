@@ -27,7 +27,7 @@ const Steps = ({ currentStep, steps, setCurrentStep }: StepsProps) => {
         )}
       >
         <div className=" gap-2 flex lg:gap-4  w-full ">
-          {steps.map((step, index) => (
+          {steps .map((step, index) => (
             <div
               onClick={() => {
                 console.log({ "index ": currentStep, length: steps.length });
@@ -55,7 +55,7 @@ const Steps = ({ currentStep, steps, setCurrentStep }: StepsProps) => {
           >
             <div className=" flex flex-col gap-3 items-start justify-start  xl:w-10/12 w-10/12 lg:w-full">
               <p className="bg-[#EBF8FE] text-[#46809B] rounded-3xl py-1 px-2 w-fit">
-                step {step.id + 1} of {steps.length}
+                step {step.id + 1} of {steps.length -1}
               </p>
               <h3 className="text-black font-medium text-2xl">{step.title}</h3>
             </div>
