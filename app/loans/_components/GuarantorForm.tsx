@@ -16,7 +16,7 @@ export interface PersonalDetailsType {
   lName: string;
   dob: string;
   phone: string;
-  maritalStatus: string;
+  businessExp: string;
   occupation: string;
   gender: string;
   photo: File | undefined;
@@ -29,7 +29,7 @@ interface PersonalDetailsFormProps {
   customerPhoto: File | undefined;
 }
 
-const PersonalDetailsForm = ({
+const GuarantorForm = ({
   setCurrentStep,
   customerPhoto,
   setCustomerPhoto,
@@ -46,7 +46,7 @@ const PersonalDetailsForm = ({
     lName: storedPersonalDetails.lName || "",
     dob: storedPersonalDetails.dob || "",
     phone: storedPersonalDetails.phone || "",
-    maritalStatus: storedPersonalDetails.maritalStatus || "",
+    businessExp: "",
     occupation: storedPersonalDetails.occupation || "",
     gender: storedPersonalDetails.gender || "",
     photo: undefined,
@@ -83,7 +83,6 @@ const PersonalDetailsForm = ({
         lName: values.lName,
         dob: values.dob,
         phone: values.phone,
-        maritalStatus: values.maritalStatus,
         occupation: values.occupation,
         gender: values.gender,
         photo: undefined,
@@ -93,7 +92,6 @@ const PersonalDetailsForm = ({
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
-    setCurrentStep(0);
     return true;
   };
 
@@ -104,8 +102,8 @@ const PersonalDetailsForm = ({
           src: "/icons/security.png",
           alt: "user",
         }}
-        primaryText="Personal Details"
-        secondaryText="- Ensure name matches identity document"
+        primaryText="Guarantor Details"
+        secondaryText="- Guarantor can’t be a family relative"
       />
 
       <Formik
@@ -118,7 +116,7 @@ const PersonalDetailsForm = ({
             <div className="lg:px-8">
               <div className="py-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="fName" className="text-sm text-[#454547]">
+                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
                     First Name *
                   </label>
                   <Field
@@ -134,23 +132,7 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="mName" className="text-sm text-[#454547]">
-                    Middele Name
-                  </label>
-                  <Field
-                    type="text"
-                    name="mName"
-                    value={values.mName}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer middle name"
-                  />
-                  <ErrorMessage
-                    name="mName"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="lName" className="text-sm text-[#454547]">
                     Surname *
@@ -168,25 +150,10 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="dob" className="text-sm text-[#454547]">
-                    Date of Birth *
-                  </label>
-                  <Field
-                    type="date"
-                    name="dob"
-                    value={values.dob}
-                    max={"2007-12-31"}
-                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-                      (e.target as HTMLInputElement).showPicker();
-                    }}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Day - Month - Year, ex. 01-12-1990"
-                  />
-                </div>
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="lname" className="text-sm text-[#454547]">
-                    Phone *
+                    Phone number*
                   </label>
                   <Field
                     type="text"
@@ -206,46 +173,13 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="lname" className="text-sm text-[#454547]">
-                    Marital Status *
-                  </label>
-                  <Field
-                    type="select"
-                    as="select"
-                    name="maritalStatus"
-                    value={values.maritalStatus}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Choose a marital status"
-                  >
-                    <option className="text-gray-400 " disabled value="">
-                      Select marital status
-                    </option>
-                    <option value="single" className="text-black">
-                      Single
-                    </option>
-                    <option value="married" className="text-black">
-                      Married
-                    </option>
-                    <option value="devorced" className="text-black">
-                      Devorced
-                    </option>
-                    <option value="widowed" className="text-black">
-                      Widowed
-                    </option>
-                  </Field>
-                  <ErrorMessage
-                    name="maritalStatus"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
+
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="occupation"
                     className="text-sm text-[#454547]"
                   >
-                    Occupation *
+                    Relationship *
                   </label>
                   <Field
                     type="text"
@@ -260,59 +194,55 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="">
+                <div className="flex flex-col gap-2">
                   <label
                     htmlFor="occupation"
                     className="text-sm text-[#454547]"
                   >
-                    Customer Gender *
+                    Address *
                   </label>
-                  <div className="display flex gap-4 mt-2 w-full justify-stretch">
-                    <label
-                      htmlFor="gender_male"
-                      className=" cursor-pointer flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
-                    >
-                      Male
-                      <Field
-                        type="radio"
-                        name="gender"
-                        value="male"
-                        id="gender_male"
-                        onChange={() => setFieldValue("gender", "male")}
-                        className="cursor-pointer w-5 h-5"
-                      />
-                    </label>
-                    <label
-                      htmlFor="gender_female"
-                      className=" cursor-pointer flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
-                    >
-                      Female
-                      <Field
-                        type="radio"
-                        name="gender"
-                        value="female"
-                        id="gender_female"
-                        onChange={() => setFieldValue("gender", "female")}
-                        className="cursor-pointer w-5 h-5"
-                      />
-                    </label>
-                  </div>
+                  <Field
+                    type="number"
+                    name="businessExp"
+                    value={values.businessExp}
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                    placeholder="Enter registered phone number"
+                  />
+                  <ErrorMessage name="businessExp" />
                 </div>
               </div>
-              <div className="py-6 flex gap-6">
+              <div className="py-6 grid grid-cols-2 overflow-hidden gap-6 w-full">
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload or Take a photo"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className=" flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload Identity Card"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
+                />
+                <ImageDropzone
+                  fieldName="photo"
+                  text="Upload Employment Letter"
+                  setFieldValue={setFieldValue}
+                  setFile={setCustomerPhoto}
+                  file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
+                />
+                <ImageDropzone
+                  fieldName="photo"
+                  text="Upload Signature"
+                  setFieldValue={setFieldValue}
+                  setFile={setCustomerPhoto}
+                  file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
               </div>
             </div>
@@ -346,4 +276,4 @@ const PersonalDetailsForm = ({
   );
 };
 
-export default PersonalDetailsForm;
+export default GuarantorForm;

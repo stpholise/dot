@@ -1,16 +1,13 @@
 "use client";
-import React from "react";
-import Steps from "../../_components/ui/cards/Steps";
+import Steps from "../_components/ui/cards/Steps";
 import { useState } from "react";
-import Image from "next/image";
 import clsx from "clsx";
-import PrimaryButtons from "../../_components/ui/units/buttons/PrimaryButtons";
+import Image from "next/image";
+import PrimaryButtons from "../_components/ui/units/buttons/PrimaryButtons";
 import PersonalDetailsForm from "./_components/PersonalDetailsForm";
-import { useFetchState } from "@/app/account/create-account/_components/useFetchState";
-import Address from "./_components/OriginandAddress";
-import PlanValidity from "./_components/Plan&Validity";
-import ReviewHMO from "./_components/ReviewHMO";
-import SuccessfulHMOPurchase from "./_components/SuccessfulHMOPurchase";
+import GuarantorForm from "./_components/GuarantorForm";
+import NextOfKinDetailsForm from "./_components/NextOfKinDetailsForm";
+import CheckCreditForm from "./_components/CheckCreditForm";
 
 interface Step {
   id: number;
@@ -21,20 +18,14 @@ interface Step {
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const { states, isLoading, error } = useFetchState() as {
-    states: string[];
-    isLoading: boolean;
-    error: string;
-  };
-
-  const [selectedState, setSelectedState] = useState<string>("");
-
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
     undefined
   );
   const cancelRegistration = () => {
     setCurrentStep(0);
+    console.log("cancelRegistration");
   };
+
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
       <div
@@ -45,10 +36,10 @@ const Page = () => {
       >
         <div className="">
           <h4 className="text-sm text-[#454547] sm:block hidden md:hidden lg:block">
-            HMO \ Buy HMO
+            Loans \ Apply for Loan
           </h4>
           <h1 className="h1 text-base sm:text-2xl font-medium text-black">
-            Register Customer for HMO
+            Register Customer for Loans
           </h1>
         </div>
         <PrimaryButtons
@@ -98,30 +89,26 @@ const Page = () => {
               setCustomerPhoto={setCustomerPhoto}
             />
           )}
-          {currentStep === 1 && (
-            <Address
-              states={states}
-              selectedState={selectedState}
-              setSelectedState={setSelectedState}
-              isLoading={isLoading}
-              error={error}
+          {currentStep === 2 && (
+            <GuarantorForm
               setCurrentStep={setCurrentStep}
+              customerPhoto={customerPhoto}
+              setCustomerPhoto={setCustomerPhoto}
             />
           )}
-          {currentStep === 2 && (
-            <PlanValidity setCurrentStep={setCurrentStep} />
+          {currentStep === 3 && (
+            <NextOfKinDetailsForm setCurrentStep={setCurrentStep} />
           )}
-          {currentStep === 3 && <ReviewHMO setCurrentSep={setCurrentStep} />}
-          {currentStep === 4 && (
-            <SuccessfulHMOPurchase setCurrentStep={setCurrentStep} />
-          )}
+          {
+            currentStep === 4 && (
+              <CheckCreditForm />
+            )
+          }
         </div>
       </div>
     </div>
   );
 };
-
-export default Page;
 
 const steps: Step[] = [
   {
@@ -154,4 +141,18 @@ const steps: Step[] = [
     image: "/image/step_4.png",
     style: "",
   },
+  {
+    id: 5,
+    title: "How can we locate the customer?",
+    image: "/image/step_4.png",
+    style: "",
+  },
+  {
+    id: 6,
+    title: "How can we locate the customer?",
+    image: "/image/step_4.png",
+    style: "",
+  },
 ];
+
+export default Page;

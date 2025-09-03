@@ -16,7 +16,7 @@ export interface PersonalDetailsType {
   lName: string;
   dob: string;
   phone: string;
-  maritalStatus: string;
+  businessExp: string;
   occupation: string;
   gender: string;
   photo: File | undefined;
@@ -46,7 +46,7 @@ const PersonalDetailsForm = ({
     lName: storedPersonalDetails.lName || "",
     dob: storedPersonalDetails.dob || "",
     phone: storedPersonalDetails.phone || "",
-    maritalStatus: storedPersonalDetails.maritalStatus || "",
+    businessExp: "",
     occupation: storedPersonalDetails.occupation || "",
     gender: storedPersonalDetails.gender || "",
     photo: undefined,
@@ -83,7 +83,6 @@ const PersonalDetailsForm = ({
         lName: values.lName,
         dob: values.dob,
         phone: values.phone,
-        maritalStatus: values.maritalStatus,
         occupation: values.occupation,
         gender: values.gender,
         photo: undefined,
@@ -118,7 +117,24 @@ const PersonalDetailsForm = ({
             <div className="lg:px-8">
               <div className="py-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="fName" className="text-sm text-[#454547]">
+                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
+                    Dot Account *
+                  </label>
+                  <Field
+                    type="text"
+                    name="fName"
+                    value={values.fName}
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                    placeholder="Enter customer first name"
+                  />
+                  <ErrorMessage
+                    name="fName"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
                     First Name *
                   </label>
                   <Field
@@ -134,6 +150,7 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="mName" className="text-sm text-[#454547]">
                     Middele Name
@@ -206,40 +223,7 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="lname" className="text-sm text-[#454547]">
-                    Marital Status *
-                  </label>
-                  <Field
-                    type="select"
-                    as="select"
-                    name="maritalStatus"
-                    value={values.maritalStatus}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Choose a marital status"
-                  >
-                    <option className="text-gray-400 " disabled value="">
-                      Select marital status
-                    </option>
-                    <option value="single" className="text-black">
-                      Single
-                    </option>
-                    <option value="married" className="text-black">
-                      Married
-                    </option>
-                    <option value="devorced" className="text-black">
-                      Devorced
-                    </option>
-                    <option value="widowed" className="text-black">
-                      Widowed
-                    </option>
-                  </Field>
-                  <ErrorMessage
-                    name="maritalStatus"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
+
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="occupation"
@@ -259,6 +243,22 @@ const PersonalDetailsForm = ({
                     component="div"
                     className="text-xs text-red-500"
                   />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="occupation"
+                    className="text-sm text-[#454547]"
+                  >
+                    Years of Business Experience *
+                  </label>
+                  <Field
+                    type="number"
+                    name="businessExp"
+                    value={values.businessExp}
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                    placeholder="Enter registered phone number"
+                  />
+                  <ErrorMessage name="businessExp" />
                 </div>
                 <div className="">
                   <label
@@ -302,17 +302,19 @@ const PersonalDetailsForm = ({
               <div className="py-6 flex gap-6">
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload or Take a photo"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
                   fieldName="photo"
-                  text="customer photo"
+                  text="Upload Identity Card"
                   setFieldValue={setFieldValue}
                   setFile={setCustomerPhoto}
                   file={customerPhoto}
+                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
               </div>
             </div>

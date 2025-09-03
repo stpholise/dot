@@ -4,8 +4,7 @@ import FormHeader from "@/app/_components/ui/units/FormHeader";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
-import clsx from "clsx";
-import ImageDropzone from "@/app/_components/ImageDropzone";
+import clsx from "clsx"; 
 import { useSelector, useDispatch } from "react-redux";
 import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
 import { RootState } from "@/app/store";
@@ -16,24 +15,18 @@ export interface PersonalDetailsType {
   lName: string;
   dob: string;
   phone: string;
-  maritalStatus: string;
+  businessExp: string;
   occupation: string;
   gender: string;
-  photo: File | undefined;
+
   identity: File | undefined;
 }
 
 interface PersonalDetailsFormProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
-  customerPhoto: File | undefined;
 }
 
-const PersonalDetailsForm = ({
-  setCurrentStep,
-  customerPhoto,
-  setCustomerPhoto,
-}: PersonalDetailsFormProps) => {
+const NextOfKinDetailsForm = ({ setCurrentStep }: PersonalDetailsFormProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const storedPersonalDetails = useSelector(
@@ -46,10 +39,9 @@ const PersonalDetailsForm = ({
     lName: storedPersonalDetails.lName || "",
     dob: storedPersonalDetails.dob || "",
     phone: storedPersonalDetails.phone || "",
-    maritalStatus: storedPersonalDetails.maritalStatus || "",
+    businessExp: "",
     occupation: storedPersonalDetails.occupation || "",
     gender: storedPersonalDetails.gender || "",
-    photo: undefined,
     identity: undefined,
   };
 
@@ -83,7 +75,6 @@ const PersonalDetailsForm = ({
         lName: values.lName,
         dob: values.dob,
         phone: values.phone,
-        maritalStatus: values.maritalStatus,
         occupation: values.occupation,
         gender: values.gender,
         photo: undefined,
@@ -93,7 +84,6 @@ const PersonalDetailsForm = ({
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
-    setCurrentStep(0);
     return true;
   };
 
@@ -104,8 +94,8 @@ const PersonalDetailsForm = ({
           src: "/icons/security.png",
           alt: "user",
         }}
-        primaryText="Personal Details"
-        secondaryText="- Ensure name matches identity document"
+        primaryText="Next of Kin Details"
+        secondaryText="- Verify next of kin identity"
       />
 
       <Formik
@@ -118,7 +108,7 @@ const PersonalDetailsForm = ({
             <div className="lg:px-8">
               <div className="py-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="fName" className="text-sm text-[#454547]">
+                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
                     First Name *
                   </label>
                   <Field
@@ -134,23 +124,7 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="mName" className="text-sm text-[#454547]">
-                    Middele Name
-                  </label>
-                  <Field
-                    type="text"
-                    name="mName"
-                    value={values.mName}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer middle name"
-                  />
-                  <ErrorMessage
-                    name="mName"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="lName" className="text-sm text-[#454547]">
                     Surname *
@@ -168,25 +142,10 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="dob" className="text-sm text-[#454547]">
-                    Date of Birth *
-                  </label>
-                  <Field
-                    type="date"
-                    name="dob"
-                    value={values.dob}
-                    max={"2007-12-31"}
-                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-                      (e.target as HTMLInputElement).showPicker();
-                    }}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Day - Month - Year, ex. 01-12-1990"
-                  />
-                </div>
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="lname" className="text-sm text-[#454547]">
-                    Phone *
+                    Phone number*
                   </label>
                   <Field
                     type="text"
@@ -206,46 +165,13 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="lname" className="text-sm text-[#454547]">
-                    Marital Status *
-                  </label>
-                  <Field
-                    type="select"
-                    as="select"
-                    name="maritalStatus"
-                    value={values.maritalStatus}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Choose a marital status"
-                  >
-                    <option className="text-gray-400 " disabled value="">
-                      Select marital status
-                    </option>
-                    <option value="single" className="text-black">
-                      Single
-                    </option>
-                    <option value="married" className="text-black">
-                      Married
-                    </option>
-                    <option value="devorced" className="text-black">
-                      Devorced
-                    </option>
-                    <option value="widowed" className="text-black">
-                      Widowed
-                    </option>
-                  </Field>
-                  <ErrorMessage
-                    name="maritalStatus"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
+
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="occupation"
                     className="text-sm text-[#454547]"
                   >
-                    Occupation *
+                    Relationship *
                   </label>
                   <Field
                     type="text"
@@ -260,60 +186,22 @@ const PersonalDetailsForm = ({
                     className="text-xs text-red-500"
                   />
                 </div>
-                <div className="">
+                <div className="flex flex-col gap-2">
                   <label
                     htmlFor="occupation"
                     className="text-sm text-[#454547]"
                   >
-                    Customer Gender *
+                    Address *
                   </label>
-                  <div className="display flex gap-4 mt-2 w-full justify-stretch">
-                    <label
-                      htmlFor="gender_male"
-                      className=" cursor-pointer flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
-                    >
-                      Male
-                      <Field
-                        type="radio"
-                        name="gender"
-                        value="male"
-                        id="gender_male"
-                        onChange={() => setFieldValue("gender", "male")}
-                        className="cursor-pointer w-5 h-5"
-                      />
-                    </label>
-                    <label
-                      htmlFor="gender_female"
-                      className=" cursor-pointer flex items-center gap-2 px-4 py-3 border border-[#D2D5E1] text-[#454547] rounded-lg w-1/2 justify-between"
-                    >
-                      Female
-                      <Field
-                        type="radio"
-                        name="gender"
-                        value="female"
-                        id="gender_female"
-                        onChange={() => setFieldValue("gender", "female")}
-                        className="cursor-pointer w-5 h-5"
-                      />
-                    </label>
-                  </div>
+                  <Field
+                    type="number"
+                    name="businessExp"
+                    value={values.businessExp}
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                    placeholder="Enter registered phone number"
+                  />
+                  <ErrorMessage name="businessExp" />
                 </div>
-              </div>
-              <div className="py-6 flex gap-6">
-                <ImageDropzone
-                  fieldName="photo"
-                  text="customer photo"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
-                />
-                <ImageDropzone
-                  fieldName="photo"
-                  text="customer photo"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
-                />
               </div>
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
@@ -346,4 +234,4 @@ const PersonalDetailsForm = ({
   );
 };
 
-export default PersonalDetailsForm;
+export default NextOfKinDetailsForm;
