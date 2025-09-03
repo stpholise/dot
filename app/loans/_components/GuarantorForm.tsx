@@ -29,7 +29,7 @@ interface PersonalDetailsFormProps {
   customerPhoto: File | undefined;
 }
 
-const PersonalDetailsForm = ({
+const GuarantorForm = ({
   setCurrentStep,
   customerPhoto,
   setCustomerPhoto,
@@ -91,8 +91,7 @@ const PersonalDetailsForm = ({
     );
     formik.resetForm();
   };
-  const storedCustomerDetailsCheck = () => {
-    setCurrentStep(0);
+  const storedCustomerDetailsCheck = () => { 
     return true;
   };
 
@@ -299,7 +298,21 @@ const PersonalDetailsForm = ({
                   </div>
                 </div>
               </div>
-              <div className="py-6 flex gap-6">
+              <div className="py-6 grid grid-cols-2 overflow-hidden gap-6">
+                <ImageDropzone
+                  fieldName="photo"
+                  text="customer photo"
+                  setFieldValue={setFieldValue}
+                  setFile={setCustomerPhoto}
+                  file={customerPhoto}
+                />
+                <ImageDropzone
+                  fieldName="photo"
+                  text="customer photo"
+                  setFieldValue={setFieldValue}
+                  setFile={setCustomerPhoto}
+                  file={customerPhoto}
+                />
                 <ImageDropzone
                   fieldName="photo"
                   text="customer photo"
@@ -346,4 +359,4 @@ const PersonalDetailsForm = ({
   );
 };
 
-export default PersonalDetailsForm;
+export default GuarantorForm;

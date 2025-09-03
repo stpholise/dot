@@ -5,6 +5,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import PrimaryButtons from "../_components/ui/units/buttons/PrimaryButtons";
 import PersonalDetailsForm from "./_components/PersonalDetailsForm";
+import GuarantorForm from "./_components/GuarantorForm";
 
 interface Step {
   id: number;
@@ -81,6 +82,13 @@ const Page = () => {
         >
           {currentStep === 0 && (
             <PersonalDetailsForm
+              setCurrentStep={setCurrentStep}
+              customerPhoto={customerPhoto}
+              setCustomerPhoto={setCustomerPhoto}
+            />
+          )}
+          {currentStep === 2 && (
+            <GuarantorForm
               setCurrentStep={setCurrentStep}
               customerPhoto={customerPhoto}
               setCustomerPhoto={setCustomerPhoto}
