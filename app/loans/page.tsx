@@ -8,6 +8,7 @@ import PersonalDetailsForm from "./_components/PersonalDetailsForm";
 import GuarantorForm from "./_components/GuarantorForm";
 import NextOfKinDetailsForm from "./_components/NextOfKinDetailsForm";
 import CheckCreditForm from "./_components/CheckCreditForm";
+import ApplicationInformation from "./_components/ApplicationInformation";
 
 interface Step {
   id: number;
@@ -104,6 +105,11 @@ const Page = () => {
               <CheckCreditForm />
             )
           }
+          {
+            currentStep === 5 && (
+              <ApplicationInformation />
+            )
+          }
         </div>
       </div>
     </div>
@@ -149,6 +155,12 @@ const steps: Step[] = [
   },
   {
     id: 6,
+    title: "How can we locate the customer?",
+    image: "/image/step_4.png",
+    style: "",
+  },
+  {
+    id: 7,
     title: "How can we locate the customer?",
     image: "/image/step_4.png",
     style: "",
