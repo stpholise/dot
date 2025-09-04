@@ -6,9 +6,6 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
-// import { useSelector, useDispatch } from "react-redux";
-// import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
-// import { RootState } from "@/app/store";
 import { useState } from "react";
 
 export interface PersonalDetailsType {
@@ -18,6 +15,7 @@ export interface PersonalDetailsType {
   lName: string;
   dob: string;
   phone: string;
+  maritalStatus: string;
   businessExp: string;
   occupation: string;
   gender: string;
@@ -29,10 +27,10 @@ interface PersonalDetailsFormProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
   setLoanPersonalDetail: React.Dispatch<
-    React.SetStateAction<PersonalDetailsType | undefined>
+    React.SetStateAction<PersonalDetailsType>
   >;
+  loanPersonalDetail: PersonalDetailsType;
   customerPhoto: File | undefined;
-  loanPersonalDetail: PersonalDetailsType | undefined;
 }
 
 const PersonalDetailsForm = ({
@@ -43,10 +41,6 @@ const PersonalDetailsForm = ({
   loanPersonalDetail,
 }: PersonalDetailsFormProps) => {
   const router = useRouter();
-  // const dispatch = useDispatch();
-  // const storedPersonalDetails = useSelector(
-  //   (state: RootState) => state.hmo.personalDetail
-  // );
 
   const initialValues: PersonalDetailsType = {
     dotAcct: loanPersonalDetail?.dotAcct || "",
@@ -55,7 +49,8 @@ const PersonalDetailsForm = ({
     lName: loanPersonalDetail?.lName || "",
     dob: loanPersonalDetail?.dob || "",
     phone: loanPersonalDetail?.phone || "",
-    businessExp: loanPersonalDetail?.businessExp || "",
+    maritalStatus: loanPersonalDetail?.maritalStatus || "",
+    businessExp: loanPersonalDetail?.businessExp || "0",
     occupation: loanPersonalDetail?.occupation || "",
     gender: loanPersonalDetail?.gender || "",
     photo: loanPersonalDetail?.photo || undefined,
@@ -72,6 +67,7 @@ const PersonalDetailsForm = ({
     occupation: Yup.string().required("Occupation is required"),
     businessExp: Yup.string().required("Business experience is required"),
     gender: Yup.string().oneOf(["male", "female"], "Select male or female"),
+    maritalStatus: Yup.string().required(),
     photo: Yup.mixed().required(),
     identity: Yup.mixed().required(),
   });
@@ -91,27 +87,13 @@ const PersonalDetailsForm = ({
       lName: values.lName,
       dob: values.dob,
       phone: values.phone,
+      maritalStatus: values.maritalStatus,
       occupation: values.occupation,
       gender: values.gender,
       photo: customerPhoto,
       identity: userIdentity,
       businessExp: values.businessExp,
     });
-    console.log(userIdentity);
-    console.log(loanPersonalDetail?.identity);
-    // dispatch(
-    //   setPersonalDetail({
-    //     fName: values.fName,
-    //     mName: values.mName,
-    //     lName: values.lName,
-    //     dob: values.dob,
-    //     phone: values.phone,
-    //     occupation: values.occupation,
-    //     gender: values.gender,
-    //     photo: undefined,
-    //     identity: undefined,
-    //   })
-    // );
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
@@ -252,42 +234,6 @@ const PersonalDetailsForm = ({
                   />
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="occupation"
-                    className="text-sm text-[#454547]"
-                  >
-                    Occupation *
-                  </label>
-                  <Field
-                    type="text"
-                    name="occupation"
-                    value={values.occupation}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter occupation"
-                  />
-                  <ErrorMessage
-                    name="occupation"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="occupation"
-                    className="text-sm text-[#454547]"
-                  >
-                    Years of Business Experience *
-                  </label>
-                  <Field
-                    type="number"
-                    name="businessExp"
-                    value={values.businessExp}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter registered phone number"
-                  />
-                  <ErrorMessage name="businessExp" />
-                </div>
                 <div className="">
                   <label
                     htmlFor="occupation"
@@ -328,6 +274,76 @@ const PersonalDetailsForm = ({
                     </label>
                   </div>
                 </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="lname" className="text-sm text-[#454547]">
+                    Marital Status *
+                  </label>
+                  <Field
+                    type="select"
+                    as="select"
+                    name="maritalStatus"
+                    value={values.maritalStatus}
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                    placeholder="Choose a marital status"
+                  >
+                    <option className="text-gray-400 " disabled value="">
+                      Select marital status
+                    </option>
+                    <option value="single" className="text-black">
+                      Single
+                    </option>
+                    <option value="married" className="text-black">
+                      Married
+                    </option>
+                    <option value="devorced" className="text-black">
+                      Devorced
+                    </option>
+                    <option value="widowed" className="text-black">
+                      Widowed
+                    </option>
+                  </Field>
+                  <ErrorMessage
+                    name="maritalStatus"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="occupation"
+                    className="text-sm text-[#454547]"
+                  >
+                    Occupation *
+                  </label>
+                  <Field
+                    type="text"
+                    name="occupation"
+                    value={values.occupation}
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                    placeholder="Enter occupation"
+                  />
+                  <ErrorMessage
+                    name="occupation"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="occupation"
+                    className="text-sm text-[#454547]"
+                  >
+                    Years of Business Experience *
+                  </label>
+                  <Field
+                    type="number"
+                    name="businessExp"
+                    value={values.businessExp}
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
+                    placeholder="Enter registered phone number"
+                  />
+                  <ErrorMessage name="businessExp" />
+                </div>
               </div>
               <div className="py-6 flex gap-6">
                 <ImageDropzone
@@ -359,9 +375,7 @@ const PersonalDetailsForm = ({
                 text={"Proceed - Address Details"}
                 type="submit"
                 disabled={
-                  !isValid || isSubmitting || loanPersonalDetail
-                    ? dirty
-                    : !dirty
+                  !isValid || isSubmitting  
                 }
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",

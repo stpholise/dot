@@ -6,7 +6,7 @@ import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
-interface LoanData {
+export interface LoanData {
   amountRequested: string;
   loanType: string;
   loanStage: string;
@@ -15,15 +15,25 @@ interface LoanData {
   loanHistory: true | false;
 }
 
-const ApplicationInformation = () => {
+interface ApplicationInformationProps {
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setAppInformation: React.Dispatch<React.SetStateAction<LoanData>>;
+  appInformation: LoanData;
+}
+
+const ApplicationInformation = ({
+  setCurrentStep,
+  setAppInformation,
+  appInformation,
+}: ApplicationInformationProps) => {
   const router = useRouter();
   const initialValues: LoanData = {
-    amountRequested: "0",
-    loanType: "",
-    loanStage: "",
-    loanDuration: "",
-    loanPurpose: "",
-    loanHistory: false,
+    amountRequested: appInformation.amountRequested || "0",
+    loanType: appInformation.loanType || "",
+    loanStage: appInformation.loanStage || "",
+    loanDuration: appInformation.loanDuration || "",
+    loanPurpose: appInformation.loanPurpose || "",
+    loanHistory: appInformation.loanHistory || false,
   };
 
   const validationSchema = Yup.object({
@@ -61,8 +71,16 @@ const ApplicationInformation = () => {
   });
 
   const onSubmit = (values: LoanData, formik: FormikHelpers<LoanData>) => {
-    console.log(values);
-    console.log(formik);
+    setAppInformation({
+      amountRequested: values.amountRequested,
+      loanType: values.loanType,
+      loanStage: values.loanStage,
+      loanDuration: values.loanDuration,
+      loanPurpose: values.loanPurpose,
+      loanHistory: values.loanHistory,
+    });
+    setCurrentStep(6);
+    formik.resetForm();
   };
 
   return (
@@ -176,10 +194,10 @@ const ApplicationInformation = () => {
                     Loan Duration *
                   </label>
                   <Field
-                    type="text"
+                    type="number"
                     name="loanDuration"
-                    value={values.loanDuration}
-                    inputMode='numeric'
+                    value={values.loanDuration  } 
+                    inputMode="numeric"
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter customer first name"
                   />
@@ -212,7 +230,7 @@ const ApplicationInformation = () => {
                     htmlFor="occupation"
                     className="text-sm text-[#454547]"
                   >
-                    Have you taken a loan before? * 
+                    Have you taken a loan before? *
                   </label>
                   <div className="display flex gap-4 mt-2 w-full justify-stretch">
                     <label
@@ -273,7 +291,7 @@ const ApplicationInformation = () => {
               <PrimaryButtons
                 text={"Proceed - Address Details"}
                 type="submit"
-                disabled={!isValid || !dirty || isSubmitting}
+                disabled={!isValid || isSubmitting}
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {

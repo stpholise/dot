@@ -16,6 +16,7 @@ import { useFetchState } from "../account/create-account/_components/useFetchSta
 import { GuarantorDataDetailsType } from "./_components/GuarantorForm";
 import { NextOfKinDetailsType } from "./_components/NextOfKinDetailsForm";
 import { CreditFormProp } from "./_components/CheckCreditForm";
+import { LoanData } from "./_components/ApplicationInformation";
 
 interface Step {
   id: number;
@@ -37,9 +38,7 @@ const Page = () => {
   const [originAddress, setOriginAddress] = useState<
     CustomerAddress | undefined
   >();
-  const [loanPersonalDetail, setLoanPersonalDetail] = useState<
-    PersonalDetailsType | undefined
-  >();
+
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
     undefined
   );
@@ -52,7 +51,20 @@ const Page = () => {
     isLoading: boolean;
     error: string;
   };
-
+  const [loanPersonalDetail, setLoanPersonalDetail] = useState<PersonalDetailsType>({
+       dotAcct: '',
+      fName: '',
+      mName:'',
+      lName:'',
+      dob: '',
+      phone: '',
+      maritalStatus: '',
+      occupation: '',
+      gender: '',
+      photo: undefined,
+      identity: undefined,
+      businessExp: '',
+  });
   const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>({
     fName: "",
     lName: "",
@@ -81,6 +93,15 @@ const Page = () => {
     specialFoodOccurance: "",
     householdFeeding: "",
     householdCondition: "",
+  });
+
+  const [appInformation, setAppInformation] = useState<LoanData>({
+    amountRequested: "",
+    loanType: "",
+    loanStage: "",
+    loanDuration: "",
+    loanPurpose: "",
+    loanHistory: false,
   });
 
   return (
@@ -183,8 +204,23 @@ const Page = () => {
               creditDetail={creditDetail}
             />
           )}
-          {currentStep === 5 && <ApplicationInformation />}
-          {currentStep === 6 && <ReviewLoan setCurrentStep={setCurrentStep} />}
+          {currentStep === 5 && (
+            <ApplicationInformation
+              setCurrentStep={setCurrentStep}
+              setAppInformation={setAppInformation}
+              appInformation={appInformation}
+            />
+          )}
+          {currentStep === 6 && (
+            <ReviewLoan
+              setCurrentStep={setCurrentStep}
+              loanPersonalDetail={loanPersonalDetail}
+              guarantorData={guarantorData}
+              nextOfKinData={nextOfKinData}
+              creditDetail={creditDetail}
+              appInformation={appInformation}
+            />
+          )}
         </div>
       </div>
     </div>
