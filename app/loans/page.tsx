@@ -13,6 +13,9 @@ import ReviewLoan from "./_components/ReviewLoan";
 import { PersonalDetailsType } from "./_components/PersonalDetailsForm";
 import Address from "../hmo/buy-hmo/_components/OriginandAddress";
 import { useFetchState } from "../account/create-account/_components/useFetchState";
+import { GuarantorDataDetailsType } from "./_components/GuarantorForm";
+import { NextOfKinDetailsType } from "./_components/NextOfKinDetailsForm";
+import { CreditFormProp } from "./_components/CheckCreditForm";
 
 interface Step {
   id: number;
@@ -30,6 +33,7 @@ interface CustomerAddress {
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [selectedState, setSelectedState] = useState<string>("");
   const [originAddress, setOriginAddress] = useState<
     CustomerAddress | undefined
   >();
@@ -49,7 +53,35 @@ const Page = () => {
     error: string;
   };
 
-  const [selectedState, setSelectedState] = useState<string>("");
+  const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>({
+    fName: "",
+    lName: "",
+    phone: "",
+    relationship: "",
+    address: "",
+    lga: "",
+    state: "",
+    guarantorPhoto: undefined,
+    identity: undefined,
+    employmentLetter: undefined,
+    signature: undefined,
+  });
+  const [nextOfKinData, setNextOfKinData] = useState<NextOfKinDetailsType>({
+    fName: "",
+    lName: "",
+    phone: "",
+    relationship: "",
+    address: "",
+    state: "",
+    lga: "",
+  });
+
+  const [creditDetail, setCreditDetail] = useState<CreditFormProp>({
+    householdIncome: "",
+    specialFoodOccurance: "",
+    householdFeeding: "",
+    householdCondition: "",
+  });
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
@@ -71,12 +103,10 @@ const Page = () => {
           className="mt-4 text-black hidden lg:flex bg-white border border-gray-300 hover:bg-gray-100 h-[48px] items-center justify-center"
           text="Cancel Registration"
           icon="/icons/close.svg"
-          // disabled={currentStep === 1}
           onClick={cancelRegistration}
         />
         <button
           className=" text-black flex md:hidden bg-white border border-gray-300 hover:bg-gray-100 h-[40px] w-[40px] items-center justify-center rounded-lg"
-          // disabled={currentStep === 1}
           onClick={cancelRegistration}
         >
           {" "}
@@ -133,12 +163,26 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               customerPhoto={customerPhoto}
               setCustomerPhoto={setCustomerPhoto}
+              states={states}
+              setGuarantorData={setGuarantorData}
+              guarantorData={guarantorData}
             />
           )}
           {currentStep === 3 && (
-            <NextOfKinDetailsForm setCurrentStep={setCurrentStep} />
+            <NextOfKinDetailsForm
+              setCurrentStep={setCurrentStep}
+              states={states}
+              setNextOfKinData={setNextOfKinData}
+              nextOfKinData={nextOfKinData}
+            />
           )}
-          {currentStep === 4 && <CheckCreditForm />}
+          {currentStep === 4 && (
+            <CheckCreditForm
+              setCurrentStep={setCurrentStep}
+              setCreditDetail={setCreditDetail}
+              creditDetail={creditDetail}
+            />
+          )}
           {currentStep === 5 && <ApplicationInformation />}
           {currentStep === 6 && <ReviewLoan setCurrentStep={setCurrentStep} />}
         </div>

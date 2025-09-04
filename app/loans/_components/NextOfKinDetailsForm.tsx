@@ -3,88 +3,80 @@ import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
+import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState";
 import { useRouter } from "next/navigation";
-import clsx from "clsx"; 
-import { useSelector, useDispatch } from "react-redux";
-import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
-import { RootState } from "@/app/store";
+import clsx from "clsx";
 
-export interface PersonalDetailsType {
+export interface NextOfKinDetailsType {
   fName: string;
-  mName: string;
   lName: string;
-  dob: string;
   phone: string;
-  businessExp: string;
-  occupation: string;
-  gender: string;
-
-  identity: File | undefined;
+  relationship: string;
+  address: string;
+  state: string;
+  lga: string;
 }
 
 interface PersonalDetailsFormProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setNextOfKinData: React.Dispatch<React.SetStateAction<NextOfKinDetailsType>>;
+  nextOfKinData: NextOfKinDetailsType;
+  states: string[];
 }
 
-const NextOfKinDetailsForm = ({ setCurrentStep }: PersonalDetailsFormProps) => {
+const NextOfKinDetailsForm = ({
+  setCurrentStep,
+  nextOfKinData,
+  setNextOfKinData,
+  states,
+}: PersonalDetailsFormProps) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const storedPersonalDetails = useSelector(
-    (state: RootState) => state.hmo.personalDetail
-  );
 
-  const initialValues: PersonalDetailsType = {
-    fName: storedPersonalDetails.fName || "",
-    mName: storedPersonalDetails.mName || "",
-    lName: storedPersonalDetails.lName || "",
-    dob: storedPersonalDetails.dob || "",
-    phone: storedPersonalDetails.phone || "",
-    businessExp: "",
-    occupation: storedPersonalDetails.occupation || "",
-    gender: storedPersonalDetails.gender || "",
-    identity: undefined,
+  const initialValues: NextOfKinDetailsType = {
+    fName: nextOfKinData.fName || "",
+    lName: nextOfKinData.lName || "",
+    phone: nextOfKinData.phone || "",
+    relationship: nextOfKinData.relationship || "",
+    address: nextOfKinData.address || "",
+    state: nextOfKinData.state || "",
+    lga: nextOfKinData.lga || "",
   };
 
   const validationSchima = Yup.object({
     fName: Yup.string().required(),
-    mName: Yup.string(),
     lName: Yup.string().required(),
-    dob: Yup.string().required(),
     phone: Yup.string().required(),
-    maritalStatus: Yup.string().oneOf(
-      ["single", "married", "devorced", "widowed"],
-      "Invalid marital status"
-    ),
-    occupation: Yup.string().required(),
-    gender: Yup.string().oneOf(
-      ["male", "feamle"],
-      "they are only two genders "
-    ),
+    relationship: Yup.string().required(),
+    address: Yup.string().required(),
+    state: Yup.string().required(),
+    lga: Yup.string().required(),
   });
 
-  const handleFormSubmission = (
-    values: PersonalDetailsType,
-    formik: FormikHelpers<PersonalDetailsType>
-  ) => {
-    setCurrentStep(1);
-    console.log("values", values);
-    dispatch(
-      setPersonalDetail({
-        fName: values.fName,
-        mName: values.mName,
-        lName: values.lName,
-        dob: values.dob,
-        phone: values.phone,
-        occupation: values.occupation,
-        gender: values.gender,
-        photo: undefined,
-        identity: undefined,
-      })
-    );
-    formik.resetForm();
+  const { lga, loadingLga, errorFetchinLga } = useFetchLGA(
+    nextOfKinData?.state ?? ""
+  ) as {
+    lga: string[] | undefined;
+    loadingLga: boolean;
+    errorFetchinLga: string | null;
   };
-  const storedCustomerDetailsCheck = () => {
-    return true;
+
+  const handleFormSubmission = (
+    values: NextOfKinDetailsType,
+    formik: FormikHelpers<NextOfKinDetailsType>
+  ) => {
+    setCurrentStep(4);
+
+    setNextOfKinData({
+      fName: values.fName,
+      lName: values.lName,
+      phone: values.phone,
+      relationship: values.relationship,
+      address: values.address,
+      state: values.state,
+      lga: values.lga,
+    });
+    console.log(values);
+    formik.resetForm();
   };
 
   return (
@@ -144,7 +136,7 @@ const NextOfKinDetailsForm = ({ setCurrentStep }: PersonalDetailsFormProps) => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="lname" className="text-sm text-[#454547]">
+                  <label htmlFor="phone" className="text-sm text-[#454547]">
                     Phone number*
                   </label>
                   <Field
@@ -168,40 +160,135 @@ const NextOfKinDetailsForm = ({ setCurrentStep }: PersonalDetailsFormProps) => {
 
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="occupation"
+                    htmlFor="relationship"
                     className="text-sm text-[#454547]"
                   >
                     Relationship *
                   </label>
                   <Field
                     type="text"
-                    name="occupation"
-                    value={values.occupation}
+                    name="relationship"
+                    value={values.relationship}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter occupation"
+                    placeholder="Enter relationship"
                   />
                   <ErrorMessage
-                    name="occupation"
+                    name="relationship"
                     component="div"
                     className="text-xs text-red-500"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="occupation"
-                    className="text-sm text-[#454547]"
-                  >
+                  <label htmlFor="address" className="text-sm text-[#454547]">
                     Address *
                   </label>
                   <Field
-                    type="number"
-                    name="businessExp"
-                    value={values.businessExp}
+                    type="string"
+                    name="address"
+                    value={values.address}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter registered phone number"
                   />
-                  <ErrorMessage name="businessExp" />
+                  <ErrorMessage
+                    name="address"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
                 </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="fname" className="text-sm text-[#454547]">
+                    State *
+                  </label>
+                  {
+                    <Field
+                      as="select"
+                      name="state"
+                      value={values.state}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        setFieldValue("state", e.target.value);
+                        setNextOfKinData((prev) => ({
+                          ...prev,
+                          state: e.target.value,
+                        }));
+                        setFieldValue("lga", "");
+                      }}
+                      className="w-full cursor-pointer px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
+                    >
+                      {!states ? (
+                        <option value="" className="text-gray-300" disabled>
+                          Error fetching State
+                        </option>
+                      ) : (
+                        <option value="" className="text-gray-300" disabled>
+                          select a state
+                        </option>
+                      )}
+                      {states &&
+                        states.map((state) => (
+                          <option
+                            className="text-black"
+                            value={state}
+                            key={state}
+                          >
+                            {state}
+                          </option>
+                        ))}
+                    </Field>
+                  }
+                  <ErrorMessage
+                    name="state"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                {
+                  <div className="">
+                    <label htmlFor="lga" className="text-sm text-[#454547]">
+                      Local Government Area *
+                    </label>
+                    {
+                      <Field
+                        as="select"
+                        name="lga"
+                        className="w-full cursor-pointer px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
+                      >
+                        {loadingLga ? (
+                          <option value="" className="text-gray-300" disabled>
+                            Loading...
+                          </option>
+                        ) : errorFetchinLga ? (
+                          <option value="" className="text-gray-300" disabled>
+                            Error fetching LGA
+                          </option>
+                        ) : !nextOfKinData?.state ||
+                          nextOfKinData?.state == "" ? (
+                          <option value="" className="text-gray-300" disabled>
+                            select a state first
+                          </option>
+                        ) : (
+                          <option value="" className="text-gray-300" disabled>
+                            select a local government area
+                          </option>
+                        )}
+                        {lga &&
+                          lga.map((lgaItem) => (
+                            <option
+                              className="text-black"
+                              value={lgaItem}
+                              key={lgaItem}
+                            >
+                              {lgaItem}
+                            </option>
+                          ))}
+                      </Field>
+                    }
+                    <ErrorMessage
+                      name="lga"
+                      component="div"
+                      className="text-xs text-red-500"
+                    />
+                  </div>
+                }
               </div>
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
@@ -214,13 +301,13 @@ const NextOfKinDetailsForm = ({ setCurrentStep }: PersonalDetailsFormProps) => {
               <PrimaryButtons
                 text={"Proceed - Address Details"}
                 type="submit"
-                disabled={!isValid || !dirty || isSubmitting}
+                disabled={!isValid || isSubmitting}
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
                     "bg-black text-white":
                       (isValid && !isSubmitting && dirty) ||
-                      (storedCustomerDetailsCheck() && isValid && !dirty),
+                      (isValid && !dirty),
                     "bg-[#9A9A9A] text-white":
                       !isValid || !dirty || isSubmitting,
                   }
