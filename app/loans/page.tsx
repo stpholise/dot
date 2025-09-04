@@ -38,9 +38,7 @@ const Page = () => {
   const [originAddress, setOriginAddress] = useState<
     CustomerAddress | undefined
   >();
-  const [loanPersonalDetail, setLoanPersonalDetail] = useState<
-    PersonalDetailsType | undefined
-  >();
+
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
     undefined
   );
@@ -53,7 +51,20 @@ const Page = () => {
     isLoading: boolean;
     error: string;
   };
-
+  const [loanPersonalDetail, setLoanPersonalDetail] = useState<PersonalDetailsType>({
+       dotAcct: '',
+      fName: '',
+      mName:'',
+      lName:'',
+      dob: '',
+      phone: '',
+      maritalStatus: '',
+      occupation: '',
+      gender: '',
+      photo: undefined,
+      identity: undefined,
+      businessExp: '',
+  });
   const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>({
     fName: "",
     lName: "",
@@ -200,7 +211,16 @@ const Page = () => {
               appInformation={appInformation}
             />
           )}
-          {currentStep === 6 && <ReviewLoan setCurrentStep={setCurrentStep} />}
+          {currentStep === 6 && (
+            <ReviewLoan
+              setCurrentStep={setCurrentStep}
+              loanPersonalDetail={loanPersonalDetail}
+              guarantorData={guarantorData}
+              nextOfKinData={nextOfKinData}
+              creditDetail={creditDetail}
+              appInformation={appInformation}
+            />
+          )}
         </div>
       </div>
     </div>
