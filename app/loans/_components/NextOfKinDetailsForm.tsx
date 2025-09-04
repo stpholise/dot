@@ -301,7 +301,7 @@ const NextOfKinDetailsForm = ({
               <PrimaryButtons
                 text={"Proceed - Address Details"}
                 type="submit"
-                disabled={!isValid || !dirty || isSubmitting}
+                disabled={!isValid || isSubmitting}
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {

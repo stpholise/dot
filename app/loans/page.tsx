@@ -15,6 +15,7 @@ import Address from "../hmo/buy-hmo/_components/OriginandAddress";
 import { useFetchState } from "../account/create-account/_components/useFetchState";
 import { GuarantorDataDetailsType } from "./_components/GuarantorForm";
 import { NextOfKinDetailsType } from "./_components/NextOfKinDetailsForm";
+import { CreditFormProp } from "./_components/CheckCreditForm";
 
 interface Step {
   id: number;
@@ -32,6 +33,7 @@ interface CustomerAddress {
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [selectedState, setSelectedState] = useState<string>("");
   const [originAddress, setOriginAddress] = useState<
     CustomerAddress | undefined
   >();
@@ -50,8 +52,6 @@ const Page = () => {
     isLoading: boolean;
     error: string;
   };
-
-  const [selectedState, setSelectedState] = useState<string>("");
 
   const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>({
     fName: "",
@@ -74,6 +74,13 @@ const Page = () => {
     address: "",
     state: "",
     lga: "",
+  });
+
+  const [creditDetail, setCreditDetail] = useState<CreditFormProp>({
+    householdIncome: "",
+    specialFoodOccurance: "",
+    householdFeeding: "",
+    householdCondition: "",
   });
 
   return (
@@ -169,7 +176,13 @@ const Page = () => {
               nextOfKinData={nextOfKinData}
             />
           )}
-          {currentStep === 4 && <CheckCreditForm />}
+          {currentStep === 4 && (
+            <CheckCreditForm
+              setCurrentStep={setCurrentStep}
+              setCreditDetail={setCreditDetail}
+              creditDetail={creditDetail}
+            />
+          )}
           {currentStep === 5 && <ApplicationInformation />}
           {currentStep === 6 && <ReviewLoan setCurrentStep={setCurrentStep} />}
         </div>
