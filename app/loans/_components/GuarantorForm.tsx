@@ -6,93 +6,111 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
-import { useSelector, useDispatch } from "react-redux";
-import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
-import { RootState } from "@/app/store";
+import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState";
 
-export interface PersonalDetailsType {
+export interface GuarantorDataDetailsType {
   fName: string;
-  mName: string;
   lName: string;
-  dob: string;
   phone: string;
-  businessExp: string;
-  occupation: string;
-  gender: string;
-  photo: File | undefined;
+  relationship: string;
+  address: string;
+  state: string;
+  lga: string;
+  guarantorPhoto: File | undefined;
   identity: File | undefined;
+  employmentLetter: File | undefined;
+  signature: File | undefined;
 }
 
 interface PersonalDetailsFormProps {
+  states: string[];
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
   customerPhoto: File | undefined;
+  guarantorData?: GuarantorDataDetailsType;
+  setGuarantorData: React.Dispatch<
+    React.SetStateAction<GuarantorDataDetailsType>
+  >;
 }
 
 const GuarantorForm = ({
+  states,
   setCurrentStep,
-  customerPhoto,
-  setCustomerPhoto,
+  guarantorData,
+  setGuarantorData,
 }: PersonalDetailsFormProps) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const storedPersonalDetails = useSelector(
-    (state: RootState) => state.hmo.personalDetail
-  );
 
-  const initialValues: PersonalDetailsType = {
-    fName: storedPersonalDetails.fName || "",
-    mName: storedPersonalDetails.mName || "",
-    lName: storedPersonalDetails.lName || "",
-    dob: storedPersonalDetails.dob || "",
-    phone: storedPersonalDetails.phone || "",
-    businessExp: "",
-    occupation: storedPersonalDetails.occupation || "",
-    gender: storedPersonalDetails.gender || "",
-    photo: undefined,
+  const initialValues: GuarantorDataDetailsType = {
+    fName: guarantorData?.fName || "",
+    lName: guarantorData?.lName || "",
+    phone: guarantorData?.phone || "",
+    relationship: guarantorData?.relationship || "",
+    address: guarantorData?.address || "",
+    state: guarantorData?.state || "",
+    lga: guarantorData?.lga || "",
+    guarantorPhoto: undefined,
     identity: undefined,
+    signature: undefined,
+    employmentLetter: undefined,
   };
 
   const validationSchima = Yup.object({
     fName: Yup.string().required(),
-    mName: Yup.string(),
     lName: Yup.string().required(),
-    dob: Yup.string().required(),
     phone: Yup.string().required(),
-    maritalStatus: Yup.string().oneOf(
-      ["single", "married", "devorced", "widowed"],
-      "Invalid marital status"
-    ),
-    occupation: Yup.string().required(),
-    gender: Yup.string().oneOf(
-      ["male", "feamle"],
-      "they are only two genders "
-    ),
+    relationship: Yup.string().required(),
+    address: Yup.string().required(),
+    state: Yup.string().required(),
+    lga: Yup.string().required(),
+    guarantorPhoto: Yup.mixed<File>().required(),
+    identity: Yup.mixed<File>().required(),
+    signature: Yup.mixed<File>().required(),
+    employmentLetter: Yup.mixed<File>().required(),
   });
 
+  const setGuarantorPhoto = (photo: File | undefined) => {
+    setGuarantorData((prev) => ({ ...prev, guarantorPhoto: photo }));
+  };
+  const setGuarantorIdentity = (photo: File | undefined) => {
+    setGuarantorData((prev) => ({ ...prev, identity: photo }));
+  };
+  const setGuarantorEmploymentLetter = (photo: File | undefined) => {
+    setGuarantorData((prev) => ({ ...prev, employmentLetter: photo }));
+  };
+  const setGuarantorSignature = (photo: File | undefined) => {
+    setGuarantorData((prev) => ({ ...prev, signature: photo }));
+  };
+
   const handleFormSubmission = (
-    values: PersonalDetailsType,
-    formik: FormikHelpers<PersonalDetailsType>
+    values: GuarantorDataDetailsType,
+    formik: FormikHelpers<GuarantorDataDetailsType>
   ) => {
-    setCurrentStep(1);
+    setCurrentStep(3);
     console.log("values", values);
-    dispatch(
-      setPersonalDetail({
-        fName: values.fName,
-        mName: values.mName,
-        lName: values.lName,
-        dob: values.dob,
-        phone: values.phone,
-        occupation: values.occupation,
-        gender: values.gender,
-        photo: undefined,
-        identity: undefined,
-      })
-    );
+    setGuarantorData({
+      fName: values.fName,
+      lName: values.lName,
+      phone: values.phone,
+      relationship: values.relationship,
+      address: values.address,
+      state: values.state,
+      lga: values.lga,
+      guarantorPhoto: values.guarantorPhoto,
+      identity: values.identity,
+      employmentLetter: values.employmentLetter,
+      signature: values.signature,
+    });
+
     formik.resetForm();
   };
-  const storedCustomerDetailsCheck = () => {
-    return true;
+
+  const { lga, loadingLga, errorFetchinLga } = useFetchLGA(
+    guarantorData?.state ?? ""
+  ) as {
+    lga: string[] | undefined;
+    loadingLga: boolean;
+    errorFetchinLga: string | null;
   };
 
   return (
@@ -183,13 +201,13 @@ const GuarantorForm = ({
                   </label>
                   <Field
                     type="text"
-                    name="occupation"
-                    value={values.occupation}
+                    name="relationship"
+                    value={values.relationship}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter occupation"
                   />
                   <ErrorMessage
-                    name="occupation"
+                    name="relationship"
                     component="div"
                     className="text-xs text-red-500"
                   />
@@ -202,46 +220,145 @@ const GuarantorForm = ({
                     Address *
                   </label>
                   <Field
-                    type="number"
-                    name="businessExp"
-                    value={values.businessExp}
+                    type="text"
+                    name="address"
+                    value={values.address}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter registered phone number"
                   />
-                  <ErrorMessage name="businessExp" />
+                  <ErrorMessage
+                    name="address"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
                 </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="fname" className="text-sm text-[#454547]">
+                    State *
+                  </label>
+                  {
+                    <Field
+                      as="select"
+                      name="state"
+                      value={values.state}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        // setSelectedState(e.target.value);
+                        setFieldValue("state", e.target.value);
+                        setGuarantorData((prev) => ({
+                          ...prev,
+                          state: e.target.value,
+                        }));
+                        setFieldValue("lga", "");
+                      }}
+                      className="w-full cursor-pointer px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
+                    >
+                      {!states ? (
+                        <option value="" className="text-gray-300" disabled>
+                          Error fetching State
+                        </option>
+                      ) : (
+                        <option value="" className="text-gray-300" disabled>
+                          select a state
+                        </option>
+                      )}
+                      {states &&
+                        states.map((state) => (
+                          <option
+                            className="text-black"
+                            value={state}
+                            key={state}
+                          >
+                            {state}
+                          </option>
+                        ))}
+                    </Field>
+                  }
+                  <ErrorMessage
+                    name="state"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                {
+                  <div className="">
+                    <label htmlFor="lga" className="text-sm text-[#454547]">
+                      Local Government Area *
+                    </label>
+                    {
+                      <Field
+                        as="select"
+                        name="lga"
+                        className="w-full cursor-pointer px-4 py-3 outline-none border text-black border-gray-300 rounded-lg"
+                      >
+                        {loadingLga ? (
+                          <option value="" className="text-gray-300" disabled>
+                            Loading...
+                          </option>
+                        ) : errorFetchinLga ? (
+                          <option value="" className="text-gray-300" disabled>
+                            Error fetching LGA
+                          </option>
+                        ) : !guarantorData?.state ||
+                          guarantorData?.state == "" ? (
+                          <option value="" className="text-gray-300" disabled>
+                            select a state first
+                          </option>
+                        ) : (
+                          <option value="" className="text-gray-300" disabled>
+                            select a local government area
+                          </option>
+                        )}
+                        {lga &&
+                          lga.map((lgaItem) => (
+                            <option
+                              className="text-black"
+                              value={lgaItem}
+                              key={lgaItem}
+                            >
+                              {lgaItem}
+                            </option>
+                          ))}
+                      </Field>
+                    }
+                    <ErrorMessage
+                      name="lga"
+                      component="div"
+                      className="text-xs text-red-500"
+                    />
+                  </div>
+                }
               </div>
               <div className="py-6 grid grid-cols-2 overflow-hidden gap-6 w-full">
                 <ImageDropzone
-                  fieldName="photo"
+                  fieldName="guarantorPhoto"
                   text="Upload or Take a photo"
                   setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+                  setFile={setGuarantorPhoto}
+                  file={guarantorData?.guarantorPhoto}
                   className=" flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
-                  fieldName="photo"
+                  fieldName="identity"
                   text="Upload Identity Card"
                   setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+                  setFile={setGuarantorIdentity}
+                  file={guarantorData?.identity}
                   className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
-                  fieldName="photo"
+                  fieldName="employmentLetter"
                   text="Upload Employment Letter"
                   setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+                  setFile={setGuarantorEmploymentLetter}
+                  file={guarantorData?.employmentLetter}
                   className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
-                  fieldName="photo"
+                  fieldName="signature"
                   text="Upload Signature"
                   setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+                  setFile={setGuarantorSignature}
+                  file={guarantorData?.signature}
                   className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
               </div>
@@ -256,13 +373,13 @@ const GuarantorForm = ({
               <PrimaryButtons
                 text={"Proceed - Address Details"}
                 type="submit"
-                disabled={!isValid || !dirty || isSubmitting}
+                disabled={!isValid || isSubmitting}
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
                     "bg-black text-white":
                       (isValid && !isSubmitting && dirty) ||
-                      (storedCustomerDetailsCheck() && isValid && !dirty),
+                      (isValid && !dirty),
                     "bg-[#9A9A9A] text-white":
                       !isValid || !dirty || isSubmitting,
                   }
