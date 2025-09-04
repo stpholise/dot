@@ -18,6 +18,13 @@ interface Step {
   image?: string;
   style?: string;
 }
+ interface CustomerAddress {
+  state: string;
+  city: string;
+  address: string;
+  lga: string;
+  utilityBillImage?: File | null;
+}
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -26,6 +33,8 @@ const Page = () => {
     isLoading: boolean;
     error: string;
   };
+
+const [originAddress, setOriginAddress] = useState<CustomerAddress | undefined>()
 
   const [selectedState, setSelectedState] = useState<string>("");
 
@@ -106,6 +115,8 @@ const Page = () => {
               isLoading={isLoading}
               error={error}
               setCurrentStep={setCurrentStep}
+              setOriginAddress={setOriginAddress}
+              originAddress={originAddress}
             />
           )}
           {currentStep === 2 && (

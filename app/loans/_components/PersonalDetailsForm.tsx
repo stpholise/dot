@@ -72,6 +72,8 @@ const PersonalDetailsForm = ({
     occupation: Yup.string().required("Occupation is required"),
     businessExp: Yup.string().required("Business experience is required"),
     gender: Yup.string().oneOf(["male", "female"], "Select male or female"),
+    photo: Yup.mixed().required(),
+    identity: Yup.mixed().required(),
   });
 
   const [userIdentity, setUserIdentity] = useState<File | undefined>();
@@ -93,7 +95,7 @@ const PersonalDetailsForm = ({
       gender: values.gender,
       photo: customerPhoto,
       identity: userIdentity,
-      businessExp: "",
+      businessExp: values.businessExp,
     });
     console.log(userIdentity);
     console.log(loanPersonalDetail?.identity);
@@ -356,7 +358,11 @@ const PersonalDetailsForm = ({
               <PrimaryButtons
                 text={"Proceed - Address Details"}
                 type="submit"
-                disabled={!isValid || !dirty || isSubmitting}
+                disabled={
+                  !isValid || isSubmitting || loanPersonalDetail
+                    ? dirty
+                    : !dirty
+                }
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
