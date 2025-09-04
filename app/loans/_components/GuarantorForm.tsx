@@ -86,8 +86,7 @@ const GuarantorForm = ({
     values: GuarantorDataDetailsType,
     formik: FormikHelpers<GuarantorDataDetailsType>
   ) => {
-    setCurrentStep(3);
-    console.log("values", values);
+    setCurrentStep(3); 
     setGuarantorData({
       fName: values.fName,
       lName: values.lName,

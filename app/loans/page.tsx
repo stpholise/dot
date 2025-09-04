@@ -14,6 +14,7 @@ import { PersonalDetailsType } from "./_components/PersonalDetailsForm";
 import Address from "../hmo/buy-hmo/_components/OriginandAddress";
 import { useFetchState } from "../account/create-account/_components/useFetchState";
 import { GuarantorDataDetailsType } from "./_components/GuarantorForm";
+import { NextOfKinDetailsType } from "./_components/NextOfKinDetailsForm";
 
 interface Step {
   id: number;
@@ -51,10 +52,8 @@ const Page = () => {
   };
 
   const [selectedState, setSelectedState] = useState<string>("");
-  // const [guarantorState, setGuarantorState] = useState<string>('')
-  const [guarantorData, setGuarantorData] = useState<
-    GuarantorDataDetailsType  
-  >({
+
+  const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>({
     fName: "",
     lName: "",
     phone: "",
@@ -66,6 +65,15 @@ const Page = () => {
     identity: undefined,
     employmentLetter: undefined,
     signature: undefined,
+  });
+  const [nextOfKinData, setNextOfKinData] = useState<NextOfKinDetailsType>({
+    fName: "",
+    lName: "",
+    phone: "",
+    relationship: "",
+    address: "",
+    state: "",
+    lga: "",
   });
 
   return (
@@ -154,7 +162,12 @@ const Page = () => {
             />
           )}
           {currentStep === 3 && (
-            <NextOfKinDetailsForm setCurrentStep={setCurrentStep} />
+            <NextOfKinDetailsForm
+              setCurrentStep={setCurrentStep}
+              states={states}
+              setNextOfKinData={setNextOfKinData}
+              nextOfKinData={nextOfKinData}
+            />
           )}
           {currentStep === 4 && <CheckCreditForm />}
           {currentStep === 5 && <ApplicationInformation />}
