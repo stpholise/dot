@@ -11,7 +11,7 @@ const ReviewLoan = ({
   const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false);
 
   const confirmHMOPurchase = () => {
-    setCurrentStep(4);
+    setCurrentStep(5);
   };
 
   return (

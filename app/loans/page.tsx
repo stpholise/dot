@@ -16,6 +16,7 @@ import { useFetchState } from "../account/create-account/_components/useFetchSta
 import { GuarantorDataDetailsType } from "./_components/GuarantorForm";
 import { NextOfKinDetailsType } from "./_components/NextOfKinDetailsForm";
 import { CreditFormProp } from "./_components/CheckCreditForm";
+import { LoanData } from "./_components/ApplicationInformation";
 
 interface Step {
   id: number;
@@ -81,6 +82,15 @@ const Page = () => {
     specialFoodOccurance: "",
     householdFeeding: "",
     householdCondition: "",
+  });
+
+  const [appInformation, setAppInformation] = useState<LoanData>({
+    amountRequested: "",
+    loanType: "",
+    loanStage: "",
+    loanDuration: "",
+    loanPurpose: "",
+    loanHistory: false,
   });
 
   return (
@@ -183,7 +193,13 @@ const Page = () => {
               creditDetail={creditDetail}
             />
           )}
-          {currentStep === 5 && <ApplicationInformation />}
+          {currentStep === 5 && (
+            <ApplicationInformation
+              setCurrentStep={setCurrentStep}
+              setAppInformation={setAppInformation}
+              appInformation={appInformation}
+            />
+          )}
           {currentStep === 6 && <ReviewLoan setCurrentStep={setCurrentStep} />}
         </div>
       </div>
