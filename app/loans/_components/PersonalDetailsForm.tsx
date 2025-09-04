@@ -6,11 +6,13 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
-import { useSelector, useDispatch } from "react-redux";
-import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
-import { RootState } from "@/app/store";
+// import { useSelector, useDispatch } from "react-redux";
+// import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
+// import { RootState } from "@/app/store";
+import { useState } from "react";
 
 export interface PersonalDetailsType {
+  dotAcct?: string;
   fName: string;
   mName: string;
   lName: string;
@@ -26,49 +28,53 @@ export interface PersonalDetailsType {
 interface PersonalDetailsFormProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
+  setLoanPersonalDetail: React.Dispatch<
+    React.SetStateAction<PersonalDetailsType | undefined>
+  >;
   customerPhoto: File | undefined;
+  loanPersonalDetail: PersonalDetailsType | undefined;
 }
 
 const PersonalDetailsForm = ({
   setCurrentStep,
   customerPhoto,
   setCustomerPhoto,
+  setLoanPersonalDetail,
+  loanPersonalDetail,
 }: PersonalDetailsFormProps) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const storedPersonalDetails = useSelector(
-    (state: RootState) => state.hmo.personalDetail
-  );
+  // const dispatch = useDispatch();
+  // const storedPersonalDetails = useSelector(
+  //   (state: RootState) => state.hmo.personalDetail
+  // );
 
   const initialValues: PersonalDetailsType = {
-    fName: storedPersonalDetails.fName || "",
-    mName: storedPersonalDetails.mName || "",
-    lName: storedPersonalDetails.lName || "",
-    dob: storedPersonalDetails.dob || "",
-    phone: storedPersonalDetails.phone || "",
-    businessExp: "",
-    occupation: storedPersonalDetails.occupation || "",
-    gender: storedPersonalDetails.gender || "",
-    photo: undefined,
-    identity: undefined,
+    dotAcct: loanPersonalDetail?.dotAcct || "",
+    fName: loanPersonalDetail?.fName || "",
+    mName: loanPersonalDetail?.mName || "",
+    lName: loanPersonalDetail?.lName || "",
+    dob: loanPersonalDetail?.dob || "",
+    phone: loanPersonalDetail?.phone || "",
+    businessExp: loanPersonalDetail?.businessExp || "",
+    occupation: loanPersonalDetail?.occupation || "",
+    gender: loanPersonalDetail?.gender || "",
+    photo: loanPersonalDetail?.photo || undefined,
+    identity: loanPersonalDetail?.identity || undefined,
   };
 
   const validationSchima = Yup.object({
-    fName: Yup.string().required(),
+    dotAcct: Yup.string().required("Dot Account is required"),
+    fName: Yup.string().required("First name is required"),
     mName: Yup.string(),
-    lName: Yup.string().required(),
-    dob: Yup.string().required(),
-    phone: Yup.string().required(),
-    maritalStatus: Yup.string().oneOf(
-      ["single", "married", "devorced", "widowed"],
-      "Invalid marital status"
-    ),
-    occupation: Yup.string().required(),
-    gender: Yup.string().oneOf(
-      ["male", "feamle"],
-      "they are only two genders "
-    ),
+    lName: Yup.string().required("Surname is required"),
+    dob: Yup.string().required("Date of birth is required"),
+    phone: Yup.string().required("Phone is required"),
+    occupation: Yup.string().required("Occupation is required"),
+    businessExp: Yup.string().required("Business experience is required"),
+    gender: Yup.string().oneOf(["male", "female"], "Select male or female"),
   });
+
+  const [userIdentity, setUserIdentity] = useState<File | undefined>();
 
   const handleFormSubmission = (
     values: PersonalDetailsType,
@@ -76,19 +82,34 @@ const PersonalDetailsForm = ({
   ) => {
     setCurrentStep(1);
     console.log("values", values);
-    dispatch(
-      setPersonalDetail({
-        fName: values.fName,
-        mName: values.mName,
-        lName: values.lName,
-        dob: values.dob,
-        phone: values.phone,
-        occupation: values.occupation,
-        gender: values.gender,
-        photo: undefined,
-        identity: undefined,
-      })
-    );
+    setLoanPersonalDetail({
+      dotAcct: values.dotAcct,
+      fName: values.fName,
+      mName: values.mName,
+      lName: values.lName,
+      dob: values.dob,
+      phone: values.phone,
+      occupation: values.occupation,
+      gender: values.gender,
+      photo: customerPhoto,
+      identity: userIdentity,
+      businessExp: "",
+    });
+    console.log(userIdentity);
+    console.log(loanPersonalDetail?.identity);
+    // dispatch(
+    //   setPersonalDetail({
+    //     fName: values.fName,
+    //     mName: values.mName,
+    //     lName: values.lName,
+    //     dob: values.dob,
+    //     phone: values.phone,
+    //     occupation: values.occupation,
+    //     gender: values.gender,
+    //     photo: undefined,
+    //     identity: undefined,
+    //   })
+    // );
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
@@ -122,13 +143,18 @@ const PersonalDetailsForm = ({
                   </label>
                   <Field
                     type="text"
-                    name="fName"
-                    value={values.fName}
+                    name="dotAcct"
+                    value={values.dotAcct}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const numericValue = e.target.value.replace(/\D/g, "");
+                      setFieldValue("dotAcct", numericValue);
+                    }}
+                    maxLength={11}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter customer first name"
                   />
                   <ErrorMessage
-                    name="fName"
+                    name="dotAcct"
                     component="div"
                     className="text-xs text-red-500"
                   />
@@ -278,6 +304,7 @@ const PersonalDetailsForm = ({
                         name="gender"
                         value="male"
                         id="gender_male"
+                        checked={values.gender === "male"}
                         onChange={() => setFieldValue("gender", "male")}
                         className="cursor-pointer w-5 h-5"
                       />
@@ -292,6 +319,7 @@ const PersonalDetailsForm = ({
                         name="gender"
                         value="female"
                         id="gender_female"
+                        checked={values.gender === "female"}
                         onChange={() => setFieldValue("gender", "female")}
                         className="cursor-pointer w-5 h-5"
                       />
@@ -309,11 +337,11 @@ const PersonalDetailsForm = ({
                   className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
                 <ImageDropzone
-                  fieldName="photo"
+                  fieldName="identity"
                   text="Upload Identity Card"
                   setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+                  setFile={setUserIdentity}
+                  file={userIdentity}
                   className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
                 />
               </div>

@@ -9,6 +9,8 @@ import GuarantorForm from "./_components/GuarantorForm";
 import NextOfKinDetailsForm from "./_components/NextOfKinDetailsForm";
 import CheckCreditForm from "./_components/CheckCreditForm";
 import ApplicationInformation from "./_components/ApplicationInformation";
+import ReviewLoan from "./_components/ReviewLoan";
+import { PersonalDetailsType } from "./_components/PersonalDetailsForm";
 
 interface Step {
   id: number;
@@ -19,6 +21,7 @@ interface Step {
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [loanPersonalDetail, setLoanPersonalDetail]  = useState<PersonalDetailsType | undefined>()
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
     undefined
   );
@@ -88,6 +91,8 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               customerPhoto={customerPhoto}
               setCustomerPhoto={setCustomerPhoto}
+              setLoanPersonalDetail={setLoanPersonalDetail}
+              loanPersonalDetail={loanPersonalDetail}
             />
           )}
           {currentStep === 2 && (
@@ -100,16 +105,9 @@ const Page = () => {
           {currentStep === 3 && (
             <NextOfKinDetailsForm setCurrentStep={setCurrentStep} />
           )}
-          {
-            currentStep === 4 && (
-              <CheckCreditForm />
-            )
-          }
-          {
-            currentStep === 5 && (
-              <ApplicationInformation />
-            )
-          }
+          {currentStep === 4 && <CheckCreditForm />}
+          {currentStep === 5 && <ApplicationInformation />}
+          {currentStep === 6 && <ReviewLoan setCurrentStep={setCurrentStep} />}
         </div>
       </div>
     </div>
