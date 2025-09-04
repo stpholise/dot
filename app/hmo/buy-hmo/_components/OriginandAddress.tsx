@@ -1,16 +1,10 @@
 "use client";
 import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
-import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-
-import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState";
-import {
-  //useDispatch,
-  useSelector,
-} from "react-redux";
+import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons"; 
+import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState"; 
 import * as Yup from "yup";
-import clsx from "clsx";
-import { RootState } from "@/app/store";
+import clsx from "clsx"; 
 import { useEffect } from "react";
 import { scrollToTop } from "@/app/_utils/ScrollToTop";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
@@ -30,6 +24,10 @@ interface AddressProps {
   selectedState: string;
   setSelectedState: (state: string) => void;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setOriginAddress: React.Dispatch<
+    React.SetStateAction<CustomerAddress | undefined>
+  >;
+  originAddress: CustomerAddress | undefined;
 }
 
 const Address = ({
@@ -39,7 +37,9 @@ const Address = ({
   selectedState,
   setSelectedState,
   setCurrentStep,
-}: AddressProps) => { 
+  setOriginAddress,
+  originAddress,
+}: AddressProps) => {
   useEffect(() => {
     scrollToTop();
   }, []);
@@ -50,31 +50,20 @@ const Address = ({
     errorFetchinLga: string | null;
   };
 
-  //   const currentStep = useSelector(
-  //     (state: RootState) => state.userAccount.initialStepState.currentStep
-  //   );
-
-  const customerAddress = useSelector(
-    (state: RootState) =>
-      state.userAccount.userAccountInitialState.customerAddress
-  );
+  
   const decrementStep = () => {
-    // const newStep = currentStep - 1;
-    // dispatch(setCurrentStep(newStep));
     setCurrentStep(0);
   };
   const incrementStep = () => {
     setCurrentStep(2);
-    // const newStep = currentStep + 1;
-    // dispatch(setCurrentStep(newStep));
     setCurrentStep(2);
   };
 
   const initialState: CustomerAddress = {
     state: selectedState || "",
-    city: customerAddress?.city || "",
-    address: customerAddress?.address || "",
-    lga: customerAddress?.lga || "",
+    city: originAddress?.city || "",
+    address: originAddress?.address || "",
+    lga: originAddress?.lga || "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -97,15 +86,12 @@ const Address = ({
     value: CustomerAddress,
     actions: FormikHelpers<CustomerAddress>
   ) => {
-    // dispatch(
-    //   setCustomerAddress({
-    //     state: value.state,
-    //     city: value.city,
-    //     address: value.address,
-    //     lga: value.lga,
-    //     utilityBillImage: value.utilityBillImage,
-    //   })
-    // );
+    setOriginAddress({
+      state: value.state,
+      city: value.city,
+      address: value.address,
+      lga: value.lga,
+    });
     actions.resetForm();
     incrementStep();
   };

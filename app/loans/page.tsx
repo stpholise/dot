@@ -11,6 +11,8 @@ import CheckCreditForm from "./_components/CheckCreditForm";
 import ApplicationInformation from "./_components/ApplicationInformation";
 import ReviewLoan from "./_components/ReviewLoan";
 import { PersonalDetailsType } from "./_components/PersonalDetailsForm";
+import Address from "../hmo/buy-hmo/_components/OriginandAddress";
+import { useFetchState } from "../account/create-account/_components/useFetchState";
 
 interface Step {
   id: number;
@@ -18,10 +20,22 @@ interface Step {
   image?: string;
   style?: string;
 }
+interface CustomerAddress {
+  state: string;
+  city: string;
+  address: string;
+  lga: string;
+  utilityBillImage?: File | null;
+}
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [loanPersonalDetail, setLoanPersonalDetail]  = useState<PersonalDetailsType | undefined>()
+  const [originAddress, setOriginAddress] = useState<
+    CustomerAddress | undefined
+  >();
+  const [loanPersonalDetail, setLoanPersonalDetail] = useState<
+    PersonalDetailsType | undefined
+  >();
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
     undefined
   );
@@ -29,6 +43,13 @@ const Page = () => {
     setCurrentStep(0);
     console.log("cancelRegistration");
   };
+  const { states, isLoading, error } = useFetchState() as {
+    states: string[];
+    isLoading: boolean;
+    error: string;
+  };
+
+  const [selectedState, setSelectedState] = useState<string>("");
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
@@ -93,6 +114,18 @@ const Page = () => {
               setCustomerPhoto={setCustomerPhoto}
               setLoanPersonalDetail={setLoanPersonalDetail}
               loanPersonalDetail={loanPersonalDetail}
+            />
+          )}
+          {currentStep === 1 && (
+            <Address
+              states={states}
+              selectedState={selectedState}
+              setSelectedState={setSelectedState}
+              isLoading={isLoading}
+              error={error}
+              setCurrentStep={setCurrentStep}
+              setOriginAddress={setOriginAddress}
+              originAddress={originAddress}
             />
           )}
           {currentStep === 2 && (
