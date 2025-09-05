@@ -259,19 +259,7 @@ const Address = ({
                 </div>
               }
 
-              <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">
-                <Image
-                  src="/icons/setting.svg"
-                  alt="morde details"
-                  width={16}
-                  height={16}
-                />
-                <p className="text-xs">
-                  Ensure the credentials provided by the customer matches their
-                  means of identification, Dot Technologies does not support
-                  third party account creation.
-                </p>
-              </div>
+            
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse lg:flex-col-reverse xl:flex-row">
               <PrimaryButtons

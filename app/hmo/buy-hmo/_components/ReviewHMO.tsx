@@ -2,14 +2,27 @@
 import Image from "next/image";
 import { useState } from "react";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
+import { PersonalDetailsType } from "./PersonalDetailsForm";
+import { PlanValidityTypes } from "./Plan&Validity";
+import { CustomerAddress } from "./OriginandAddress";
 
-const ReviewHMO = ({setCurrentSep}: {setCurrentSep: React.Dispatch<React.SetStateAction<number>>}) => {
+const ReviewHMO = ({
+  setCurrentSep,
+  personalData,
+  originAddress,
+  plan,
+}: {
+  setCurrentSep: React.Dispatch<React.SetStateAction<number>>;
+  personalData: PersonalDetailsType;
+  originAddress?: CustomerAddress;
+  plan: PlanValidityTypes;
+}) => {
   const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false);
-  
+
   const confirmHMOPurchase = () => {
-    setCurrentSep(4)
-  }
-  
+    setCurrentSep(4);
+  };
+
   return (
     <div className="py-6 px-8 ">
       <div className=" flex items-center text-[#3FB12C] bg-[#EFFBEE] py-1 px-2 rounded-3xl font-medium w-fit">
@@ -25,31 +38,39 @@ const ReviewHMO = ({setCurrentSep}: {setCurrentSep: React.Dispatch<React.SetStat
 
       <div className="flex items-center gap-2 my-6">
         <div className="size-12 bg-gray-200 flex items-center justify-center rounded-full">
-          BB
+          {personalData.fName.charAt(0) + personalData.lName.charAt(0)}
         </div>
         <div className="">
           <h4 className="text-black font-medium text-xl">
-            Benedicta Grace Bamidele
+            {personalData.fName +
+              " " +
+              personalData.mName +
+              " " +
+              personalData.lName}
           </h4>
-          <p className="text-[#667085] text-sm">&#9743; 08163432233</p>
+          <p className="text-[#667085] text-sm">&#9743; {personalData.phone}</p>
         </div>
       </div>
       <div className=" grid grid-cols-2 gap-4">
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Date of Birth</p>
-          <p className="font-medium text-base text-black">12 November, 1990</p>
+          <p className="font-medium text-base text-black">{personalData.dob}</p>
         </div>
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Gender</p>
-          <p className="font-medium text-base text-black">Male</p>
+          <p className="font-medium text-base text-black">{personalData.dob}</p>
         </div>
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Marital Status</p>
-          <p className="font-medium text-base text-black">Married</p>
+          <p className="font-medium text-base text-black">
+            {personalData.maritalStatus}
+          </p>
         </div>
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Occupation</p>
-          <p className="font-medium text-base text-black">Business</p>
+          <p className="font-medium text-base text-black">
+            {personalData.occupation}
+          </p>
         </div>
       </div>
       <div className="flex flex-col gap-4 my-6">
@@ -62,9 +83,9 @@ const ReviewHMO = ({setCurrentSep}: {setCurrentSep: React.Dispatch<React.SetStat
             className=""
           />
           <div className="">
-            <h4 className="text-black text-sm">ID Image (Back)</h4>
+            <h4 className="text-black text-sm">Customer Photo</h4>
             <p className="text-[#868C98] text-xs overflow-hidden">
-              {"No ID back image uploaded"}
+              {personalData?.photo?.name ?? "No ID back image uploaded"}
             </p>
           </div>
         </div>
@@ -77,9 +98,9 @@ const ReviewHMO = ({setCurrentSep}: {setCurrentSep: React.Dispatch<React.SetStat
             className=""
           />
           <div className="">
-            <h4 className="text-black text-sm">ID Image (Back)</h4>
+            <h4 className="text-black text-sm">Identity Document</h4>
             <p className="text-[#868C98] text-xs overflow-hidden">
-              {"No ID back image uploaded"}
+              {personalData?.photo?.name ?? "No ID back image uploaded"}
             </p>
           </div>
         </div>
@@ -91,12 +112,14 @@ const ReviewHMO = ({setCurrentSep}: {setCurrentSep: React.Dispatch<React.SetStat
       <div className=" grid grid-cols-2 gap-4 py-4">
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5"> Place of Birth</p>
-          <p className="font-medium text-base text-black">12 November, 1990</p>
+          <p className="font-medium text-base text-black">
+            {originAddress?.city}
+          </p>
         </div>
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Address</p>
           <p className="font-medium text-base text-black">
-            123 Boulevard Rd, Palms Avn. Eti-Osa LGA Lagos State
+            {originAddress?.address}
           </p>
         </div>
       </div>
@@ -109,25 +132,46 @@ const ReviewHMO = ({setCurrentSep}: {setCurrentSep: React.Dispatch<React.SetStat
       <div className=" grid grid-cols-2 gap-4 py-4">
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Plan Type</p>
-          <p className="font-medium text-base text-black">
-            Kaariya Monthly Plus
-          </p>
+          <p className="font-medium text-base text-black">{plan.planType}</p>
         </div>
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Validity Period</p>
-          <p className="font-medium text-base text-black">3 Months</p>
+          <p className="font-medium text-base text-black">
+            {plan.validityPeriod}
+          </p>
         </div>
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Provider State</p>
-          <p className="font-medium text-base text-black">Lagos State</p>
+          <p className="font-medium text-base text-black">
+            {plan.providerState}
+          </p>
         </div>
         <div className="">
           <p className="text-xs text-[#667085] leading-4.5">Provider</p>
-          <p className="font-medium text-base text-black">Annex Medicals</p>
+          <p className="font-medium text-base text-black">{plan.provider}</p>
         </div>
       </div>
 
-<div className="dependent py-4">dependant</div>
+      <div className="dependent py-4">
+        dependant
+        <div className="">
+          {plan.dependants.map((item) => (
+            <div
+              className="flex items-center gap-2 my-6 relative"
+              key={item.id}
+            >
+              <div className="size-12 bg-gray-200 flex items-center justify-center rounded-full">
+                {item.fName.charAt(0) + item.lName.charAt(0)}
+              </div>
+              <div className="">
+                <h4 className="text-black font-medium text-xl">
+                  {item.fName + " " + item.mName + " " + item.lName}
+                </h4>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="h-[193px] bg-[#E7FAE3] rounded-2xl  py-6 px-8 flex flex-col justify-between gap-8  ">
         <div className="flex gap-2">
@@ -162,12 +206,12 @@ const ReviewHMO = ({setCurrentSep}: {setCurrentSep: React.Dispatch<React.SetStat
           <h3 className="text-sm font-medium text-black">
             I agree with Dot HMO Contract
           </h3>
-          <p className="text-[#667085] text-xs"> 
+          <p className="text-[#667085] text-xs">
             Read through and accept our terms of HMO registration.
           </p>
         </label>
       </div>
-        <footer className="flex gap-4  py-4 mt-auto sm:flex-row flex-col-reverse">
+      <footer className="flex gap-4  py-4 mt-auto sm:flex-row flex-col-reverse">
         <PrimaryButtons
           text={"Edit Credentials"}
           type="button"

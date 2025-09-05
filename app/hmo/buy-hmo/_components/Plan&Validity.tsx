@@ -94,8 +94,7 @@ const PlanValidity = ({
       {isDependantModalOpen && (
         <DependantPopupModal
           setIsDependantModalOpen={setIsDependantModalOpen}
-          setDependants={setDependants}
-          dependants={dependants}
+          setDependants={setDependants} 
         />
       )}
       <Formik
@@ -222,7 +221,7 @@ const PlanValidity = ({
                 </div>
               </div>
 
-              <div className="px-8 py-6 my-4">
+              <div className="px-8 py-6 mb-4">
                 <h5 className="font-medium text-sm text-[#4F555F] leading-5 mb-2">
                   Dependant Information
                 </h5>

@@ -11,21 +11,15 @@ import Address from "./_components/OriginandAddress";
 import PlanValidity from "./_components/Plan&Validity";
 import ReviewHMO from "./_components/ReviewHMO";
 import SuccessfulHMOPurchase from "./_components/SuccessfulHMOPurchase";
-import { PersonalDetailsType } from "./_components/PersonalDetailsForm"; 
+import { PersonalDetailsType } from "./_components/PersonalDetailsForm";
 import { PlanValidityTypes } from "./_components/Plan&Validity";
+import { CustomerAddress } from "./_components/OriginandAddress";
 
 interface Step {
   id: number;
   title: string;
   image?: string;
   style?: string;
-}
-interface CustomerAddress {
-  state: string;
-  city: string;
-  address: string;
-  lga: string;
-  utilityBillImage?: File | null;
 }
 
 const Page = () => {
@@ -48,22 +42,22 @@ const Page = () => {
     photo: undefined,
     identity: undefined,
   });
- 
+
   const [originAddress, setOriginAddress] = useState<
-    CustomerAddress | undefined
+    CustomerAddress 
   >();
 
-  const [plan, setPlan]  = useState<PlanValidityTypes>({
-     id: "",
+  const [plan, setPlan] = useState<PlanValidityTypes>({
+    id: "",
     planType: "",
     validityPeriod: "",
     providerState: "",
     provider: "",
-    dependants: []
-  })
+    dependants: [],
+  });
 
   const [selectedState, setSelectedState] = useState<string>("");
- 
+
   const cancelRegistration = () => {
     setCurrentStep(0);
   };
@@ -86,12 +80,11 @@ const Page = () => {
         <PrimaryButtons
           className="mt-4 text-black hidden lg:flex bg-white border border-gray-300 hover:bg-gray-100 h-[48px] items-center justify-center"
           text="Cancel Registration"
-          icon="/icons/close.svg" 
+          icon="/icons/close.svg"
           onClick={cancelRegistration}
         />
         <button
           className=" text-black flex md:hidden bg-white border border-gray-300 hover:bg-gray-100 h-[40px] w-[40px] items-center justify-center rounded-lg"
- 
           onClick={cancelRegistration}
         >
           {" "}
@@ -124,7 +117,7 @@ const Page = () => {
         >
           {currentStep === 0 && (
             <PersonalDetailsForm
-              setCurrentStep={setCurrentStep} 
+              setCurrentStep={setCurrentStep}
               setPersonalData={setPersonalData}
               personalData={personalData}
             />
@@ -142,9 +135,20 @@ const Page = () => {
             />
           )}
           {currentStep === 2 && (
-            <PlanValidity setCurrentStep={setCurrentStep} setPlan={setPlan} plan={plan} />
+            <PlanValidity
+              setCurrentStep={setCurrentStep}
+              setPlan={setPlan}
+              plan={plan}
+            />
           )}
-          {currentStep === 3 && <ReviewHMO setCurrentSep={setCurrentStep} />}
+          {currentStep === 3 && (
+            <ReviewHMO
+              setCurrentSep={setCurrentStep}
+              personalData={personalData}
+              originAddress={originAddress}
+              plan={plan}
+            />
+          )}
           {currentStep === 4 && (
             <SuccessfulHMOPurchase setCurrentStep={setCurrentStep} />
           )}
