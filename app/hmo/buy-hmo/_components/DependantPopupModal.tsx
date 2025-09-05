@@ -61,8 +61,7 @@ const DependantPopupModal = ({
     };
   }, []);
 
-  const handleFormSubmission = (values: PersonalDetailsType) => {
-    console.log("values", values);
+  const handleFormSubmission = (values: PersonalDetailsType) => { 
     setIsDependantModalOpen(false);
     setDependants((prev) => [
       ...prev,

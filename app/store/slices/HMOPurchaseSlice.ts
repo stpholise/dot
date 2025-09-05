@@ -1,8 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PersonalDetailsType } from "@/app/hmo/buy-hmo/_components/PersonalDetailsForm";
 import { CustomerAddress } from "@/app/hmo/buy-hmo/_components/OriginandAddress";
+import { PlanValidityTypes } from "@/app/hmo/buy-hmo/_components/Plan&Validity";
 
-const personalDetail: PersonalDetailsType = {
+type PersonalDetailsStringOnly = Omit<
+  PersonalDetailsType,
+  "photo" | "identity"
+> & {
+  photo?: string;
+  identity?: string;
+};
+
+type PlanType = Omit<PlanValidityTypes, "dependants"> & {
+  dependants?: PersonalDetailsStringOnly[];
+};
+
+const personalDetail: PersonalDetailsStringOnly = {
   fName: "",
   mName: "",
   lName: "",
@@ -11,8 +24,8 @@ const personalDetail: PersonalDetailsType = {
   maritalStatus: "",
   occupation: "",
   gender: "",
-  photo: undefined,
-  identity: undefined,
+  photo: "",
+  identity: "",
 };
 
 const originandAddress: CustomerAddress = {
@@ -22,20 +35,42 @@ const originandAddress: CustomerAddress = {
   lga: "",
 };
 
+const plan: PlanType = {
+  id: "",
+  planType: "",
+  validityPeriod: "",
+  providerState: "",
+  provider: "",
+  dependants: [],
+};
+
+interface HmoState {
+  id: string;
+  personalDetail: PersonalDetailsStringOnly;
+  originandAddress: CustomerAddress;
+  plan: PlanType;
+}
+
+const initialState: { hmo: HmoState } = {
+  hmo: {
+    id: "",
+    personalDetail,
+    originandAddress,
+    plan,
+  },
+};
+
 const HmoSlice = createSlice({
   name: "HMOSlice",
-  initialState: { personalDetail, originandAddress },
+  initialState ,
   reducers: {
-    setPersonalDetail: (state, action) => {
-      state.personalDetail = action.payload;
+    setHmo: (state, action) => {
+      state.hmo = action.payload;
       console.log(action.payload);
-    },
-    setOriginAndAddress: (state, action) => {
-      state.originandAddress = action.payload;
     },
   },
 });
 
-export const { setPersonalDetail, setOriginAndAddress } = HmoSlice.actions;
+export const { setHmo } = HmoSlice.actions;
 
 export default HmoSlice.reducer;

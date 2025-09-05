@@ -3,7 +3,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import { useEffect } from "react";
 import { scrollToTop } from "@/app/_utils/ScrollToTop";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 
 interface DotAccountBenefit {
   icon: string;
@@ -53,7 +53,7 @@ const SuccessfulHMOPurchase = ({
     scrollToTop();
   }, []);
   return (
-    <div className="py-6 px-8">
+    <div className="py-6 lg:px-16 md:px-12 sm:px-8 px-6">
       <Image
         src={"/icons/success.png"}
         alt={"account created"}
@@ -61,8 +61,8 @@ const SuccessfulHMOPurchase = ({
         height={85}
         className="mx-auto my-4 lg:my-10"
       />
-      <h2 className="text-center font-medium text-black text-lg ">
-        Account created successfully, see details below.
+      <h2 className="text-center font-medium text-black text-lg mb-3">
+        HMO bought successfully, see details below
       </h2>
       <div className="flex flex-col gap-6">
         <div className="bg-[#F9F9F9] rounded-xl px-6 py-4 flex flex-col gap-2">
@@ -78,8 +78,8 @@ const SuccessfulHMOPurchase = ({
           </div>
         </div>
         <div className="">
-          <p className="text-[#667085] text-sm leading-5">
-            Dependant 2 (two) Information
+          <p className="text-[#667085] text-sm leading-5 mb-2">
+            Dependant 1 Information
           </p>
           <div className="bg-[#F9F9F9] rounded-xl px-6 py-4 flex flex-col gap-2">
             <div className="flex justify-between">
@@ -95,8 +95,8 @@ const SuccessfulHMOPurchase = ({
           </div>
         </div>
         <div className="">
-          <p className="text-[#667085] text-sm leading-5">
-            Dependant 2 (two) Information
+          <p className="text-[#667085] text-sm leading-5 mb-2">
+            Dependant 2 Information
           </p>
           <div className="bg-[#F9F9F9] rounded-xl px-6 py-4 flex flex-col gap-2">
             <div className="flex justify-between">
@@ -115,7 +115,11 @@ const SuccessfulHMOPurchase = ({
 
       <div className="leading-6 py-8 text-[#868C98] font-medium">
         These details have been sent to the respective phone numbers and can be
-        used in any Dot HMO Affiliated Hospital to access premium healthcare.
+        used in any{" "}
+        <span className="text-black underline">
+          Dot HMO Affiliated Hospital
+        </span>{" "}
+        to access premium healthcare.
       </div>
       <div className="">
         <p>what would you like to do next?</p>

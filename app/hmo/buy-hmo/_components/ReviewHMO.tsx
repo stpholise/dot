@@ -5,6 +5,9 @@ import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import { PersonalDetailsType } from "./PersonalDetailsForm";
 import { PlanValidityTypes } from "./Plan&Validity";
 import { CustomerAddress } from "./OriginandAddress";
+import { setHmo } from "@/app/store/slices/HMOPurchaseSlice";
+import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 
 const ReviewHMO = ({
   setCurrentSep,
@@ -17,10 +20,44 @@ const ReviewHMO = ({
   originAddress?: CustomerAddress;
   plan: PlanValidityTypes;
 }) => {
+  const dispatch = useDispatch();
   const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false);
 
   const confirmHMOPurchase = () => {
     setCurrentSep(4);
+    dispatch(
+      setHmo({
+        id: uuidv4(),
+        personalDetail: {
+          fName: personalData.fName,
+          mName: personalData.mName,
+          lName: personalData.lName,
+          dob: personalData.dob,
+          phone: personalData.phone,
+          maritalStatus: personalData.maritalStatus,
+          occupation: personalData.occupation,
+          gender: personalData.gender,
+          photo: personalData.photo?.name,
+          identity: personalData.identity?.name,
+        },
+        originandAddress: {
+          state: originAddress?.state,
+          city: originAddress?.city,
+          address: originAddress?.address,
+          lga: originAddress?.lga,
+        },
+        plan: {
+          id: plan.id,
+          planType: plan.planType,
+          validityPeriod: plan.validityPeriod,
+          providerState: plan.providerState,
+          provider: plan.provider,
+          dependants: plan.dependants.map((item) =>
+            item.photo instanceof File ? item.photo.name : item.photo
+          ),
+        },
+      })
+    );
   };
 
   return (

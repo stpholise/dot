@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 
+
 export interface PersonalDetailsType {
   fName: string;
   mName: string;
@@ -17,7 +18,7 @@ export interface PersonalDetailsType {
   maritalStatus: string;
   occupation: string;
   gender: string;
-  photo: File | undefined;
+  photo: File | undefined ;
   identity: File | undefined;
 }
 
