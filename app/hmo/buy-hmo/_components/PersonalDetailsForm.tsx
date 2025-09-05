@@ -1,11 +1,12 @@
 "use client";
+import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import ImageDropzone from "@/app/_components/ImageDropzone"; 
+import ImageDropzone from "@/app/_components/ImageDropzone";
 
 export interface PersonalDetailsType {
   fName: string;
@@ -21,17 +22,17 @@ export interface PersonalDetailsType {
 }
 
 interface PersonalDetailsFormProps {
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>; 
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setPersonalData: React.Dispatch<React.SetStateAction<PersonalDetailsType>>;
   personalData: PersonalDetailsType;
 }
 
 const PersonalDetailsForm = ({
-  setCurrentStep, 
+  setCurrentStep,
   setPersonalData,
   personalData,
 }: PersonalDetailsFormProps) => {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const initialValues: PersonalDetailsType = {
     fName: personalData.fName || "",
@@ -69,20 +70,20 @@ const PersonalDetailsForm = ({
   ) => {
     setCurrentStep(1);
     console.log("values", values);
-    
-      setPersonalData({
-        fName: values.fName,
-        mName: values.mName,
-        lName: values.lName,
-        dob: values.dob,
-        phone: values.phone,
-        maritalStatus: values.maritalStatus,
-        occupation: values.occupation,
-        gender: values.gender,
-        photo: undefined,
-        identity: undefined,
-      })
-    
+
+    setPersonalData({
+      fName: values.fName,
+      mName: values.mName,
+      lName: values.lName,
+      dob: values.dob,
+      phone: values.phone,
+      maritalStatus: values.maritalStatus,
+      occupation: values.occupation,
+      gender: values.gender,
+      photo: undefined,
+      identity: undefined,
+    });
+
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
@@ -90,13 +91,13 @@ const PersonalDetailsForm = ({
     return true;
   };
 
-  const setHmoPhoto =(photo: File | undefined) => {
-    setPersonalData((prev)=>({...prev, photo: photo}))
-  }
+  const setHmoPhoto = (photo: File | undefined) => {
+    setPersonalData((prev) => ({ ...prev, photo: photo }));
+  };
 
-  const setHmoIdentity =(photo: File | undefined) => {
-    setPersonalData((prev)=>({...prev, identity: photo}))
-  }
+  const setHmoIdentity = (photo: File | undefined) => {
+    setPersonalData((prev) => ({ ...prev, identity: photo }));
+  };
 
   return (
     <div>
@@ -317,6 +318,21 @@ const PersonalDetailsForm = ({
                 />
               </div>
             </div>
+            <div className="lg:px-8">
+              <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">
+                <Image
+                  src="/icons/setting.svg"
+                  alt="morde details"
+                  width={16}
+                  height={16}
+                />
+                <p className="text-xs">
+                  Ensure the credentials provided by the customer matches their
+                  means of identification, Dot Technologies does not support
+                  third party account creation.
+                </p>
+              </div>
+            </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
                 text={"Cancel"}
@@ -329,7 +345,7 @@ const PersonalDetailsForm = ({
                 type="submit"
                 disabled={!isValid || !dirty || isSubmitting}
                 className={clsx(
-                  " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
+                  " h-[48px]  font-medium rounded-lg sm:w-96 lg:min-w-40 lg:w-full justify-center items-center",
                   {
                     "bg-black text-white":
                       (isValid && !isSubmitting && dirty) ||

@@ -23,12 +23,10 @@ export interface PersonalDetailsType {
 
 const DependantPopupModal = ({
   setIsDependantModalOpen,
-  setDependants,
-  dependants,
+  setDependants, 
 }: {
   setIsDependantModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setDependants: React.Dispatch<React.SetStateAction<PersonalDetailsType[]>>;
-  dependants: PersonalDetailsType[];
+  setDependants: React.Dispatch<React.SetStateAction<PersonalDetailsType[]>>; 
 }) => {
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>();
 
@@ -79,8 +77,7 @@ const DependantPopupModal = ({
         gender: values.gender,
         photo: customerPhoto,
       },
-    ]);
-    console.log(dependants); 
+    ]); 
   };
 
   return (
