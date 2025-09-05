@@ -12,6 +12,7 @@ import PlanValidity from "./_components/Plan&Validity";
 import ReviewHMO from "./_components/ReviewHMO";
 import SuccessfulHMOPurchase from "./_components/SuccessfulHMOPurchase";
 import { PersonalDetailsType } from "./_components/PersonalDetailsForm"; 
+import { PlanValidityTypes } from "./_components/Plan&Validity";
 
 interface Step {
   id: number;
@@ -51,6 +52,15 @@ const Page = () => {
   const [originAddress, setOriginAddress] = useState<
     CustomerAddress | undefined
   >();
+
+  const [plan, setPlan]  = useState<PlanValidityTypes>({
+     id: "",
+    planType: "",
+    validityPeriod: "",
+    providerState: "",
+    provider: "",
+    dependants: []
+  })
 
   const [selectedState, setSelectedState] = useState<string>("");
  
@@ -132,7 +142,7 @@ const Page = () => {
             />
           )}
           {currentStep === 2 && (
-            <PlanValidity setCurrentStep={setCurrentStep} />
+            <PlanValidity setCurrentStep={setCurrentStep} setPlan={setPlan} plan={plan} />
           )}
           {currentStep === 3 && <ReviewHMO setCurrentSep={setCurrentStep} />}
           {currentStep === 4 && (

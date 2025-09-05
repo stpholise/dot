@@ -1,9 +1,9 @@
 "use client";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import Image from "next/image";
-import { Formik, Form, Field, ErrorMessage, } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 import * as Yup from "yup";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
@@ -28,7 +28,7 @@ const DependantPopupModal = ({
 }: {
   setIsDependantModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDependants: React.Dispatch<React.SetStateAction<PersonalDetailsType[]>>;
-  dependants:PersonalDetailsType[]
+  dependants: PersonalDetailsType[];
 }) => {
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>();
 
@@ -48,21 +48,22 @@ const DependantPopupModal = ({
     mName: Yup.string(),
     lName: Yup.string().required(),
     dob: Yup.string().required(),
-    relationship: Yup.string().oneOf(
-      ["single", "married", "devorced", "widowed"],
-      "Invalid marital status"
-    ),
+    relationship: Yup.string().required(),
     gender: Yup.string().oneOf(
       ["male", "feamle"],
       "they are only two genders "
     ),
+    photo: Yup.mixed<File>().required(),
   });
+  useEffect(() => {
+    document.body.style.overflowY = "hidden";
 
-  const handleFormSubmission = (
-    values: PersonalDetailsType
-    // formik: FormikHelpers<PersonalDetailsType>
-  ) => {
-    // formik.isSubmitting(false)
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
+  }, []);
+
+  const handleFormSubmission = (values: PersonalDetailsType) => {
     console.log("values", values);
     setIsDependantModalOpen(false);
     setDependants((prev) => [
@@ -79,8 +80,7 @@ const DependantPopupModal = ({
         photo: customerPhoto,
       },
     ]);
-    console.log(dependants)
-    // formik.resetForm();
+    console.log(dependants); 
   };
 
   return (
@@ -189,40 +189,20 @@ const DependantPopupModal = ({
                     Relationship *
                   </label>
                   <Field
-                    type="select"
-                    as="select"
-                    name="maritalStatus"
+                    type="text"
+                    name="relationship"
                     value={values.relationship}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Choose a marital status"
-                  >
-                    <option className="text-gray-400 " disabled value="">
-                      Select relationship
-                    </option>
-                    <option value="single" className="text-black">
-                      Single
-                    </option>
-                    <option value="married" className="text-black">
-                      Married
-                    </option>
-                    <option value="devorced" className="text-black">
-                      Devorced
-                    </option>
-                    <option value="widowed" className="text-black">
-                      Widowed
-                    </option>
-                  </Field>
+                  />
                   <ErrorMessage
-                    name="maritalStatus"
+                    name="relationship"
                     component="div"
                     className="text-xs text-red-500"
                   />
                 </div>
                 <div className="">
-                  <label
-                    htmlFor="occupation"
-                    className="text-sm text-[#454547]"
-                  >
+                  <label htmlFor="gender" className="text-sm text-[#454547]">
                     Customer Gender *
                   </label>
                   <div className="display flex gap-4 mt-2 w-full justify-stretch">
@@ -276,7 +256,7 @@ const DependantPopupModal = ({
                 />
                 <PrimaryButtons
                   text={"Add Dependant"}
-                  type="submit" 
+                  type="submit"
                   className={clsx(
                     " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                     {

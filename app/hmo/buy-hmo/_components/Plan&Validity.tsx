@@ -1,5 +1,5 @@
 "use client";
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
@@ -7,13 +7,15 @@ import clsx from "clsx";
 import * as Yup from "yup";
 import DependantPopupModal from "./DependantPopupModal";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-interface PlanValidityTypes {
+export interface PlanValidityTypes {
   id: string;
   planType: string;
   validityPeriod: string;
   providerState: string;
   provider: string;
+  dependants: PersonalDetailsType[];
 }
 
 export interface PersonalDetailsType {
@@ -30,12 +32,13 @@ export interface PersonalDetailsType {
 
 const PlanValidity = ({
   setCurrentStep,
+  setPlan,
+  plan,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setPlan: React.Dispatch<React.SetStateAction<PlanValidityTypes>>;
+  plan: PlanValidityTypes;
 }) => {
-  // const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
-  //   undefined
-  // );
   const [isDependantModalOpen, setIsDependantModalOpen] =
     useState<boolean>(false);
 
@@ -47,20 +50,33 @@ const PlanValidity = ({
     validityPeriod: "",
     providerState: "",
     provider: "",
+    dependants: [],
   };
   const validationSchema = Yup.object({
-    palyType: Yup.string().required(),
+    planType: Yup.string().required(),
     validityPeriod: Yup.string().required(),
-    ProviderState: Yup.string().required(),
-    Provider: Yup.string().required(),
+    providerState: Yup.string().required(),
+    provider: Yup.string().required(),
   });
+  const removeDependant = (item: PersonalDetailsType) => {
+    const filteredList = dependants.filter(
+      (dependant) => dependant.id !== item.id
+    );
+    setDependants(filteredList);
 
-  const handleFormSubmission = (
-    values: PlanValidityTypes,
-    formik: FormikHelpers<PlanValidityTypes>
-  ) => {
-    console.log(values);
-    console.log("formik", formik);
+    console.log(item);
+  };
+
+  const handleFormSubmission = (values: PlanValidityTypes) => {
+    setPlan({
+      id: uuidv4(),
+      planType: values.planType,
+      validityPeriod: values.validityPeriod,
+      providerState: values.providerState,
+      provider: values.provider,
+      dependants: dependants,
+    });
+    console.log(plan);
     setCurrentStep(3);
   };
 
@@ -92,16 +108,32 @@ const PlanValidity = ({
             <Form>
               <div className="py-6 px-8 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="fName" className="text-sm text-[#454547]">
+                  <label htmlFor="planType" className="text-sm text-[#454547]">
                     Plan Type*
                   </label>
                   <Field
                     type="text"
                     name="planType"
+                    as="select"
                     value={values.planType}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter customer first name"
-                  />
+                  >
+                    <option value="">-- Select a plan --</option>
+                    <option value="individual">Individual Plan</option>
+                    <option value="family">Family Plan</option>
+                    <option value="corporate">Corporate/Group Plan</option>
+                    <option value="student">Student Plan</option>
+                    <option value="basic">Basic / Bronze Plan</option>
+                    <option value="standard">Standard / Silver Plan</option>
+                    <option value="premium">Premium / Gold Plan</option>
+                    <option value="vip">VIP / Platinum Plan</option>
+                    <option value="maternity">Maternity Plan</option>
+                    <option value="senior">Senior Citizen Plan</option>
+                    <option value="international">
+                      International Coverage Plan
+                    </option>
+                  </Field>
                   <ErrorMessage
                     name="planType"
                     component="div"
@@ -109,16 +141,27 @@ const PlanValidity = ({
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="fName" className="text-sm text-[#454547]">
+                  <label
+                    htmlFor="validityPeriod"
+                    className="text-sm text-[#454547]"
+                  >
                     Validity Period *
                   </label>
                   <Field
                     type="text"
                     name="validityPeriod"
+                    as="select"
                     value={values.validityPeriod}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter customer first name"
-                  />
+                  >
+                    <option value="">-- Select validity period --</option>
+                    <option value="1_month">1 Month</option>
+                    <option value="3_months">3 Months (Quarterly)</option>
+                    <option value="6_months">6 Months</option>
+                    <option value="12_months">12 Months (Annual)</option>
+                    <option value="24_months">24 Months (2 Years)</option>
+                  </Field>
                   <ErrorMessage
                     name="validityPeriod"
                     component="div"
@@ -126,16 +169,26 @@ const PlanValidity = ({
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="fName" className="text-sm text-[#454547]">
+                  <label
+                    htmlFor="providerState"
+                    className="text-sm text-[#454547]"
+                  >
                     Provider State *
                   </label>
                   <Field
                     type="text"
+                    as="select"
                     name="providerState"
                     value={values.providerState}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter customer first name"
-                  />
+                  >
+                    <option value="">-- Select status --</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="suspended">Suspended</option>
+                    <option value="terminated">Terminated</option>
+                  </Field>
                   <ErrorMessage
                     name="providerState"
                     component="div"
@@ -143,16 +196,24 @@ const PlanValidity = ({
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="fName" className="text-sm text-[#454547]">
+                  <label htmlFor="provider" className="text-sm text-[#454547]">
                     Provider *
                   </label>
                   <Field
                     type="text"
+                    as="select"
                     name="provider"
                     value={values.provider}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter customer first name"
-                  />
+                  >
+                    <option value="">-- Select provider --</option>
+                    <option value="axa_mansard">AXA Mansard</option>
+                    <option value="avon_hmo">Avon HMO</option>
+                    <option value="hygeia">Hygeia</option>
+                    <option value="leadway">Leadway Health</option>
+                    <option value="redcare">Redcare HMO</option>
+                  </Field>
                   <ErrorMessage
                     name="provider"
                     component="div"
@@ -161,15 +222,46 @@ const PlanValidity = ({
                 </div>
               </div>
 
-              <div className="px-8 py-6">
+              <div className="px-8 py-6 my-4">
+                <h5 className="font-medium text-sm text-[#4F555F] leading-5 mb-2">
+                  Dependant Information
+                </h5>
                 <div
-                  className={clsx("", {
-                    "px-4": dependants.length > 0,
+                  className={clsx(" flex flex-col gap-4  mb-9", {
+                    "px-4 pb-4 border border-[#E1E4EA] rounded-2xl ":
+                      dependants.length > 0,
                   })}
                 >
+                  <div className="">
+                    {dependants.map((item) => (
+                      <div
+                        className="flex items-center gap-2 my-6 relative"
+                        key={item.id}
+                      >
+                        <div className="size-12 bg-gray-200 flex items-center justify-center rounded-full">
+                          {item.fName.charAt(0) + item.lName.charAt(0)}
+                        </div>
+                        <div className="">
+                          <h4 className="text-black font-medium text-xl">
+                            {item.fName + " " + item.mName + " " + item.lName}
+                          </h4>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeDependant(item)}
+                          className="ml-auto"
+                        >
+                          {" "}
+                          remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                   <button
+                    type="button"
+                    disabled={dependants.length >= 4}
                     onClick={() => setIsDependantModalOpen(true)}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg flex items-center justify-between bg-[#F7F7F7] my-6"
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg flex items-center justify-between bg-[#F7F7F7] "
                   >
                     <div className=" flex items-center gap-3">
                       <Image
@@ -190,7 +282,7 @@ const PlanValidity = ({
                     />
                   </button>
                 </div>
-                <div className="h-[193px] bg-[#E7FAE3] rounded-2xl  py-6 px-8 flex flex-col justify-between gap-8">
+                <div className="h-[193px] bg-[#E7FAE3] rounded-2xl  py-6 mb-4  px-8 flex flex-col justify-between gap-8">
                   <div className="flex gap-2">
                     <Image
                       src={"/icons/arrow-right.png"}
@@ -213,7 +305,7 @@ const PlanValidity = ({
                   </div>
                 </div>
               </div>
-              <div className="px-8 my-6">
+              <div className="px-8 mt-4 mb-2">
                 <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">
                   <Image
                     src="/icons/setting.svg"
