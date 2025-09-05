@@ -1,12 +1,13 @@
 "use client";
-import { useEffect } from "react";
 import clsx from "clsx";
+import { useState } from "react";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import Image from "next/image";
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import { Formik, Form, Field, ErrorMessage, } from "formik";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 import * as Yup from "yup";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
+import { v4 as uuidv4 } from "uuid";
 
 export interface PersonalDetailsType {
   id: string;
@@ -21,24 +22,15 @@ export interface PersonalDetailsType {
 }
 
 const DependantPopupModal = ({
-  customerPhoto,
-  setCustomerPhoto,
   setIsDependantModalOpen,
-  setDependant,
+  setDependants,
+  dependants,
 }: {
-  customerPhoto: File | undefined;
-  setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
   setIsDependantModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setDependant: React.Dispatch<React.SetStateAction<PersonalDetailsType[]>>;
+  setDependants: React.Dispatch<React.SetStateAction<PersonalDetailsType[]>>;
+  dependants:PersonalDetailsType[]
 }) => {
-  console.log(customerPhoto, setCustomerPhoto);
-
-  useEffect(() => {
-    window.document.body.style.overflowY = "hidden";
-    return () => {
-      window.document.body.style.overflowY = "auto";
-    };
-  }, []);
+  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>();
 
   const initialValues: PersonalDetailsType = {
     id: "",
@@ -66,12 +58,29 @@ const DependantPopupModal = ({
     ),
   });
 
-  const addDependant = (
-    values: PersonalDetailsType,
-    formik: FormikHelpers<PersonalDetailsType>
+  const handleFormSubmission = (
+    values: PersonalDetailsType
+    // formik: FormikHelpers<PersonalDetailsType>
   ) => {
-    console.log(values);
-    console.log(formik);
+    // formik.isSubmitting(false)
+    console.log("values", values);
+    setIsDependantModalOpen(false);
+    setDependants((prev) => [
+      ...prev,
+      {
+        id: uuidv4(),
+        fName: values.fName,
+        mName: values.mName,
+        lName: values.lName,
+        dob: values.dob,
+        phone: values.phone,
+        maritalStatus: values.relationship,
+        gender: values.gender,
+        photo: customerPhoto,
+      },
+    ]);
+    console.log(dependants)
+    // formik.resetForm();
   };
 
   return (
@@ -102,7 +111,7 @@ const DependantPopupModal = ({
         </button>
         <Formik
           initialValues={initialValues}
-          onSubmit={addDependant}
+          onSubmit={handleFormSubmission}
           validationSchema={validationSchima}
         >
           {({ values, isValid, dirty, isSubmitting, setFieldValue }) => (
@@ -254,6 +263,7 @@ const DependantPopupModal = ({
                     setFieldValue={setFieldValue}
                     setFile={setCustomerPhoto}
                     file={customerPhoto}
+                    className=" justify-center items-center gap-2 sm:h-[104px] lg:min-w-full xl:w-full text-start"
                   />
                 </div>
               </div>
@@ -262,11 +272,11 @@ const DependantPopupModal = ({
                   text={"Cancel"}
                   type="button"
                   className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-                  // onClick={() => router.push("/hmo/buy-hmo")}
+                  onClick={() => setIsDependantModalOpen(false)}
                 />
                 <PrimaryButtons
                   text={"Add Dependant"}
-                  type="submit"
+                  type="submit" 
                   className={clsx(
                     " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                     {

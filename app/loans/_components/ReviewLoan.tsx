@@ -25,8 +25,9 @@ const ReviewLoan = ({
 }) => {
   const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false);
 
-  const confirmHMOPurchase = () => {
+  const confirmLoanApplication = () => {
     setCurrentStep(5);
+    
   };
 
   return (
@@ -380,11 +381,11 @@ const ReviewLoan = ({
           type="button"
           className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center items-center"
           icon="/icons/arrow_back.png"
-          onClick={confirmHMOPurchase}
+          onClick={() => setCurrentStep(5)}
         />
         <PrimaryButtons
           text={"Confirm HMO Purchase"}
-          onClick={confirmHMOPurchase}
+          onClick={confirmLoanApplication}
           className={
             " h-[48px] bg-black text-white font-medium rounded-lg sm:w-96 justify-center items-center"
           }

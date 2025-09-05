@@ -2,7 +2,7 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import Image from "next/image";
-import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons"; 
+import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
 import * as Yup from "yup";
 import DependantPopupModal from "./DependantPopupModal";
@@ -33,9 +33,9 @@ const PlanValidity = ({
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }) => {
-  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
-    undefined
-  );
+  // const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
+  //   undefined
+  // );
   const [isDependantModalOpen, setIsDependantModalOpen] =
     useState<boolean>(false);
 
@@ -75,6 +75,13 @@ const PlanValidity = ({
         primaryText="Plan & Validity"
         secondaryText="- Every field is important"
       />
+      {isDependantModalOpen && (
+        <DependantPopupModal
+          setIsDependantModalOpen={setIsDependantModalOpen}
+          setDependants={setDependants}
+          dependants={dependants}
+        />
+      )}
       <Formik
         initialValues={initialValues}
         onSubmit={handleFormSubmission}
@@ -153,14 +160,7 @@ const PlanValidity = ({
                   />
                 </div>
               </div>
-              {isDependantModalOpen && (
-                <DependantPopupModal
-                  customerPhoto={customerPhoto}
-                  setCustomerPhoto={setCustomerPhoto}
-                  setIsDependantModalOpen={setIsDependantModalOpen}
-                  setDependant={setDependants}
-                />
-              )}
+
               <div className="px-8 py-6">
                 <div
                   className={clsx("", {

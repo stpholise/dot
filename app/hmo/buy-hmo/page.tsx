@@ -11,6 +11,7 @@ import Address from "./_components/OriginandAddress";
 import PlanValidity from "./_components/Plan&Validity";
 import ReviewHMO from "./_components/ReviewHMO";
 import SuccessfulHMOPurchase from "./_components/SuccessfulHMOPurchase";
+import { PersonalDetailsType } from "./_components/PersonalDetailsForm"; 
 
 interface Step {
   id: number;
@@ -18,7 +19,7 @@ interface Step {
   image?: string;
   style?: string;
 }
- interface CustomerAddress {
+interface CustomerAddress {
   state: string;
   city: string;
   address: string;
@@ -34,13 +35,25 @@ const Page = () => {
     error: string;
   };
 
-const [originAddress, setOriginAddress] = useState<CustomerAddress | undefined>()
+  const [personalData, setPersonalData] = useState<PersonalDetailsType>({
+    fName: "",
+    mName: "",
+    lName: "",
+    dob: "",
+    phone: "",
+    maritalStatus: "",
+    occupation: "",
+    gender: "",
+    photo: undefined,
+    identity: undefined,
+  });
+ 
+  const [originAddress, setOriginAddress] = useState<
+    CustomerAddress | undefined
+  >();
 
   const [selectedState, setSelectedState] = useState<string>("");
-
-  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
-    undefined
-  );
+ 
   const cancelRegistration = () => {
     setCurrentStep(0);
   };
@@ -63,13 +76,12 @@ const [originAddress, setOriginAddress] = useState<CustomerAddress | undefined>(
         <PrimaryButtons
           className="mt-4 text-black hidden lg:flex bg-white border border-gray-300 hover:bg-gray-100 h-[48px] items-center justify-center"
           text="Cancel Registration"
-          icon="/icons/close.svg"
-          // disabled={currentStep === 1}
+          icon="/icons/close.svg" 
           onClick={cancelRegistration}
         />
         <button
           className=" text-black flex md:hidden bg-white border border-gray-300 hover:bg-gray-100 h-[40px] w-[40px] items-center justify-center rounded-lg"
-          // disabled={currentStep === 1}
+ 
           onClick={cancelRegistration}
         >
           {" "}
@@ -102,9 +114,9 @@ const [originAddress, setOriginAddress] = useState<CustomerAddress | undefined>(
         >
           {currentStep === 0 && (
             <PersonalDetailsForm
-              setCurrentStep={setCurrentStep}
-              customerPhoto={customerPhoto}
-              setCustomerPhoto={setCustomerPhoto}
+              setCurrentStep={setCurrentStep} 
+              setPersonalData={setPersonalData}
+              personalData={personalData}
             />
           )}
           {currentStep === 1 && (

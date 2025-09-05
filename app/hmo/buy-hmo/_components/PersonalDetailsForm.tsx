@@ -5,10 +5,7 @@ import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import ImageDropzone from "@/app/_components/ImageDropzone";
-import { useSelector, useDispatch } from "react-redux";
-import { setPersonalDetail } from "@/app/store/slices/HMOPurchaseSlice";
-import { RootState } from "@/app/store";
+import ImageDropzone from "@/app/_components/ImageDropzone"; 
 
 export interface PersonalDetailsType {
   fName: string;
@@ -24,33 +21,29 @@ export interface PersonalDetailsType {
 }
 
 interface PersonalDetailsFormProps {
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  setCustomerPhoto: React.Dispatch<React.SetStateAction<File | undefined>>;
-  customerPhoto: File | undefined;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>; 
+  setPersonalData: React.Dispatch<React.SetStateAction<PersonalDetailsType>>;
+  personalData: PersonalDetailsType;
 }
 
 const PersonalDetailsForm = ({
-  setCurrentStep,
-  customerPhoto,
-  setCustomerPhoto,
+  setCurrentStep, 
+  setPersonalData,
+  personalData,
 }: PersonalDetailsFormProps) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const storedPersonalDetails = useSelector(
-    (state: RootState) => state.hmo.personalDetail
-  );
+  const router = useRouter(); 
 
   const initialValues: PersonalDetailsType = {
-    fName: storedPersonalDetails.fName || "",
-    mName: storedPersonalDetails.mName || "",
-    lName: storedPersonalDetails.lName || "",
-    dob: storedPersonalDetails.dob || "",
-    phone: storedPersonalDetails.phone || "",
-    maritalStatus: storedPersonalDetails.maritalStatus || "",
-    occupation: storedPersonalDetails.occupation || "",
-    gender: storedPersonalDetails.gender || "",
-    photo: undefined,
-    identity: undefined,
+    fName: personalData.fName || "",
+    mName: personalData.mName || "",
+    lName: personalData.lName || "",
+    dob: personalData.dob || "",
+    phone: personalData.phone || "",
+    maritalStatus: personalData.maritalStatus || "",
+    occupation: personalData.occupation || "",
+    gender: personalData.gender || "",
+    photo: personalData.photo || undefined,
+    identity: personalData.identity || undefined,
   };
 
   const validationSchima = Yup.object({
@@ -76,8 +69,8 @@ const PersonalDetailsForm = ({
   ) => {
     setCurrentStep(1);
     console.log("values", values);
-    dispatch(
-      setPersonalDetail({
+    
+      setPersonalData({
         fName: values.fName,
         mName: values.mName,
         lName: values.lName,
@@ -89,13 +82,21 @@ const PersonalDetailsForm = ({
         photo: undefined,
         identity: undefined,
       })
-    );
+    
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
     setCurrentStep(0);
     return true;
   };
+
+  const setHmoPhoto =(photo: File | undefined) => {
+    setPersonalData((prev)=>({...prev, photo: photo}))
+  }
+
+  const setHmoIdentity =(photo: File | undefined) => {
+    setPersonalData((prev)=>({...prev, identity: photo}))
+  }
 
   return (
     <div>
@@ -304,15 +305,15 @@ const PersonalDetailsForm = ({
                   fieldName="photo"
                   text="customer photo"
                   setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+                  setFile={setHmoPhoto}
+                  file={personalData.photo}
                 />
                 <ImageDropzone
-                  fieldName="photo"
+                  fieldName="identity"
                   text="customer photo"
                   setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
+                  setFile={setHmoIdentity}
+                  file={personalData.identity}
                 />
               </div>
             </div>
