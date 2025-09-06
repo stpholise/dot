@@ -3,10 +3,11 @@ import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
-import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState";
+import FormTitle from "@/app/_components/ui/units/FormTitle";
+import { Step } from "@/app/hmo/buy-hmo/page";
 
 export interface GuarantorDataDetailsType {
   fName: string;
@@ -31,6 +32,7 @@ interface PersonalDetailsFormProps {
   setGuarantorData: React.Dispatch<
     React.SetStateAction<GuarantorDataDetailsType>
   >;
+  steps: Step[];
 }
 
 const GuarantorForm = ({
@@ -38,9 +40,8 @@ const GuarantorForm = ({
   setCurrentStep,
   guarantorData,
   setGuarantorData,
+  steps,
 }: PersonalDetailsFormProps) => {
-  const router = useRouter();
-
   const initialValues: GuarantorDataDetailsType = {
     fName: guarantorData?.fName || "",
     lName: guarantorData?.lName || "",
@@ -86,7 +87,7 @@ const GuarantorForm = ({
     values: GuarantorDataDetailsType,
     formik: FormikHelpers<GuarantorDataDetailsType>
   ) => {
-    setCurrentStep(3); 
+    setCurrentStep(3);
     setGuarantorData({
       fName: values.fName,
       lName: values.lName,
@@ -114,6 +115,7 @@ const GuarantorForm = ({
 
   return (
     <div>
+      <FormTitle currentStep={2} title="Guarantor Details" steps={steps} />
       <FormHeader
         icon={{
           src: "/icons/security.png",
@@ -130,7 +132,7 @@ const GuarantorForm = ({
       >
         {({ isSubmitting, isValid, dirty, setFieldValue, values }) => (
           <Form>
-            <div className="lg:px-8">
+            <div className="lg:px-8 px-4 md:px-6">
               <div className="py-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
@@ -327,7 +329,7 @@ const GuarantorForm = ({
                   </div>
                 }
               </div>
-              <div className="py-6 grid grid-cols-2 overflow-hidden gap-6 w-full">
+              <div className="py-6 grid grid-cols-1 md:grid-cols-2 overflow-hidden gap-6 w-full">
                 <ImageDropzone
                   fieldName="guarantorPhoto"
                   text="Upload or Take a photo"
@@ -364,10 +366,11 @@ const GuarantorForm = ({
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
               <PrimaryButtons
-                text={"Cancel"}
+                text={"Go Back"}
+                icon="/icons/arrow_back.png"
                 type="button"
                 className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-                onClick={() => router.push("/hmo/buy-hmo")}
+                onClick={() => setCurrentStep(1)}
               />
               <PrimaryButtons
                 text={"Proceed - Address Details"}

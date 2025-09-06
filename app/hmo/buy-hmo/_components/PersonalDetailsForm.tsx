@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
+import FormTitle from "@/app/_components/ui/units/FormTitle";
+import { Step } from "../page";
 
 export interface PersonalDetailsType {
   fName: string;
@@ -25,12 +27,14 @@ interface PersonalDetailsFormProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setPersonalData: React.Dispatch<React.SetStateAction<PersonalDetailsType>>;
   personalData: PersonalDetailsType;
+  steps: Step[];
 }
 
 const PersonalDetailsForm = ({
   setCurrentStep,
   setPersonalData,
   personalData,
+  steps,
 }: PersonalDetailsFormProps) => {
   const router = useRouter();
 
@@ -69,7 +73,6 @@ const PersonalDetailsForm = ({
     formik: FormikHelpers<PersonalDetailsType>
   ) => {
     setCurrentStep(1);
-    console.log("values", values);
 
     setPersonalData({
       fName: values.fName,
@@ -80,8 +83,8 @@ const PersonalDetailsForm = ({
       maritalStatus: values.maritalStatus,
       occupation: values.occupation,
       gender: values.gender,
-      photo: undefined,
-      identity: undefined,
+      photo: values.photo,
+      identity: values.identity,
     });
 
     formik.resetForm();
@@ -101,6 +104,7 @@ const PersonalDetailsForm = ({
 
   return (
     <div>
+      <FormTitle currentStep={0} steps={steps} title={"Personal Details"} />
       <FormHeader
         icon={{
           src: "/icons/security.png",
@@ -117,7 +121,7 @@ const PersonalDetailsForm = ({
       >
         {({ isSubmitting, isValid, dirty, setFieldValue, values }) => (
           <Form>
-            <div className="lg:px-8">
+            <div className="lg:px-8 md:px-6 px-4">
               <div className="py-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="fName" className="text-sm text-[#454547]">
@@ -301,24 +305,26 @@ const PersonalDetailsForm = ({
                   </div>
                 </div>
               </div>
-              <div className="py-6 flex gap-6">
+              <div className="py-6 flex gap-6 xl:flex-row md:flex-row flex-col lg:flex-col">
                 <ImageDropzone
                   fieldName="photo"
                   text="customer photo"
                   setFieldValue={setFieldValue}
                   setFile={setHmoPhoto}
-                  file={personalData.photo}
+                  file={values.photo}
+                  className="xl:flex-col md:flex-col lg:flex-row justify-center items-center gap-2 sm:h-[158px] xl:max-w-[248px] text-center"
                 />
                 <ImageDropzone
                   fieldName="identity"
                   text="customer photo"
                   setFieldValue={setFieldValue}
                   setFile={setHmoIdentity}
-                  file={personalData.identity}
+                  file={values.identity}
+                  className="xl:flex-col md:flex-col  lg:flex-row justify-center items-center gap-2 sm:h-[158px] xl:max-w-[248px] text-center"
                 />
               </div>
             </div>
-            <div className="lg:px-8">
+            <div className="lg:px-8 md:px-6 px-4">
               <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">
                 <Image
                   src="/icons/setting.svg"

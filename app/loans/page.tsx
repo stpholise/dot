@@ -17,6 +17,7 @@ import { GuarantorDataDetailsType } from "./_components/GuarantorForm";
 import { NextOfKinDetailsType } from "./_components/NextOfKinDetailsForm";
 import { CreditFormProp } from "./_components/CheckCreditForm";
 import { LoanData } from "./_components/ApplicationInformation";
+import SuccessfulLoan from "./_components/Successful";
 
 interface Step {
   id: number;
@@ -33,39 +34,32 @@ interface CustomerAddress {
 }
 
 const Page = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(5);
   const [selectedState, setSelectedState] = useState<string>("");
-  const [originAddress, setOriginAddress] = useState<
-    CustomerAddress | undefined
-  >();
 
-  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
-    undefined
-  );
-  const cancelRegistration = () => {
-    setCurrentStep(0);
-    console.log("cancelRegistration");
+  const loanPersonalDetailInitialState = {
+    dotAcct: "",
+    fName: "",
+    mName: "",
+    lName: "",
+    dob: "",
+    phone: "",
+    maritalStatus: "",
+    occupation: "",
+    gender: "",
+    photo: undefined,
+    identity: undefined,
+    businessExp: "",
   };
-  const { states, isLoading, error } = useFetchState() as {
-    states: string[];
-    isLoading: boolean;
-    error: string;
+
+  const originAddressInitialState = {
+    state: "",
+    city: "",
+    address: "",
+    lga: "",
   };
-  const [loanPersonalDetail, setLoanPersonalDetail] = useState<PersonalDetailsType>({
-       dotAcct: '',
-      fName: '',
-      mName:'',
-      lName:'',
-      dob: '',
-      phone: '',
-      maritalStatus: '',
-      occupation: '',
-      gender: '',
-      photo: undefined,
-      identity: undefined,
-      businessExp: '',
-  });
-  const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>({
+
+  const guarantorDataInitialState = {
     fName: "",
     lName: "",
     phone: "",
@@ -77,8 +71,9 @@ const Page = () => {
     identity: undefined,
     employmentLetter: undefined,
     signature: undefined,
-  });
-  const [nextOfKinData, setNextOfKinData] = useState<NextOfKinDetailsType>({
+  };
+
+  const nextOfKinDataInitialState = {
     fName: "",
     lName: "",
     phone: "",
@@ -86,23 +81,60 @@ const Page = () => {
     address: "",
     state: "",
     lga: "",
-  });
+  };
 
-  const [creditDetail, setCreditDetail] = useState<CreditFormProp>({
+  const creditDetailInitialState = {
     householdIncome: "",
     specialFoodOccurance: "",
     householdFeeding: "",
     householdCondition: "",
-  });
+  };
 
-  const [appInformation, setAppInformation] = useState<LoanData>({
+  const appInformationInitialState = {
     amountRequested: "",
     loanType: "",
     loanStage: "",
     loanDuration: "",
     loanPurpose: "",
     loanHistory: false,
-  });
+  };
+
+  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
+    undefined
+  );
+  const cancelRegistration = () => {
+    setCurrentStep(0);
+    setLoanPersonalDetail(loanPersonalDetailInitialState);
+    setGuarantorData(guarantorDataInitialState);
+    setNextOfKinData(nextOfKinDataInitialState);
+    setCreditDetail(creditDetailInitialState);
+    setAppInformation(appInformationInitialState);
+    setOriginAddress(originAddressInitialState)
+  };
+  const { states, isLoading, error } = useFetchState() as {
+    states: string[];
+    isLoading: boolean;
+    error: string;
+  };
+  const [loanPersonalDetail, setLoanPersonalDetail] =
+    useState<PersonalDetailsType>(loanPersonalDetailInitialState);
+  const [originAddress, setOriginAddress] = useState<
+    CustomerAddress | undefined
+  >(originAddressInitialState);
+  const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>(
+    guarantorDataInitialState
+  );
+  const [nextOfKinData, setNextOfKinData] = useState<NextOfKinDetailsType>(
+    nextOfKinDataInitialState
+  );
+
+  const [creditDetail, setCreditDetail] = useState<CreditFormProp>(
+    creditDetailInitialState
+  );
+
+  const [appInformation, setAppInformation] = useState<LoanData>(
+    appInformationInitialState
+  );
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
@@ -143,7 +175,7 @@ const Page = () => {
           step {currentStep + 1} of {steps.length}
         </p>
       </div>
-      <div className={" flex   gap-5  justify-center w-full"}>
+      <div className={" flex   lg:gap-5  justify-center w-full"}>
         <Steps
           steps={steps}
           currentStep={currentStep}
@@ -165,6 +197,8 @@ const Page = () => {
               setCustomerPhoto={setCustomerPhoto}
               setLoanPersonalDetail={setLoanPersonalDetail}
               loanPersonalDetail={loanPersonalDetail}
+              steps={steps}
+              cancelRegistration={cancelRegistration}
             />
           )}
           {currentStep === 1 && (
@@ -177,6 +211,7 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               setOriginAddress={setOriginAddress}
               originAddress={originAddress}
+              steps={steps}
             />
           )}
           {currentStep === 2 && (
@@ -187,6 +222,7 @@ const Page = () => {
               states={states}
               setGuarantorData={setGuarantorData}
               guarantorData={guarantorData}
+              steps={steps}
             />
           )}
           {currentStep === 3 && (
@@ -195,6 +231,7 @@ const Page = () => {
               states={states}
               setNextOfKinData={setNextOfKinData}
               nextOfKinData={nextOfKinData}
+              steps={steps}
             />
           )}
           {currentStep === 4 && (
@@ -202,6 +239,7 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               setCreditDetail={setCreditDetail}
               creditDetail={creditDetail}
+              steps={steps}
             />
           )}
           {currentStep === 5 && (
@@ -209,6 +247,7 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               setAppInformation={setAppInformation}
               appInformation={appInformation}
+              steps={steps}
             />
           )}
           {currentStep === 6 && (
@@ -221,6 +260,9 @@ const Page = () => {
               appInformation={appInformation}
             />
           )}
+          {currentStep === 7 && (
+            <SuccessfulLoan cancelRegistration={cancelRegistration} />
+          )}
         </div>
       </div>
     </div>
@@ -230,43 +272,43 @@ const Page = () => {
 const steps: Step[] = [
   {
     id: 0,
-    title: "Who is buying this HMO plan?",
+    title: "Who is applying for this loan?",
     image: "/image/Frame.png",
     style: "",
   },
   {
     id: 1,
-    title: "Take a selfie of the customer",
+    title: "How can we locate the customer?",
     image: "/image/step_2.png",
     style: "",
   },
   {
     id: 2,
-    title: "Provide your current valid means of identification",
+    title: "Who else can stand-in for the customer ?",
     image: "/image/step_3.png",
     style: "",
   },
   {
     id: 3,
-    title: "How can we locate the customer?",
+    title: "Enter the customer’s next of kin’s details?",
     image: "/image/step_4.png",
     style: "",
   },
   {
     id: 4,
-    title: "How can we locate the customer?",
+    title: "How can we verify if we can lend this customer?",
     image: "/image/step_4.png",
     style: "",
   },
   {
     id: 5,
-    title: "How can we locate the customer?",
+    title: "What are the specifics to the customer’s request?",
     image: "/image/step_4.png",
     style: "",
   },
   {
     id: 6,
-    title: "How can we locate the customer?",
+    title: "How long will this plan be valid for?",
     image: "/image/step_4.png",
     style: "",
   },

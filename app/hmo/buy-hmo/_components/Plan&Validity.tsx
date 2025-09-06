@@ -8,6 +8,8 @@ import * as Yup from "yup";
 import DependantPopupModal from "./DependantPopupModal";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import FormTitle from "@/app/_components/ui/units/FormTitle";
+import { Step } from "../page";
 
 export interface PlanValidityTypes {
   id: string;
@@ -32,12 +34,12 @@ export interface PersonalDetailsType {
 
 const PlanValidity = ({
   setCurrentStep,
-  setPlan,
-  plan,
+  setPlan, 
+  steps,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  setPlan: React.Dispatch<React.SetStateAction<PlanValidityTypes>>;
-  plan: PlanValidityTypes;
+  setPlan: React.Dispatch<React.SetStateAction<PlanValidityTypes>>; 
+  steps: Step[],
 }) => {
   const [isDependantModalOpen, setIsDependantModalOpen] =
     useState<boolean>(false);
@@ -62,10 +64,10 @@ const PlanValidity = ({
     const filteredList = dependants.filter(
       (dependant) => dependant.id !== item.id
     );
-    setDependants(filteredList);
-
-    console.log(item);
+    setDependants(filteredList); 
   };
+
+
 
   const handleFormSubmission = (values: PlanValidityTypes) => {
     setPlan({
@@ -76,7 +78,7 @@ const PlanValidity = ({
       provider: values.provider,
       dependants: dependants,
     });
-    console.log(plan);
+ 
     setCurrentStep(3);
   };
 
@@ -86,6 +88,9 @@ const PlanValidity = ({
 
   return (
     <div>
+
+      
+      <FormTitle currentStep={2} steps={steps} title={"Plan & Validity"} />
       <FormHeader
         icon={{ src: "/icons/setting.svg", alt: "morde details" }}
         primaryText="Plan & Validity"
