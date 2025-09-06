@@ -36,9 +36,6 @@ interface CustomerAddress {
 const Page = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedState, setSelectedState] = useState<string>("");
-  const [originAddress, setOriginAddress] = useState<
-    CustomerAddress | undefined
-  >();
 
   const loanPersonalDetailInitialState = {
     dotAcct: "",
@@ -53,6 +50,13 @@ const Page = () => {
     photo: undefined,
     identity: undefined,
     businessExp: "",
+  };
+
+  const originAddressInitialState = {
+    state: "",
+    city: "",
+    address: "",
+    lga: "",
   };
 
   const guarantorDataInitialState = {
@@ -79,6 +83,22 @@ const Page = () => {
     lga: "",
   };
 
+  const creditDetailInitialState = {
+    householdIncome: "",
+    specialFoodOccurance: "",
+    householdFeeding: "",
+    householdCondition: "",
+  };
+
+  const appInformationInitialState = {
+    amountRequested: "",
+    loanType: "",
+    loanStage: "",
+    loanDuration: "",
+    loanPurpose: "",
+    loanHistory: false,
+  };
+
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
     undefined
   );
@@ -87,6 +107,9 @@ const Page = () => {
     setLoanPersonalDetail(loanPersonalDetailInitialState);
     setGuarantorData(guarantorDataInitialState);
     setNextOfKinData(nextOfKinDataInitialState);
+    setCreditDetail(creditDetailInitialState);
+    setAppInformation(appInformationInitialState);
+    setOriginAddress(originAddressInitialState)
   };
   const { states, isLoading, error } = useFetchState() as {
     states: string[];
@@ -95,6 +118,9 @@ const Page = () => {
   };
   const [loanPersonalDetail, setLoanPersonalDetail] =
     useState<PersonalDetailsType>(loanPersonalDetailInitialState);
+  const [originAddress, setOriginAddress] = useState<
+    CustomerAddress | undefined
+  >(originAddressInitialState);
   const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>(
     guarantorDataInitialState
   );
@@ -102,21 +128,13 @@ const Page = () => {
     nextOfKinDataInitialState
   );
 
-  const [creditDetail, setCreditDetail] = useState<CreditFormProp>({
-    householdIncome: "",
-    specialFoodOccurance: "",
-    householdFeeding: "",
-    householdCondition: "",
-  });
+  const [creditDetail, setCreditDetail] = useState<CreditFormProp>(
+    creditDetailInitialState
+  );
 
-  const [appInformation, setAppInformation] = useState<LoanData>({
-    amountRequested: "",
-    loanType: "",
-    loanStage: "",
-    loanDuration: "",
-    loanPurpose: "",
-    loanHistory: false,
-  });
+  const [appInformation, setAppInformation] = useState<LoanData>(
+    appInformationInitialState
+  );
 
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
@@ -236,7 +254,7 @@ const Page = () => {
             />
           )}
           {currentStep === 7 && (
-            <SuccessfulLoan setCurrentStep={setCurrentStep} />
+            <SuccessfulLoan cancelRegistration={cancelRegistration} />
           )}
         </div>
       </div>

@@ -17,9 +17,9 @@ interface DotAccountBenefit {
 }
 
 const SuccessfulLoan = ({
-  setCurrentStep,
+  cancelRegistration,
 }: {
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  cancelRegistration: () => void;
 }) => {
   const router = useRouter();
   const loanData = useSelector((state: RootState) => state.hmo.loan);
@@ -41,7 +41,7 @@ const SuccessfulLoan = ({
       path: "/hmo/buy-hmo",
       onClick: () => {
         router.push("/hmo/buy-hmo");
-        setCurrentStep(0);
+        cancelRegistration();
       },
     },
     {
@@ -80,13 +80,8 @@ const SuccessfulLoan = ({
           <div className="flex justify-between">
             <p className="text-[#454547]">Loan Requested</p>
             <p className="text-black font-medium text-base">
-              ₦
-              {Number(loanData.loanValues.amountRequested).toLocaleString(
-                "en-NG",
-                {
-                  minimumFractionDigits: 0,
-                }
-              )}
+              ₦{loanData.loanValues.amountRequested}
+               
             </p>
           </div>
         </div>

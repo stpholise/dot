@@ -34,7 +34,7 @@ const ReviewLoan = ({
     dispatch(
       setLoan({
         id: uuidv4(),
-        personalDetal: {
+        personalDetail: {
           ...loanPersonalDetail,
           photo: loanPersonalDetail.photo?.name,
           identity: loanPersonalDetail.identity?.name,
