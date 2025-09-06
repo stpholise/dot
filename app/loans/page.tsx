@@ -34,7 +34,7 @@ interface CustomerAddress {
 }
 
 const Page = () => {
-  const [currentStep, setCurrentStep] = useState<number>(5);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedState, setSelectedState] = useState<string>("");
 
   const loanPersonalDetailInitialState = {
@@ -109,7 +109,7 @@ const Page = () => {
     setNextOfKinData(nextOfKinDataInitialState);
     setCreditDetail(creditDetailInitialState);
     setAppInformation(appInformationInitialState);
-    setOriginAddress(originAddressInitialState)
+    setOriginAddress(originAddressInitialState);
   };
   const { states, isLoading, error } = useFetchState() as {
     states: string[];
@@ -139,10 +139,13 @@ const Page = () => {
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
       <div
-        className={clsx(" items-center justify-between mb-4 px-4 xs:px-0", {
-          hidden: currentStep == steps.length - 1,
-          flex: currentStep !== steps.length,
-        })}
+        className={clsx(
+          " items-center justify-between mb-4 px-4 xs:px-0 sticky sm:static top-0",
+          {
+            hidden: currentStep == steps.length - 1,
+            flex: currentStep !== steps.length,
+          }
+        )}
       >
         <div className="">
           <h4 className="text-sm text-[#454547] sm:block hidden md:hidden lg:block">

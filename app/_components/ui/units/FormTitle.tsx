@@ -12,7 +12,7 @@ const FormTitle = ({
   title?: string;
 }) => {
   return (
-    <div className=" lg:hidden px-4 sm:px-8 mt-4 flex flex-col gap-6">
+    <div className=" lg:hidden px-4 sm:px-8 mt-4 flex flex-col gap-6 sticky top-4 lg:static left-0 right-0">
       <div className=" gap-2 flex lg:gap-4  w-full ">
         {steps.slice(0, steps.length - 1).map((step, index) => (
           <div
