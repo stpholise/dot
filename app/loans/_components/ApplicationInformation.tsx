@@ -200,6 +200,7 @@ const ApplicationInformation = ({
                     inputMode="numeric"
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter customer first name"
+                    min={1}
                   />
                   <ErrorMessage
                     name="loanDuration"

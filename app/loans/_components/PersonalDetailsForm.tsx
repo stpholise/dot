@@ -341,6 +341,7 @@ const PersonalDetailsForm = ({
                     value={values.businessExp}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter registered phone number"
+                    min={0}
                   />
                   <ErrorMessage name="businessExp" />
                 </div>

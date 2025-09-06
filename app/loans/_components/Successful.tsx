@@ -16,13 +16,13 @@ interface DotAccountBenefit {
   onClick?: () => void;
 }
 
-const SuccessfulHMOPurchase = ({
+const SuccessfulLoan = ({
   setCurrentStep,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const router = useRouter();
-  const hmoData = useSelector((state: RootState) => state.hmo.hmo);
+  const loanData = useSelector((state: RootState) => state.hmo.loan);
 
   const dotAccountBenefit: DotAccountBenefit[] = [
     {
@@ -65,61 +65,36 @@ const SuccessfulHMOPurchase = ({
         className="mx-auto my-4 lg:my-10"
       />
       <h2 className="text-center font-medium text-black text-lg mb-3">
-        HMO bought successfully, see details below
+        Loan application sent, see details below
       </h2>
       <div className="flex flex-col gap-6">
         <div className="bg-[#F9F9F9] rounded-xl px-6 py-4 flex flex-col gap-2">
           <div className="flex justify-between">
-            <p className="text-[#454547] leading-6">Customer Name</p>
+            <p className="text-[#454547] leading-6">Applicant’s Name</p>
             <p className="text-black font-medium text-base">
-              {hmoData.personalDetail.fName +
+              {loanData.personalDetail.fName +
                 " " +
-                hmoData.personalDetail.lName}
+                loanData.personalDetail.lName}
             </p>
           </div>
           <div className="flex justify-between">
-            <p className="text-[#454547]">Policy ID</p>
+            <p className="text-[#454547]">Loan Requested</p>
             <p className="text-black font-medium text-base">
-              {hmoData.id.replace(/\D/g, "").slice(0, 10)}
+              ₦
+              {Number(loanData.loanValues.amountRequested).toLocaleString(
+                "en-NG",
+                {
+                  minimumFractionDigits: 0,
+                }
+              )}
             </p>
           </div>
         </div>
-        <div className="">
-          {hmoData.plan &&
-            hmoData.plan.dependants?.map((item, index) => (
-              <div className="" key={item.id + index}>
-                <p className="text-[#667085] text-sm leading-5 mb-2">
-                  Dependant {"("}
-                  {index + 1}{") "} Information
-                </p>
-                <div className="bg-[#F9F9F9] rounded-xl px-6 py-4 flex flex-col gap-2">
-                  <div className="flex justify-between">
-                    <p className="text-[#454547] leading-6">Customer Name</p>
-                    <p className="text-black font-medium text-base">
-                      {item.fName + " " + item.lName}
-                    </p>
-                  </div>
-                  <div className="flex justify-between">
-                    <p className="text-[#454547]">Policy ID</p>
-                    <p className="text-black font-medium text-base">
-
-                      {item.id?.replace(/\D/g, "").slice(0, 10)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </div>
-  
       </div>
 
       <div className="leading-6 py-8 text-[#868C98] font-medium">
-        These details have been sent to the respective phone numbers and can be
-        used in any{" "}
-        <span className="text-black underline">
-          Dot HMO Affiliated Hospital
-        </span>{" "}
-        to access premium healthcare.
+        Upon approval, more details on next steps and repayment amount will be
+        sent to the customer’s phone number.
       </div>
       <div className="">
         <p>what would you like to do next?</p>
@@ -163,4 +138,4 @@ const SuccessfulHMOPurchase = ({
   );
 };
 
-export default SuccessfulHMOPurchase;
+export default SuccessfulLoan;

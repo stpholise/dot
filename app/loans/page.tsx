@@ -17,6 +17,7 @@ import { GuarantorDataDetailsType } from "./_components/GuarantorForm";
 import { NextOfKinDetailsType } from "./_components/NextOfKinDetailsForm";
 import { CreditFormProp } from "./_components/CheckCreditForm";
 import { LoanData } from "./_components/ApplicationInformation";
+import SuccessfulLoan from "./_components/Successful";
 
 interface Step {
   id: number;
@@ -39,33 +40,22 @@ const Page = () => {
     CustomerAddress | undefined
   >();
 
-  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
-    undefined
-  );
-  const cancelRegistration = () => {
-    setCurrentStep(0);
-    console.log("cancelRegistration");
+  const loanPersonalDetailInitialState = {
+    dotAcct: "",
+    fName: "",
+    mName: "",
+    lName: "",
+    dob: "",
+    phone: "",
+    maritalStatus: "",
+    occupation: "",
+    gender: "",
+    photo: undefined,
+    identity: undefined,
+    businessExp: "",
   };
-  const { states, isLoading, error } = useFetchState() as {
-    states: string[];
-    isLoading: boolean;
-    error: string;
-  };
-  const [loanPersonalDetail, setLoanPersonalDetail] = useState<PersonalDetailsType>({
-       dotAcct: '',
-      fName: '',
-      mName:'',
-      lName:'',
-      dob: '',
-      phone: '',
-      maritalStatus: '',
-      occupation: '',
-      gender: '',
-      photo: undefined,
-      identity: undefined,
-      businessExp: '',
-  });
-  const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>({
+
+  const guarantorDataInitialState = {
     fName: "",
     lName: "",
     phone: "",
@@ -77,8 +67,9 @@ const Page = () => {
     identity: undefined,
     employmentLetter: undefined,
     signature: undefined,
-  });
-  const [nextOfKinData, setNextOfKinData] = useState<NextOfKinDetailsType>({
+  };
+
+  const nextOfKinDataInitialState = {
     fName: "",
     lName: "",
     phone: "",
@@ -86,7 +77,30 @@ const Page = () => {
     address: "",
     state: "",
     lga: "",
-  });
+  };
+
+  const [customerPhoto, setCustomerPhoto] = useState<File | undefined>(
+    undefined
+  );
+  const cancelRegistration = () => {
+    setCurrentStep(0);
+    setLoanPersonalDetail(loanPersonalDetailInitialState);
+    setGuarantorData(guarantorDataInitialState);
+    setNextOfKinData(nextOfKinDataInitialState);
+  };
+  const { states, isLoading, error } = useFetchState() as {
+    states: string[];
+    isLoading: boolean;
+    error: string;
+  };
+  const [loanPersonalDetail, setLoanPersonalDetail] =
+    useState<PersonalDetailsType>(loanPersonalDetailInitialState);
+  const [guarantorData, setGuarantorData] = useState<GuarantorDataDetailsType>(
+    guarantorDataInitialState
+  );
+  const [nextOfKinData, setNextOfKinData] = useState<NextOfKinDetailsType>(
+    nextOfKinDataInitialState
+  );
 
   const [creditDetail, setCreditDetail] = useState<CreditFormProp>({
     householdIncome: "",
@@ -221,7 +235,9 @@ const Page = () => {
               appInformation={appInformation}
             />
           )}
-          
+          {currentStep === 7 && (
+            <SuccessfulLoan setCurrentStep={setCurrentStep} />
+          )}
         </div>
       </div>
     </div>
