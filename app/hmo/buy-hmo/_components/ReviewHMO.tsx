@@ -52,9 +52,10 @@ const ReviewHMO = ({
           validityPeriod: plan.validityPeriod,
           providerState: plan.providerState,
           provider: plan.provider,
-          dependants: plan.dependants.map((item) =>
-            item.photo instanceof File ? item.photo.name : item.photo
-          ),
+          dependants: plan.dependants.map((item) => ({
+            ...item,
+            photo: item.photo instanceof File ? item.photo.name : item.photo,
+          })),
         },
       })
     );

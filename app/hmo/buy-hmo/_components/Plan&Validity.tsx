@@ -32,12 +32,10 @@ export interface PersonalDetailsType {
 
 const PlanValidity = ({
   setCurrentStep,
-  setPlan,
-  plan,
+  setPlan, 
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  setPlan: React.Dispatch<React.SetStateAction<PlanValidityTypes>>;
-  plan: PlanValidityTypes;
+  setPlan: React.Dispatch<React.SetStateAction<PlanValidityTypes>>; 
 }) => {
   const [isDependantModalOpen, setIsDependantModalOpen] =
     useState<boolean>(false);
@@ -62,10 +60,10 @@ const PlanValidity = ({
     const filteredList = dependants.filter(
       (dependant) => dependant.id !== item.id
     );
-    setDependants(filteredList);
-
-    console.log(item);
+    setDependants(filteredList); 
   };
+
+
 
   const handleFormSubmission = (values: PlanValidityTypes) => {
     setPlan({
@@ -76,7 +74,7 @@ const PlanValidity = ({
       provider: values.provider,
       dependants: dependants,
     });
-    console.log(plan);
+ 
     setCurrentStep(3);
   };
 

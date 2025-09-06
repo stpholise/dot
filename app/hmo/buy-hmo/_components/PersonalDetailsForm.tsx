@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 
-
 export interface PersonalDetailsType {
   fName: string;
   mName: string;
@@ -18,7 +17,7 @@ export interface PersonalDetailsType {
   maritalStatus: string;
   occupation: string;
   gender: string;
-  photo: File | undefined ;
+  photo: File | undefined;
   identity: File | undefined;
 }
 
@@ -69,8 +68,7 @@ const PersonalDetailsForm = ({
     values: PersonalDetailsType,
     formik: FormikHelpers<PersonalDetailsType>
   ) => {
-    setCurrentStep(1);
-    console.log("values", values);
+    setCurrentStep(1); 
 
     setPersonalData({
       fName: values.fName,
@@ -81,10 +79,10 @@ const PersonalDetailsForm = ({
       maritalStatus: values.maritalStatus,
       occupation: values.occupation,
       gender: values.gender,
-      photo: undefined,
-      identity: undefined,
+      photo: values.photo,
+      identity: values.identity,
     });
-
+ 
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
@@ -308,14 +306,14 @@ const PersonalDetailsForm = ({
                   text="customer photo"
                   setFieldValue={setFieldValue}
                   setFile={setHmoPhoto}
-                  file={personalData.photo}
+                  file={values.photo}
                 />
                 <ImageDropzone
                   fieldName="identity"
                   text="customer photo"
                   setFieldValue={setFieldValue}
                   setFile={setHmoIdentity}
-                  file={personalData.identity}
+                  file={values.identity}
                 />
               </div>
             </div>

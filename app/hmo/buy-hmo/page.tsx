@@ -137,8 +137,7 @@ const Page = () => {
           {currentStep === 2 && (
             <PlanValidity
               setCurrentStep={setCurrentStep}
-              setPlan={setPlan}
-              plan={plan}
+              setPlan={setPlan} 
             />
           )}
           {currentStep === 3 && (

@@ -7,6 +7,7 @@ type PersonalDetailsStringOnly = Omit<
   PersonalDetailsType,
   "photo" | "identity"
 > & {
+  id:string;
   photo?: string;
   identity?: string;
 };
@@ -16,6 +17,7 @@ type PlanType = Omit<PlanValidityTypes, "dependants"> & {
 };
 
 const personalDetail: PersonalDetailsStringOnly = {
+  id:"",
   fName: "",
   mName: "",
   lName: "",
