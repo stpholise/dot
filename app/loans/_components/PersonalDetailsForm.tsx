@@ -2,7 +2,7 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-import * as Yup from "yup"; 
+import * as Yup from "yup";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 import { useState } from "react";
@@ -44,8 +44,7 @@ const PersonalDetailsForm = ({
   loanPersonalDetail,
   steps,
   cancelRegistration,
-}: PersonalDetailsFormProps) => { 
-
+}: PersonalDetailsFormProps) => {
   const initialValues: PersonalDetailsType = {
     dotAcct: loanPersonalDetail?.dotAcct || "",
     fName: loanPersonalDetail?.fName || "",
@@ -71,9 +70,9 @@ const PersonalDetailsForm = ({
     occupation: Yup.string().required("Occupation is required"),
     businessExp: Yup.string().required("Business experience is required"),
     gender: Yup.string().oneOf(["male", "female"], "Select male or female"),
-    maritalStatus: Yup.string().required(),
-    photo: Yup.mixed().required(),
-    identity: Yup.mixed().required(),
+    maritalStatus: Yup.string().required("marital status is required"),
+    photo: Yup.mixed().required("customer photo is required"),
+    identity: Yup.mixed().required("customer identity card is required"),
   });
 
   const [userIdentity, setUserIdentity] = useState<File | undefined>();
@@ -127,7 +126,7 @@ const PersonalDetailsForm = ({
             <div className="lg:px-8 px-4 md:px-6">
               <div className="py-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
+                  <label htmlFor="dotAcct" className="text-sm text-[#454547]">
                     Dot Account *
                   </label>
                   <Field
@@ -140,7 +139,7 @@ const PersonalDetailsForm = ({
                     }}
                     maxLength={11}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer first name"
+                    placeholder="Enter your dot account number"
                   />
                   <ErrorMessage
                     name="dotAcct"
@@ -149,7 +148,7 @@ const PersonalDetailsForm = ({
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
+                  <label htmlFor="fName" className="text-sm text-[#454547]">
                     First Name *
                   </label>
                   <Field
@@ -157,7 +156,7 @@ const PersonalDetailsForm = ({
                     name="fName"
                     value={values.fName}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer first name"
+                    placeholder="Enter your first name"
                   />
                   <ErrorMessage
                     name="fName"
@@ -217,7 +216,7 @@ const PersonalDetailsForm = ({
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="lname" className="text-sm text-[#454547]">
+                  <label htmlFor="phone" className="text-sm text-[#454547]">
                     Phone *
                   </label>
                   <Field
@@ -229,7 +228,7 @@ const PersonalDetailsForm = ({
                       setFieldValue("phone", numericValue);
                     }}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter registered phone number"
+                    placeholder="Enter BVN registered phone number"
                     maxLength={11}
                   />
                   <ErrorMessage
@@ -335,7 +334,7 @@ const PersonalDetailsForm = ({
                 </div>
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="occupation"
+                    htmlFor="businessExp"
                     className="text-sm text-[#454547]"
                   >
                     Years of Business Experience *
@@ -345,29 +344,47 @@ const PersonalDetailsForm = ({
                     name="businessExp"
                     value={values.businessExp}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter registered phone number"
+                    placeholder="Enter years of business experience"
                     min={0}
                   />
-                  <ErrorMessage name="businessExp" />
+                  <ErrorMessage
+                    name="businessExp"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
                 </div>
               </div>
               <div className="py-6 flex gap-6 xl:flex-row md:flex-row flex-col lg:flex-col">
-                <ImageDropzone
-                  fieldName="photo"
-                  text="Upload or Take a photo"
-                  setFieldValue={setFieldValue}
-                  setFile={setCustomerPhoto}
-                  file={customerPhoto}
-                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
-                <ImageDropzone
-                  fieldName="identity"
-                  text="Upload Identity Card"
-                  setFieldValue={setFieldValue}
-                  setFile={setUserIdentity}
-                  file={userIdentity}
-                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
+                <div className="">
+                  <ImageDropzone
+                    fieldName="photo"
+                    text="Upload or Take a photo"
+                    setFieldValue={setFieldValue}
+                    setFile={setCustomerPhoto}
+                    file={customerPhoto}
+                    className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
+                  />
+                  <ErrorMessage
+                    name="photo"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                <div className="">
+                  <ImageDropzone
+                    fieldName="identity"
+                    text="Upload Identity Card"
+                    setFieldValue={setFieldValue}
+                    setFile={setUserIdentity}
+                    file={userIdentity}
+                    className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
+                  />
+                  <ErrorMessage
+                    name="identity"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
               </div>
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">

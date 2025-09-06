@@ -275,7 +275,7 @@ const Address = ({
                 onClick={decrementStep}
               />
               <PrimaryButtons
-                text={"Proceed - Plan & Validity"}
+                text={"Proceed "}
                 type={"submit"}
                 disabled={!isValid || isSubmitting}
                 className={clsx(

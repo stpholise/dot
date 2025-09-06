@@ -39,9 +39,9 @@ const ApplicationInformation = ({
   };
 
   const validationSchema = Yup.object({
-    amountRequested: Yup.string().required(),
+    amountRequested: Yup.string().required('"Please enter the requested amount"'),
     loanType: Yup.string()
-      .required()
+       .required("Please select a loan type")
       .oneOf(
         [
           "personal",
@@ -56,18 +56,7 @@ const ApplicationInformation = ({
         ],
         "slect an option"
       ),
-    loanStage: Yup.string()
-      .required()
-      .oneOf([
-        "submitted",
-        "review",
-        "pending-docs",
-        "approved",
-        "disbursed",
-        "repayment",
-        "closed",
-        "rejected",
-      ]),
+    
     loanDuration: Yup.string().required(),
     loanHistory: Yup.boolean(),
   });
@@ -110,7 +99,7 @@ const ApplicationInformation = ({
             <div className="lg:px-8 px-4 md:px-6">
               <div className="py-6 flex flex-col gap-4 mb-4">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
+                  <label htmlFor="amountRequested" className="text-sm text-[#454547]">
                     Amount Requested *
                   </label>
                   <Field
@@ -129,9 +118,9 @@ const ApplicationInformation = ({
                       );
                     }}
                     inputMode="numric"
-                    maxLength={7}
+                    maxLength={12}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer first name"
+                    placeholder="Enter amount requested"
                   />
                   <ErrorMessage
                     name="amountRequested"
@@ -140,7 +129,7 @@ const ApplicationInformation = ({
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
+                  <label htmlFor="loanType" className="text-sm text-[#454547]">
                     Loan Type *
                   </label>
                   <Field
@@ -148,8 +137,7 @@ const ApplicationInformation = ({
                     name="loanType"
                     as="select"
                     value={values.loanType}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer first name"
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg" 
                   >
                     <option value="">Select loan type</option>
                     <option value="personal">Personal Loan</option>
@@ -168,36 +156,9 @@ const ApplicationInformation = ({
                     className="text-xs text-red-500"
                   />
                 </div>
+               
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
-                    Loan Stage *
-                  </label>
-                  <Field
-                    type="text"
-                    as="select"
-                    name="loanStage"
-                    value={values.loanStage}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer first name"
-                  >
-                    <option value="">Select loan stage</option>
-                    <option value="submitted">Application Submitted</option>
-                    <option value="review">Under Review</option>
-                    <option value="pending-docs">Pending Documentation</option>
-                    <option value="approved">Approved</option>
-                    <option value="disbursed">Disbursed</option>
-                    <option value="repayment">In Repayment</option>
-                    <option value="closed">Completed / Closed</option>
-                    <option value="rejected">Rejected</option>
-                  </Field>
-                  <ErrorMessage
-                    name="loanStage"
-                    component="div"
-                    className="text-xs text-red-500"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
+                  <label htmlFor="loanDuration" className="text-sm text-[#454547]">
                     Loan Duration *
                   </label>
                   <Field
@@ -205,8 +166,8 @@ const ApplicationInformation = ({
                     name="loanDuration"
                     value={values.loanDuration}
                     inputMode="numeric"
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer first name"
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg" 
+                    placeholder={'Enter loan duration (e.g. 12 months)'}
                     min={1}
                   />
                   <ErrorMessage
@@ -217,15 +178,15 @@ const ApplicationInformation = ({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="dotcct" className="text-sm text-[#454547]">
+                  <label htmlFor="loanPurpose" className="text-sm text-[#454547]">
                     Purpose of Loan? *
                   </label>
                   <Field
                     type="text"
                     name="loanPurpose"
                     value={values.loanPurpose}
-                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter customer first name"
+                    className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg" 
+                    placeholder='Enter purpose of the loan'
                   />
                   <ErrorMessage
                     name="loanPurpose"
@@ -298,7 +259,7 @@ const ApplicationInformation = ({
                 onClick={() => setCurrentStep(4)}
               />
               <PrimaryButtons
-                text={"Proceed - Address Details"}
+                text={"Proceed "}
                 type="submit"
                 disabled={!isValid || isSubmitting}
                 className={clsx(
