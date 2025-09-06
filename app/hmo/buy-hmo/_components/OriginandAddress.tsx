@@ -1,13 +1,15 @@
 "use client";
-import Image from "next/image";
+// import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
-import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons"; 
-import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState"; 
+import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
+import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState";
 import * as Yup from "yup";
-import clsx from "clsx"; 
+import clsx from "clsx";
 import { useEffect } from "react";
 import { scrollToTop } from "@/app/_utils/ScrollToTop";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
+import FormTitle from "@/app/_components/ui/units/FormTitle";
+import { Step } from "../page";
 
 export interface CustomerAddress {
   state: string;
@@ -27,7 +29,9 @@ interface AddressProps {
   setOriginAddress: React.Dispatch<
     React.SetStateAction<CustomerAddress | undefined>
   >;
+
   originAddress: CustomerAddress | undefined;
+  steps: Step[];
 }
 
 const Address = ({
@@ -39,6 +43,7 @@ const Address = ({
   setCurrentStep,
   setOriginAddress,
   originAddress,
+  steps,
 }: AddressProps) => {
   useEffect(() => {
     scrollToTop();
@@ -50,7 +55,6 @@ const Address = ({
     errorFetchinLga: string | null;
   };
 
-  
   const decrementStep = () => {
     setCurrentStep(0);
   };
@@ -98,23 +102,26 @@ const Address = ({
 
   return (
     <div>
-      <div className=" lg:hidden flex gap-4 px-4 sm:px-8 mt-4">
-        <Image
-          src={"/image/Frame 48.png"}
-          alt="doc"
-          height={80}
-          width={80}
-          className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 w-14 h-14"
-        />
-        <div className=" ">
-          <p className=" text-xs sm:text-sm text-[#667085] text-medium">
-            Customer Address
-          </p>
-          <h3 className="text-black text-base sm:text-3xl font-medium">
-            How can we locate the customer?
-          </h3>
+      {/* <div className="">
+        <div className=" lg:hidden flex gap-4 px-4 sm:px-8 mt-4">
+          <Image
+            src={"/image/Frame 48.png"}
+            alt="doc"
+            height={80}
+            width={80}
+            className="rounded-xl max-h-20 max-w-20 sm:w-20 sm:h-20 w-14 h-14"
+          />
+          <div className=" ">
+            <p className=" text-xs sm:text-sm text-[#667085] text-medium">
+              Customer Address
+            </p>
+            <h3 className="text-black text-base sm:text-3xl font-medium">
+              How can we locate the customer?
+            </h3>
+          </div>
         </div>
-      </div>
+      </div> */}
+      <FormTitle currentStep={1} steps={steps} title={"Origin & Address"} />
       <FormHeader
         icon={{
           src: "/icons/security.png",
@@ -258,8 +265,6 @@ const Address = ({
                   />
                 </div>
               }
-
-            
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse lg:flex-col-reverse xl:flex-row">
               <PrimaryButtons

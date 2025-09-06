@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
+import FormTitle from "@/app/_components/ui/units/FormTitle";
+import { Step } from "../page";
 
 export interface PersonalDetailsType {
   fName: string;
@@ -25,12 +27,14 @@ interface PersonalDetailsFormProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setPersonalData: React.Dispatch<React.SetStateAction<PersonalDetailsType>>;
   personalData: PersonalDetailsType;
+  steps: Step[];
 }
 
 const PersonalDetailsForm = ({
   setCurrentStep,
   setPersonalData,
   personalData,
+  steps,
 }: PersonalDetailsFormProps) => {
   const router = useRouter();
 
@@ -100,6 +104,7 @@ const PersonalDetailsForm = ({
 
   return (
     <div>
+      <FormTitle currentStep={0} steps={steps} title={"Personal Details"} />
       <FormHeader
         icon={{
           src: "/icons/security.png",

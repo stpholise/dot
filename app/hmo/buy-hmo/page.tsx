@@ -15,7 +15,7 @@ import { PersonalDetailsType } from "./_components/PersonalDetailsForm";
 import { PlanValidityTypes } from "./_components/Plan&Validity";
 import { CustomerAddress } from "./_components/OriginandAddress";
 
-interface Step {
+ export interface Step {
   id: number;
   title: string;
   image?: string;
@@ -23,7 +23,7 @@ interface Step {
 }
 
 const Page = () => {
-  const [currentStep, setCurrentStep] = useState<number>(4);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const { states, isLoading, error } = useFetchState() as {
     states: string[];
     isLoading: boolean;
@@ -43,7 +43,9 @@ const Page = () => {
     identity: undefined,
   });
 
-  const [originAddress, setOriginAddress] = useState<CustomerAddress>();
+  const [originAddress, setOriginAddress] = useState<
+    CustomerAddress 
+  >();
 
   const [plan, setPlan] = useState<PlanValidityTypes>({
     id: "",
@@ -106,7 +108,7 @@ const Page = () => {
         />
         <div
           className={clsx(
-            "  mx-auto xl:w-full max-w-[600px] w-full lg:w-[400px] lg:min-w-96   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-3xl ",
+            "  mx-auto xl:w-full max-w-[600px] w-full lg:w-[400px] lg:min-w-96   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-2xl md:rounded-3xl ",
             {
               "lg:mx-auto lg:w-[750px]  xl:w-[600px]":
                 currentStep >= steps.length - 2,
@@ -118,6 +120,7 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               setPersonalData={setPersonalData}
               personalData={personalData}
+              steps={steps}
             />
           )}
           {currentStep === 1 && (
@@ -130,10 +133,15 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               setOriginAddress={setOriginAddress}
               originAddress={originAddress}
+              steps={steps}
             />
           )}
           {currentStep === 2 && (
-            <PlanValidity setCurrentStep={setCurrentStep} setPlan={setPlan} />
+            <PlanValidity
+              setCurrentStep={setCurrentStep}
+              setPlan={setPlan}
+              steps={steps} 
+            />
           )}
           {currentStep === 3 && (
             <ReviewHMO
@@ -176,13 +184,13 @@ const steps: Step[] = [
   {
     id: 3,
     title: " ",
-    image: "",
+    image: "/image/step_4.png",
     style: "",
   },
   {
     id: 4,
     title: " ",
-    image: " ",
+    image: "/image/step_4.png",
     style: "",
   },
 ];
