@@ -34,7 +34,7 @@ const CheckCreditForm = ({
   };
   const validationSchema = Yup.object({
     householdIncome: Yup.string()
-      .required()
+      .required('Please select the option that best applies.')
       .oneOf([
         "₦0-₦50,000",
         "₦50,000 - ₦99,999",
@@ -44,10 +44,10 @@ const CheckCreditForm = ({
         "₦2,000,000 and above",
       ]),
     specialFoodOccurance: Yup.string()
-      .required()
+      .required('Please select the option that best applies.')
       .oneOf(["Very often", "Often", "Sometimes", "Rarely", "Never"]),
     householdFeeding: Yup.string()
-      .required()
+      .required('Please select the option that best applies.')
       .oneOf([
         "Always Regular",
         "Mostly Regular",
@@ -56,7 +56,7 @@ const CheckCreditForm = ({
         "Rarely Regular",
       ]),
     householdCondition: Yup.string()
-      .required()
+      .required('Please select the option that best applies.')
       .oneOf(["Excellent", "Good", "Fair", "Poor", "Needs urgent repair"]),
   });
 
@@ -111,7 +111,7 @@ const CheckCreditForm = ({
                   value={values.householdIncome}
                   className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                 >
-                  <option value=""></option>
+                  <option value="" disabled>--Select--</option>
                   <option value={"₦0-₦50,000"}>Less than ₦50,000</option>
                   <option value="₦50,000 - ₦99,999">₦50,000 - ₦99,999</option>
                   <option value="₦100,000 - ₦499,999">
@@ -148,7 +148,7 @@ const CheckCreditForm = ({
                   value={values.specialFoodOccurance}
                   className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                 >
-                  <option value=""></option>
+                  <option value=""  disabled>--Select--</option>
                   <option value={"Very often"}>Daily</option>
                   <option value="Often">A few times a week</option>
                   <option value="Sometimes">Once a week</option>
@@ -175,7 +175,7 @@ const CheckCreditForm = ({
                   value={values.householdFeeding}
                   className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                 >
-                  <option value=""></option>
+                  <option disabled value="">--Select--</option>
                   <option value={"Always Regular"}>
                     Very Regular – Meals are always on time
                   </option>
@@ -212,9 +212,9 @@ const CheckCreditForm = ({
                   name="householdCondition"
                   value={values.householdCondition}
                   className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                  placeholder="Enter customer first name"
+       
                 >
-                  <option value=""></option>
+                  <option disabled value="">--Select--</option>
                   <option value={"Excellent"}>
                     Excellent - No visible issues
                   </option>
@@ -245,7 +245,7 @@ const CheckCreditForm = ({
                 onClick={() => setCurrentStep(3)}
               />
               <PrimaryButtons
-                text={"Proceed - Address Details"}
+                text={"Proceed  "}
                 type="submit"
                 disabled={!isValid || !dirty || isSubmitting}
                 className={clsx(

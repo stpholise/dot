@@ -3,11 +3,10 @@ import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import * as Yup from "yup";
-import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState"; 
+import { useFetchLGA } from "@/app/account/create-account/_components/useFetchState";
 import clsx from "clsx";
 import { Step } from "@/app/hmo/buy-hmo/page";
 import FormTitle from "@/app/_components/ui/units/FormTitle";
-
 
 export interface NextOfKinDetailsType {
   fName: string;
@@ -24,7 +23,7 @@ interface PersonalDetailsFormProps {
   setNextOfKinData: React.Dispatch<React.SetStateAction<NextOfKinDetailsType>>;
   nextOfKinData: NextOfKinDetailsType;
   states: string[];
-  steps: Step[]
+  steps: Step[];
 }
 
 const NextOfKinDetailsForm = ({
@@ -33,8 +32,7 @@ const NextOfKinDetailsForm = ({
   setNextOfKinData,
   states,
   steps,
-}: PersonalDetailsFormProps) => { 
-
+}: PersonalDetailsFormProps) => {
   const initialValues: NextOfKinDetailsType = {
     fName: nextOfKinData.fName || "",
     lName: nextOfKinData.lName || "",
@@ -46,13 +44,13 @@ const NextOfKinDetailsForm = ({
   };
 
   const validationSchima = Yup.object({
-    fName: Yup.string().required(),
-    lName: Yup.string().required(),
-    phone: Yup.string().required(),
-    relationship: Yup.string().required(),
-    address: Yup.string().required(),
-    state: Yup.string().required(),
-    lga: Yup.string().required(),
+    fName: Yup.string().required("First name is required"),
+    lName: Yup.string().required("Last name is required"),
+    phone: Yup.string().required("Phone number is required"),
+    relationship: Yup.string().required("Relationship is required"),
+    address: Yup.string().required("Address is required"),
+    state: Yup.string().required("State is required"),
+    lga: Yup.string().required("LGA is required"),
   });
 
   const { lga, loadingLga, errorFetchinLga } = useFetchLGA(
@@ -84,8 +82,7 @@ const NextOfKinDetailsForm = ({
 
   return (
     <div>
-
-      <FormTitle title="Next of Kin Details" currentStep={3} steps={steps}/>
+      <FormTitle title="Next of Kin Details" currentStep={3} steps={steps} />
       <FormHeader
         icon={{
           src: "/icons/security.png",
@@ -304,7 +301,7 @@ const NextOfKinDetailsForm = ({
                 onClick={() => setCurrentStep(2)}
               />
               <PrimaryButtons
-                text={"Proceed - Address Details"}
+                text={"Proceed  "}
                 type="submit"
                 disabled={!isValid || isSubmitting}
                 className={clsx(

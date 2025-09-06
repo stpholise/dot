@@ -347,7 +347,7 @@ const PersonalDetailsForm = ({
                 onClick={() => router.push("/hmo/buy-hmo")}
               />
               <PrimaryButtons
-                text={"Proceed - Address Details"}
+                text={"Proceed"}
                 type="submit"
                 disabled={!isValid || !dirty || isSubmitting}
                 className={clsx(

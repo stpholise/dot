@@ -57,17 +57,17 @@ const GuarantorForm = ({
   };
 
   const validationSchima = Yup.object({
-    fName: Yup.string().required(),
-    lName: Yup.string().required(),
-    phone: Yup.string().required(),
-    relationship: Yup.string().required(),
-    address: Yup.string().required(),
-    state: Yup.string().required(),
-    lga: Yup.string().required(),
-    guarantorPhoto: Yup.mixed<File>().required(),
-    identity: Yup.mixed<File>().required(),
-    signature: Yup.mixed<File>().required(),
-    employmentLetter: Yup.mixed<File>().required(),
+    fName: Yup.string().required('First Name is required'),
+    lName: Yup.string().required('Surname is required'),
+    phone: Yup.string().required('Guarantors phone number is required'),
+    relationship: Yup.string().required('What is your relationship with guarantor'),
+    address: Yup.string().required('Guarantors address is required'),
+    state: Yup.string().required('Guarantors state is required'),
+    lga: Yup.string().required('Guarantors Local Government is required'),
+    guarantorPhoto: Yup.mixed<File>().required('Add guarantors photo'),
+    identity: Yup.mixed<File>().required('Add guarantors Identity image'),
+    signature: Yup.mixed<File>().required('Add guarantors signature'),
+    employmentLetter: Yup.mixed<File>().required('Add guarantors emplyment letter'),
   });
 
   const setGuarantorPhoto = (photo: File | undefined) => {
@@ -171,7 +171,7 @@ const GuarantorForm = ({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="lname" className="text-sm text-[#454547]">
+                  <label htmlFor="phone" className="text-sm text-[#454547]">
                     Phone number*
                   </label>
                   <Field
@@ -183,7 +183,7 @@ const GuarantorForm = ({
                       setFieldValue("phone", numericValue);
                     }}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter registered phone number"
+                    placeholder="Guarantor phone number"
                     maxLength={11}
                   />
                   <ErrorMessage
@@ -195,7 +195,7 @@ const GuarantorForm = ({
 
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="occupation"
+                    htmlFor="relationship"
                     className="text-sm text-[#454547]"
                   >
                     Relationship *
@@ -205,7 +205,7 @@ const GuarantorForm = ({
                     name="relationship"
                     value={values.relationship}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter occupation"
+                    placeholder="Enter guarantor relationship with customer"
                   />
                   <ErrorMessage
                     name="relationship"
@@ -214,10 +214,7 @@ const GuarantorForm = ({
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="occupation"
-                    className="text-sm text-[#454547]"
-                  >
+                  <label htmlFor="address" className="text-sm text-[#454547]">
                     Address *
                   </label>
                   <Field
@@ -225,7 +222,7 @@ const GuarantorForm = ({
                     name="address"
                     value={values.address}
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
-                    placeholder="Enter registered phone number"
+                    placeholder="House number, street name (land mark)"
                   />
                   <ErrorMessage
                     name="address"
@@ -330,38 +327,66 @@ const GuarantorForm = ({
                 }
               </div>
               <div className="py-6 grid grid-cols-1 md:grid-cols-2 overflow-hidden gap-6 w-full">
-                <ImageDropzone
-                  fieldName="guarantorPhoto"
-                  text="Upload or Take a photo"
-                  setFieldValue={setFieldValue}
-                  setFile={setGuarantorPhoto}
-                  file={guarantorData?.guarantorPhoto}
-                  className=" flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
-                <ImageDropzone
-                  fieldName="identity"
-                  text="Upload Identity Card"
-                  setFieldValue={setFieldValue}
-                  setFile={setGuarantorIdentity}
-                  file={guarantorData?.identity}
-                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
-                <ImageDropzone
-                  fieldName="employmentLetter"
-                  text="Upload Employment Letter"
-                  setFieldValue={setFieldValue}
-                  setFile={setGuarantorEmploymentLetter}
-                  file={guarantorData?.employmentLetter}
-                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
-                <ImageDropzone
-                  fieldName="signature"
-                  text="Upload Signature"
-                  setFieldValue={setFieldValue}
-                  setFile={setGuarantorSignature}
-                  file={guarantorData?.signature}
-                  className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
-                />
+                <div className="">
+                  <ImageDropzone
+                    fieldName="guarantorPhoto"
+                    text="Upload or Take a photo"
+                    setFieldValue={setFieldValue}
+                    setFile={setGuarantorPhoto}
+                    file={guarantorData?.guarantorPhoto}
+                    className=" flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
+                  />
+                  <ErrorMessage
+                    name="guarantorPhoto"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                <div className="">
+                  <ImageDropzone
+                    fieldName="identity"
+                    text="Upload Identity Card"
+                    setFieldValue={setFieldValue}
+                    setFile={setGuarantorIdentity}
+                    file={guarantorData?.identity}
+                    className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
+                  />
+                  <ErrorMessage
+                    name="identity"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                <div className="">
+                  <ImageDropzone
+                    fieldName="employmentLetter"
+                    text="Upload Employment Letter"
+                    setFieldValue={setFieldValue}
+                    setFile={setGuarantorEmploymentLetter}
+                    file={guarantorData?.employmentLetter}
+                    className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
+                  />
+                  <ErrorMessage
+                    name="employmentLetter"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
+                <div className="">
+                  <ImageDropzone
+                    fieldName="signature"
+                    text="Upload Signature"
+                    setFieldValue={setFieldValue}
+                    setFile={setGuarantorSignature}
+                    file={guarantorData?.signature}
+                    className="flex-col justify-center items-center gap-2 sm:h-[158px] lg:max-w-[248px] text-center"
+                  />
+                  <ErrorMessage
+                    name="signature"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
+                </div>
               </div>
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
@@ -373,7 +398,7 @@ const GuarantorForm = ({
                 onClick={() => setCurrentStep(1)}
               />
               <PrimaryButtons
-                text={"Proceed - Address Details"}
+                text={"Proceed "}
                 type="submit"
                 disabled={!isValid || isSubmitting}
                 className={clsx(
