@@ -34,7 +34,7 @@ interface CustomerAddress {
 }
 
 const Page = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(5);
   const [selectedState, setSelectedState] = useState<string>("");
 
   const loanPersonalDetailInitialState = {
@@ -175,7 +175,7 @@ const Page = () => {
           step {currentStep + 1} of {steps.length}
         </p>
       </div>
-      <div className={" flex   gap-5  justify-center w-full"}>
+      <div className={" flex   lg:gap-5  justify-center w-full"}>
         <Steps
           steps={steps}
           currentStep={currentStep}
@@ -197,6 +197,8 @@ const Page = () => {
               setCustomerPhoto={setCustomerPhoto}
               setLoanPersonalDetail={setLoanPersonalDetail}
               loanPersonalDetail={loanPersonalDetail}
+              steps={steps}
+              cancelRegistration={cancelRegistration}
             />
           )}
           {currentStep === 1 && (
@@ -209,6 +211,7 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               setOriginAddress={setOriginAddress}
               originAddress={originAddress}
+              steps={steps}
             />
           )}
           {currentStep === 2 && (
@@ -219,6 +222,7 @@ const Page = () => {
               states={states}
               setGuarantorData={setGuarantorData}
               guarantorData={guarantorData}
+              steps={steps}
             />
           )}
           {currentStep === 3 && (
@@ -227,6 +231,7 @@ const Page = () => {
               states={states}
               setNextOfKinData={setNextOfKinData}
               nextOfKinData={nextOfKinData}
+              steps={steps}
             />
           )}
           {currentStep === 4 && (
@@ -234,6 +239,7 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               setCreditDetail={setCreditDetail}
               creditDetail={creditDetail}
+              steps={steps}
             />
           )}
           {currentStep === 5 && (
@@ -241,6 +247,7 @@ const Page = () => {
               setCurrentStep={setCurrentStep}
               setAppInformation={setAppInformation}
               appInformation={appInformation}
+              steps={steps}
             />
           )}
           {currentStep === 6 && (
@@ -265,43 +272,43 @@ const Page = () => {
 const steps: Step[] = [
   {
     id: 0,
-    title: "Who is buying this HMO plan?",
+    title: "Who is applying for this loan?",
     image: "/image/Frame.png",
     style: "",
   },
   {
     id: 1,
-    title: "Take a selfie of the customer",
+    title: "How can we locate the customer?",
     image: "/image/step_2.png",
     style: "",
   },
   {
     id: 2,
-    title: "Provide your current valid means of identification",
+    title: "Who else can stand-in for the customer ?",
     image: "/image/step_3.png",
     style: "",
   },
   {
     id: 3,
-    title: "How can we locate the customer?",
+    title: "Enter the customer’s next of kin’s details?",
     image: "/image/step_4.png",
     style: "",
   },
   {
     id: 4,
-    title: "How can we locate the customer?",
+    title: "How can we verify if we can lend this customer?",
     image: "/image/step_4.png",
     style: "",
   },
   {
     id: 5,
-    title: "How can we locate the customer?",
+    title: "What are the specifics to the customer’s request?",
     image: "/image/step_4.png",
     style: "",
   },
   {
     id: 6,
-    title: "How can we locate the customer?",
+    title: "How long will this plan be valid for?",
     image: "/image/step_4.png",
     style: "",
   },

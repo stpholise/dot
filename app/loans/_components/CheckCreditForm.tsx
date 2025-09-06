@@ -2,8 +2,9 @@ import { Formik, Field, Form, FormikHelpers, ErrorMessage } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import * as Yup from "yup";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import { Step } from "@/app/hmo/buy-hmo/page";
+import FormTitle from "@/app/_components/ui/units/FormTitle";
 
 export interface CreditFormProp {
   householdIncome: string;
@@ -16,14 +17,15 @@ interface CheckCreditFormProp {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   creditDetail: CreditFormProp;
   setCreditDetail: React.Dispatch<React.SetStateAction<CreditFormProp>>;
+  steps: Step[];
 }
 
 const CheckCreditForm = ({
   setCurrentStep,
   creditDetail,
   setCreditDetail,
+  steps,
 }: CheckCreditFormProp) => {
-  const router = useRouter();
   const initialValues: CreditFormProp = {
     householdIncome: creditDetail.householdIncome || "",
     specialFoodOccurance: creditDetail.specialFoodOccurance || "",
@@ -76,6 +78,8 @@ const CheckCreditForm = ({
 
   return (
     <div>
+      <FormTitle title="Credit Check" currentStep={4} steps={steps} />
+
       <FormHeader
         icon={{
           src: "/icons/security.png",
@@ -92,7 +96,7 @@ const CheckCreditForm = ({
       >
         {({ isSubmitting, isValid, dirty, values }) => (
           <Form>
-            <div className="lg:px-8 py-6 flex flex-col gap-4">
+            <div className="lg:px-8 px-4 md:px-6 py-6 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <label
                   htmlFor="householdIncome"
@@ -232,12 +236,13 @@ const CheckCreditForm = ({
                 />
               </div>
             </div>
-            <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
+            <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-8 sm:flex-row flex-col-reverse">
               <PrimaryButtons
-                text={"Cancel"}
+                text={"Go Back"}
+                icon="/icons/arrow_back.png"
                 type="button"
                 className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-                onClick={() => router.push("/hmo/buy-hmo")}
+                onClick={() => setCurrentStep(3)}
               />
               <PrimaryButtons
                 text={"Proceed - Address Details"}

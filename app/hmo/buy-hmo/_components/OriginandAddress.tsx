@@ -269,9 +269,9 @@ const Address = ({
             <footer className="flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse lg:flex-col-reverse xl:flex-row">
               <PrimaryButtons
                 text={"Go Back"}
+                icon="/icons/arrow_back.png"
                 type="button"
                 className="flex-row-reverse font-medium border-[#D0D5DD] border text-black h-[48px] rounded-lg  justify-center  items-center"
-                icon="/icons/arrow_back.png"
                 onClick={decrementStep}
               />
               <PrimaryButtons

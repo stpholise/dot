@@ -4,7 +4,8 @@ import * as Yup from "yup";
 import Image from "next/image";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
 import clsx from "clsx";
-import { useRouter } from "next/navigation";
+import FormTitle from "@/app/_components/ui/units/FormTitle";
+import { Step } from "@/app/hmo/buy-hmo/page";
 
 export interface LoanData {
   amountRequested: string;
@@ -19,14 +20,15 @@ interface ApplicationInformationProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setAppInformation: React.Dispatch<React.SetStateAction<LoanData>>;
   appInformation: LoanData;
+  steps: Step[];
 }
 
 const ApplicationInformation = ({
   setCurrentStep,
   setAppInformation,
   appInformation,
+  steps,
 }: ApplicationInformationProps) => {
-  const router = useRouter();
   const initialValues: LoanData = {
     amountRequested: appInformation.amountRequested || "0",
     loanType: appInformation.loanType || "",
@@ -85,6 +87,11 @@ const ApplicationInformation = ({
 
   return (
     <div>
+      <FormTitle
+        steps={steps}
+        currentStep={5}
+        title="Application Information"
+      />
       <FormHeader
         icon={{
           src: "/icons/security.png",
@@ -100,7 +107,7 @@ const ApplicationInformation = ({
       >
         {({ values, isValid, dirty, isSubmitting, setFieldValue }) => (
           <Form>
-            <div className="lg:px-8">
+            <div className="lg:px-8 px-4 md:px-6">
               <div className="py-6 flex flex-col gap-4 mb-4">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
@@ -196,7 +203,7 @@ const ApplicationInformation = ({
                   <Field
                     type="number"
                     name="loanDuration"
-                    value={values.loanDuration  } 
+                    value={values.loanDuration}
                     inputMode="numeric"
                     className="w-full px-4 py-3 outline-none border border-gray-300 rounded-lg"
                     placeholder="Enter customer first name"
@@ -284,10 +291,11 @@ const ApplicationInformation = ({
             </div>
             <footer className="flex gap-4 px-4 sm:px-8 py-4 justify-between sm:flex-row flex-col-reverse">
               <PrimaryButtons
-                text={"Cancel"}
+                text={"Go Back"}
+                icon="/icons/arrow_back.png"
                 type="button"
                 className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-                onClick={() => router.push("/hmo/buy-hmo")}
+                onClick={() => setCurrentStep(4)}
               />
               <PrimaryButtons
                 text={"Proceed - Address Details"}

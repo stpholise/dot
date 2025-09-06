@@ -2,11 +2,12 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import FormHeader from "@/app/_components/ui/units/FormHeader";
 import PrimaryButtons from "@/app/_components/ui/units/buttons/PrimaryButtons";
-import * as Yup from "yup";
-import { useRouter } from "next/navigation";
+import * as Yup from "yup"; 
 import clsx from "clsx";
 import ImageDropzone from "@/app/_components/ImageDropzone";
 import { useState } from "react";
+import { Step } from "@/app/hmo/buy-hmo/page";
+import FormTitle from "@/app/_components/ui/units/FormTitle";
 
 export interface PersonalDetailsType {
   dotAcct?: string;
@@ -31,6 +32,8 @@ interface PersonalDetailsFormProps {
   >;
   loanPersonalDetail: PersonalDetailsType;
   customerPhoto: File | undefined;
+  steps: Step[];
+  cancelRegistration: () => void;
 }
 
 const PersonalDetailsForm = ({
@@ -39,8 +42,9 @@ const PersonalDetailsForm = ({
   setCustomerPhoto,
   setLoanPersonalDetail,
   loanPersonalDetail,
-}: PersonalDetailsFormProps) => {
-  const router = useRouter();
+  steps,
+  cancelRegistration,
+}: PersonalDetailsFormProps) => { 
 
   const initialValues: PersonalDetailsType = {
     dotAcct: loanPersonalDetail?.dotAcct || "",
@@ -103,6 +107,7 @@ const PersonalDetailsForm = ({
 
   return (
     <div>
+      <FormTitle currentStep={0} steps={steps} title="Personal Details" />
       <FormHeader
         icon={{
           src: "/icons/security.png",
@@ -119,7 +124,7 @@ const PersonalDetailsForm = ({
       >
         {({ isSubmitting, isValid, dirty, setFieldValue, values }) => (
           <Form>
-            <div className="lg:px-8">
+            <div className="lg:px-8 px-4 md:px-6">
               <div className="py-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="dotA  cct" className="text-sm text-[#454547]">
@@ -346,7 +351,7 @@ const PersonalDetailsForm = ({
                   <ErrorMessage name="businessExp" />
                 </div>
               </div>
-              <div className="py-6 flex gap-6">
+              <div className="py-6 flex gap-6 xl:flex-row md:flex-row flex-col lg:flex-col">
                 <ImageDropzone
                   fieldName="photo"
                   text="Upload or Take a photo"
@@ -370,14 +375,12 @@ const PersonalDetailsForm = ({
                 text={"Cancel"}
                 type="button"
                 className="flex-row-reverse font-medium border-[#D0D5DD]  border text-black h-[48px] rounded-lg  justify-center items-center"
-                onClick={() => router.push("/hmo/buy-hmo")}
+                onClick={() => cancelRegistration()}
               />
               <PrimaryButtons
                 text={"Proceed - Address Details"}
                 type="submit"
-                disabled={
-                  !isValid || isSubmitting  
-                }
+                disabled={!isValid || isSubmitting}
                 className={clsx(
                   " h-[48px]  font-medium rounded-lg sm:w-96 justify-center items-center",
                   {
