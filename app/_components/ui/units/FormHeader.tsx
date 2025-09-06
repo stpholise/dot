@@ -1,4 +1,5 @@
 import Image from "next/image";
+import clsx from "clsx";
 
 interface FormHeaderProps {
   primaryText?: string;
@@ -7,11 +8,23 @@ interface FormHeaderProps {
     src: string;
     alt: string;
   };
+  className?: string;
 }
 
-const FormHeader = ({ icon, primaryText, secondaryText }: FormHeaderProps) => {
+const FormHeader = ({
+  icon,
+  primaryText,
+  secondaryText,
+  className,
+}: FormHeaderProps) => {
   return (
-    <div className="hidden lg:flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6">
+    <div
+      className={clsx(
+        " lg:flex gap-2 items-center font-medium w-full border-b-gray-300 border-b-2 py-4 px-6",
+       {"hidden": !className},
+        className
+      )}
+    >
       {icon && (
         <Image
           alt={icon.alt || "user"}

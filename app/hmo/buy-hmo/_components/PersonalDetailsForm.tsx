@@ -68,7 +68,7 @@ const PersonalDetailsForm = ({
     values: PersonalDetailsType,
     formik: FormikHelpers<PersonalDetailsType>
   ) => {
-    setCurrentStep(1); 
+    setCurrentStep(1);
 
     setPersonalData({
       fName: values.fName,
@@ -82,7 +82,7 @@ const PersonalDetailsForm = ({
       photo: values.photo,
       identity: values.identity,
     });
- 
+
     formik.resetForm();
   };
   const storedCustomerDetailsCheck = () => {
@@ -116,7 +116,7 @@ const PersonalDetailsForm = ({
       >
         {({ isSubmitting, isValid, dirty, setFieldValue, values }) => (
           <Form>
-            <div className="lg:px-8">
+            <div className="lg:px-8 md:px-6 px-4">
               <div className="py-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="fName" className="text-sm text-[#454547]">
@@ -300,13 +300,14 @@ const PersonalDetailsForm = ({
                   </div>
                 </div>
               </div>
-              <div className="py-6 flex gap-6">
+              <div className="py-6 flex gap-6 xl:flex-row md:flex-row flex-col lg:flex-col">
                 <ImageDropzone
                   fieldName="photo"
                   text="customer photo"
                   setFieldValue={setFieldValue}
                   setFile={setHmoPhoto}
                   file={values.photo}
+                  className="xl:flex-col md:flex-col lg:flex-row justify-center items-center gap-2 sm:h-[158px] xl:max-w-[248px] text-center"
                 />
                 <ImageDropzone
                   fieldName="identity"
@@ -314,10 +315,11 @@ const PersonalDetailsForm = ({
                   setFieldValue={setFieldValue}
                   setFile={setHmoIdentity}
                   file={values.identity}
+                  className="xl:flex-col md:flex-col  lg:flex-row justify-center items-center gap-2 sm:h-[158px] xl:max-w-[248px] text-center"
                 />
               </div>
             </div>
-            <div className="lg:px-8">
+            <div className="lg:px-8 md:px-6 px-4">
               <div className="rounded-lg bg-[#F9F9F9] flex gap-4 px-4 py-4 justify-start items-start ">
                 <Image
                   src="/icons/setting.svg"

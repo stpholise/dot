@@ -191,7 +191,8 @@ const ReviewHMO = ({
       </div>
 
       <div className="dependent py-4">
-        dependant
+        {plan.dependants.length > 0 && <p>dependant</p>}
+        
         <div className="">
           {plan.dependants.map((item) => (
             <div

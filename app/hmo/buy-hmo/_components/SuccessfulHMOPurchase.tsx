@@ -71,7 +71,7 @@ const SuccessfulHMOPurchase = ({
         <div className="bg-[#F9F9F9] rounded-xl px-6 py-4 flex flex-col gap-2">
           <div className="flex justify-between">
             <p className="text-[#454547] leading-6">Customer Name</p>
-            <p className="text-black font-medium text-base">
+            <p className="text-black font-medium text-base text-right">
               {hmoData.personalDetail.fName +
                 " " +
                 hmoData.personalDetail.lName}
@@ -79,7 +79,7 @@ const SuccessfulHMOPurchase = ({
           </div>
           <div className="flex justify-between">
             <p className="text-[#454547]">Policy ID</p>
-            <p className="text-black font-medium text-base">
+            <p className="text-black font-medium text-base text-right">
               {hmoData.id.replace(/\D/g, "").slice(0, 10)}
             </p>
           </div>
@@ -95,13 +95,13 @@ const SuccessfulHMOPurchase = ({
                 <div className="bg-[#F9F9F9] rounded-xl px-6 py-4 flex flex-col gap-2">
                   <div className="flex justify-between">
                     <p className="text-[#454547] leading-6">Customer Name</p>
-                    <p className="text-black font-medium text-base">
+                    <p className="text-black font-medium text-base text-right">
                       {item.fName + " " + item.lName}
                     </p>
                   </div>
                   <div className="flex justify-between">
                     <p className="text-[#454547]">Policy ID</p>
-                    <p className="text-black font-medium text-base">
+                    <p className="text-black font-medium text-base text-right">
 
                       {item.id?.replace(/\D/g, "").slice(0, 10)}
                     </p>

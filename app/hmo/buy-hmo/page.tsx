@@ -23,7 +23,7 @@ interface Step {
 }
 
 const Page = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(4);
   const { states, isLoading, error } = useFetchState() as {
     states: string[];
     isLoading: boolean;
@@ -43,9 +43,7 @@ const Page = () => {
     identity: undefined,
   });
 
-  const [originAddress, setOriginAddress] = useState<
-    CustomerAddress 
-  >();
+  const [originAddress, setOriginAddress] = useState<CustomerAddress>();
 
   const [plan, setPlan] = useState<PlanValidityTypes>({
     id: "",
@@ -64,7 +62,7 @@ const Page = () => {
   return (
     <div className="lg:ml-56 lg:px-8 lg:max-w[calc(100%-15rem)] lg:py-8 xs:px-4 py-6">
       <div
-        className={clsx(" items-center justify-between mb-4 px-4 xs:px-0", {
+        className={clsx(" items-center justify-between mb-4 px-4 xs:px-0 ", {
           hidden: currentStep == steps.length - 1,
           flex: currentStep !== steps.length,
         })}
@@ -100,7 +98,7 @@ const Page = () => {
           step {currentStep + 1} of {steps.length}
         </p>
       </div>
-      <div className={" flex   gap-5  justify-center w-full"}>
+      <div className={" flex   sm:gap-5 gap-0 justify-center w-full  "}>
         <Steps
           steps={steps}
           currentStep={currentStep}
@@ -108,7 +106,7 @@ const Page = () => {
         />
         <div
           className={clsx(
-            "  mx-auto xl:w-full max-w-[600px] w-full lg:w-[400px]   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-3xl ",
+            "  mx-auto xl:w-full max-w-[600px] w-full lg:w-[400px] lg:min-w-96   min-h-[580px] text-[#667085] bg-white rounded-xs sm:rounded-3xl ",
             {
               "lg:mx-auto lg:w-[750px]  xl:w-[600px]":
                 currentStep >= steps.length - 2,
@@ -135,10 +133,7 @@ const Page = () => {
             />
           )}
           {currentStep === 2 && (
-            <PlanValidity
-              setCurrentStep={setCurrentStep}
-              setPlan={setPlan} 
-            />
+            <PlanValidity setCurrentStep={setCurrentStep} setPlan={setPlan} />
           )}
           {currentStep === 3 && (
             <ReviewHMO
@@ -168,26 +163,26 @@ const steps: Step[] = [
   },
   {
     id: 1,
-    title: "Take a selfie of the customer",
+    title: "How can we locate the customer?",
     image: "/image/step_2.png",
     style: "",
   },
   {
     id: 2,
-    title: "Provide your current valid means of identification",
+    title: "How long will this plan be valid for?",
     image: "/image/step_3.png",
     style: "",
   },
   {
     id: 3,
-    title: "How can we locate the customer?",
-    image: "/image/step_4.png",
+    title: " ",
+    image: "",
     style: "",
   },
   {
     id: 4,
-    title: "How can we locate the customer?",
-    image: "/image/step_4.png",
+    title: " ",
+    image: " ",
     style: "",
   },
 ];

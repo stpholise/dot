@@ -19,7 +19,7 @@ const Steps = ({ currentStep, steps, setCurrentStep }: StepsProps) => {
     >
       <div
         className={clsx(
-          "sticky  md:top-24 md:left-56 xl:w-[460px] lg-[444px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden flex-col items-center gap-4 ",
+          "sticky  md:top-24 md:left-56 xl:w-[460px] lg-[390px] lg:h-[585px] bg-white rounded-2xl px-8 py-8 hidden flex-col items-center gap-4 ",
           {
             "hidden  ": currentStep >= steps.length - 2,
             "lg:flex  ": currentStep < steps.length - 2,
@@ -27,7 +27,7 @@ const Steps = ({ currentStep, steps, setCurrentStep }: StepsProps) => {
         )}
       >
         <div className=" gap-2 flex lg:gap-4  w-full ">
-          {steps .map((step, index) => (
+          {steps.slice(0, steps.length -1).map((step, index) => (
             <div
               onClick={() => {
                 console.log({ "index ": currentStep, length: steps.length });

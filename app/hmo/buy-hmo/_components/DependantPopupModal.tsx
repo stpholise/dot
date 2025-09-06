@@ -23,10 +23,10 @@ export interface PersonalDetailsType {
 
 const DependantPopupModal = ({
   setIsDependantModalOpen,
-  setDependants, 
+  setDependants,
 }: {
   setIsDependantModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setDependants: React.Dispatch<React.SetStateAction<PersonalDetailsType[]>>; 
+  setDependants: React.Dispatch<React.SetStateAction<PersonalDetailsType[]>>;
 }) => {
   const [customerPhoto, setCustomerPhoto] = useState<File | undefined>();
 
@@ -61,7 +61,7 @@ const DependantPopupModal = ({
     };
   }, []);
 
-  const handleFormSubmission = (values: PersonalDetailsType) => { 
+  const handleFormSubmission = (values: PersonalDetailsType) => {
     setIsDependantModalOpen(false);
     setDependants((prev) => [
       ...prev,
@@ -76,14 +76,14 @@ const DependantPopupModal = ({
         gender: values.gender,
         photo: customerPhoto,
       },
-    ]); 
+    ]);
   };
 
   return (
     <div className="">
       <div
         className={clsx(
-          "w-full bg-white lg:w-[468px] md:w-[440px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red lg:max-h-[600px] h-screen md:h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500 overflow-hidden  transform   "
+          "w-full bg-white  lg:w-[468px] md:w-[440px] z-80 fixed bottom-0 top-0 right-0 left-0 lg:left-auto bg-red lg:max-h-[600px] h-screen  md:h-fit  md:top-1/2 md:right-1/2   transition-opacity md:translate-x-1/2 md:rounded-3xl  md:-translate-y-1/2 opacity-100 ease-in-out duration-500 overflow-hidden  transform   "
         )}
       >
         <FormHeader
@@ -92,6 +92,7 @@ const DependantPopupModal = ({
             alt: "user",
           }}
           primaryText="Add a Dependant"
+          className="flex"
         />
         <button
           className="absolute top-6 right-6"
@@ -112,7 +113,7 @@ const DependantPopupModal = ({
         >
           {({ values, isValid, dirty, isSubmitting, setFieldValue }) => (
             <Form className="">
-              <div className="py-6 px-8 overflow-y-auto h-[400px] gap-4 flex flex-col">
+              <div className="py-6 px-8 overflow-y-auto   h-[calc(100vh-200px)]  sm:h-[400px] gap-4 flex flex-col">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="fName" className="text-sm text-[#454547]">
                     First Name *
@@ -243,7 +244,7 @@ const DependantPopupModal = ({
                   />
                 </div>
               </div>
-              <footer className=" bg-[#eaeaea] flex gap-4 px-4 sm:px-8 py-4 mt-auto sm:flex-row flex-col-reverse">
+              <footer className=" bg-[#eaeaea] flex gap-4  px-4 sm:px-8 py-4 mt-auto absolute bottom-0 right-0 left-0  sm:static sm:flex-row flex-col-reverse">
                 <PrimaryButtons
                   text={"Cancel"}
                   type="button"
