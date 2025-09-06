@@ -7,6 +7,9 @@ import { GuarantorDataDetailsType } from "./GuarantorForm";
 import { NextOfKinDetailsType } from "./NextOfKinDetailsForm";
 import { CreditFormProp } from "./CheckCreditForm";
 import { LoanData } from "./ApplicationInformation";
+import { useDispatch } from "react-redux";
+import { setLoan } from "@/app/store/slices/HMOPurchaseSlice";
+import { v4 as uuidv4 } from "uuid";
 
 const ReviewLoan = ({
   setCurrentStep,
@@ -23,11 +26,29 @@ const ReviewLoan = ({
   creditDetail: CreditFormProp;
   appInformation: LoanData;
 }) => {
+  const dispatch = useDispatch();
   const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false);
 
   const confirmLoanApplication = () => {
-    setCurrentStep(5);
-    
+    setCurrentStep(7);
+    dispatch(
+      setLoan({
+        id: uuidv4(),
+        personalDetal: {
+          ...loanPersonalDetail,
+          photo: loanPersonalDetail.photo?.name,
+          identity: loanPersonalDetail.identity?.name,
+        },
+        guarantor: {
+          ...guarantorData,
+          guarantorPhoto: guarantorData.guarantorPhoto?.name,
+          identity: guarantorData.identity?.name,
+          employmentLetter: guarantorData.employmentLetter?.name,
+          signature: guarantorData.signature?.name,
+        },
+        loanValues: appInformation,
+      })
+    );
   };
 
   return (
